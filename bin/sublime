@@ -1,0 +1,6 @@
+#!/bin/bash
+echo ">>> Opening sublime with $@"
+# /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text -b $@ &
+touch $@
+open -a Sublime\ Text $@
+echo ">>> Sublime running in background"
