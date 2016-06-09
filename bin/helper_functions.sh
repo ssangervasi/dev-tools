@@ -11,19 +11,14 @@ default() {
     defval=''
     for val in "$@"
     do
-        echo val;
         test $val && defval=$val && break;
     done
-    echo defval
+    echo $defval
 }
 
 count() {
-    where='.'
-    what='.'
-
-    test ! -z $1 && where=$1
-    test ! -z $2 && what=$2
-
+    what=$(default $1 '.')
+    where=$(default $2 '.')
     ls -1 $where | grep $what --count
 }
 
@@ -57,4 +52,14 @@ whatami() {
 
 rmcache() {
     find . -name '.cache' | xargs rm -r
+}
+
+
+sublime() {
+    echo ">>> Opening sublime with args: $@"
+    touch $@
+    sublime_app="Sublime Text"
+    echo $sublime_app
+    open -a "$sublime_app" $@
+    echo ">>> $sublime_app running in background"
 }
