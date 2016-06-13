@@ -1,4 +1,5 @@
 #!/bin/bash
+alias 'alias'='alias' #lol
 alias '..'="cd .."
 alias '...'="cd ~/Documents/workspace"
 alias 'resource'='. resource'
@@ -8,6 +9,7 @@ alias 'shacme'='ssh seb@acme.ditto.com'
 
 # Git
 alias 'gits'='git status -sb'
+alias 'gitn'='git checkout -b'
 alias 'gith'='git diff --name-status'
 alias 'giti'='git add -i'
 alias 'gitl'='git log --pretty=oneline --abbrev-commit -n5'
