@@ -1,9 +1,9 @@
 #!/bin/bash
 src() {
     if [ "$1" ]; then
-        source ~/.venvs/$1/bin/activate
+        source ~/.venvs/$1/bin/activate;
     else 
-        source ~/.bash_profile;
+        source $DEV_BIN"/.bash_profile";
     fi
 }
 
@@ -14,6 +14,33 @@ default() {
         test $val && defval=$val && break;
     done
     echo $defval
+}
+
+checktime() {
+    export CHECK_SECONDS=$((SECONDS-CHECK_SECONDS))
+    export ELAPSED=$((CHECK_SECONDS/60)):$((CHECK_SECONDS%60))
+    export CHECK_SECONDS=$SECONDS
+}
+
+changeprompt() {
+    simple_prompt='\$ '
+    timer_prompt='$ELAPSED\$ '
+    info_prompt='\A:\u:\W\$ '
+    export PROMPT_COMMAND=''
+    case $1 in
+        INFO)
+            export PS1=$info_prompt
+            ;;
+        TIMER)
+            export PROMPT_COMMAND=checktime
+            export PS1=$timer_prompt
+            ;;
+        SIMPLE)
+            PS1=$simple_prompt
+            ;;
+        *)
+            PS1=$(default $1 $simple_prompt)
+    esac
 }
 
 count() {
@@ -74,4 +101,11 @@ slackpost() {
     echo "Posting to slack: " $SLACK_PAYLOAD
 
     curl -s -S -X POST --data-urlencode "$SLACK_PAYLOAD" "$SLACK_WEBHOOK_URL"
+}
+
+# Java is silly.
+jcr() {
+    rootdir=$(default $1 '.')
+    find $rootdir -name '*.java' | xargs javac
+    test $2 && java $2
 }
