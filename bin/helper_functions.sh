@@ -115,5 +115,6 @@ jcr() {
 # Python is silly too
 mkpy() {
     test $1 && mkdir -p $1
-    touch $1/__init__.py
+    target_dir=$(default $1 '.')
+    touch $target_dir/__init__.py
 }
