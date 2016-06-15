@@ -54,6 +54,8 @@ tabname() {
 }
 
 cls() {
+    cd_to=$(default $1 '.')
+    cd $cd_to
     clear
     ls
 }
@@ -108,4 +110,10 @@ jcr() {
     rootdir=$(default $1 '.')
     find $rootdir -name '*.java' | xargs javac
     test $2 && java $2
+}
+
+# Python is silly too
+mkpy() {
+    test $1 && mkdir -p $1
+    touch $1/__init__.py
 }
