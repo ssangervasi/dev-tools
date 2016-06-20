@@ -57,6 +57,7 @@ cls() {
     cd_to=$(default $1 '.')
     cd $cd_to
     clear
+    pwd
     ls
 }
 
