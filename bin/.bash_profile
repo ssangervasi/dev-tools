@@ -9,5 +9,5 @@ source "helper_functions.sh"
 
 # Custom terminal
 source "colors.sh"
-changeprompt TIMER
+changeprompt INFO
 

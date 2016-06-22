@@ -81,7 +81,7 @@ whatami() {
 }
 
 rmcache() {
-    find . -name '.cache' | xargs rm -r
+    find . -name '.cache' -or -name '*.pyc' -delete
 }
 
 
