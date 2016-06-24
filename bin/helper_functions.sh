@@ -84,6 +84,17 @@ rmcache() {
     find . -name '.cache' -or -name '*.pyc' -delete
 }
 
+mvsed() {
+    for filename in $(ls -1 $1)
+    do
+        sed_filename=$(echo $filename | sed -E "$2");
+        if [ "$filename" != "$sed_filename" -a "$sed_filename" != "" ]
+        then
+            echo "$filename --> $sed_filename";
+            mv $1/$filename $1/$sed_filename;
+        fi
+    done
+}
 
 sublime() {
     echo ">>> Opening sublime with args: $@"

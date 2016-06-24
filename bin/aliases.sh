@@ -11,7 +11,9 @@ alias 'shacme'='ssh seb@acme.ditto.com'
 alias 'gits'='git status -sb'
 alias 'gitn'='git checkout -b'
 alias 'gith'='git diff --name-status'
+alias 'gita'='git add --all'
 alias 'giti'='git add -i'
+alias 'gitm'='git commit --amend'
 alias 'gitl'='git log --pretty=oneline --abbrev-commit -n5'
 
 # Lock the screen (when going AFK)
