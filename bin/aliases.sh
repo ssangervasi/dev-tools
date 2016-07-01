@@ -8,13 +8,15 @@ alias 'resource'='. resource'
 alias 'shacme'='ssh seb@acme.ditto.com'
 
 # Git
-alias 'gits'='git status -sb'
-alias 'gitn'='git checkout -b'
-alias 'gith'='git diff --name-status'
 alias 'gita'='git add --all'
+alias 'gitc'='git commit -m'
+alias 'gith'='git diff --name-status'
 alias 'giti'='git add -i'
-alias 'gitm'='git commit --amend'
 alias 'gitl'='git log --pretty=oneline --abbrev-commit -n5'
+alias 'gitm'='git commit --amend'
+alias 'gitn'='git checkout -b'
+alias 'gitp'='git pull --ff-only'
+alias 'gits'='git status -sb'
 
 # Lock the screen (when going AFK)
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
