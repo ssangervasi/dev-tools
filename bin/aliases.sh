@@ -1,8 +1,7 @@
 #!/bin/bash
 alias 'alias'='alias' #lol
-alias '..'="cd .."
-alias '...'="cd ~/Documents/workspace"
-alias 'resource'='. resource'
+alias '..'='cd ..'
+alias '...'='cd ~/Documents/workspace &> /dev/null || cd /b/Documents/GitHub'
 
 # Network
 alias 'shacme'='ssh seb@acme.ditto.com'
@@ -19,4 +18,4 @@ alias 'gitp'='git pull --ff-only'
 alias 'gits'='git status -sb'
 
 # Lock the screen (when going AFK)
-alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+alias afk='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
