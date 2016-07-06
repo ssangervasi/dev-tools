@@ -1,0 +1,18 @@
+[user]
+    name = Sebastian Sangervasi
+[alias]
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    liff = !git log \
+            -n 10 --oneline --first-parent --decorate \
+            --left-right
+    lg = !git --no-pager log \
+            --branches --tags --graph \
+            --date=relative \
+            --pretty=format:\"%h  %ad  %C(red)%ae%Creset%x09%C(green)%d %Creset%s\" \
+            -n 30 \
+
+[push]
+    default = simple
