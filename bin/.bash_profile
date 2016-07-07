@@ -11,3 +11,7 @@ source "helper_functions.sh"
 source "colors.sh"
 changeprompt INFO
 
+# Bash completion (OSX only)
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    source $(brew --prefix)/etc/bash_completion
+fi

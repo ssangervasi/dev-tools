@@ -2,7 +2,7 @@
 src() {
     if [ "$1" ]; then
         source ~/.venvs/$1/bin/activate;
-    else 
+    else
         source $DEV_BIN"/.bash_profile";
     fi
 }
@@ -50,7 +50,7 @@ count() {
 }
 
 tabname() {
-    echo -ne "\033]0;$*\007"   
+    echo -ne "\033]0;$*\007"
 }
 
 cls() {
@@ -88,8 +88,7 @@ mvsed() {
     for filename in $(ls -1 $1)
     do
         sed_filename=$(echo $filename | sed -E "$2");
-        if [ "$filename" != "$sed_filename" -a "$sed_filename" != "" ]
-        then
+        if [ "$filename" != "$sed_filename" -a "$sed_filename" != "" ]; then
             echo "$filename --> $sed_filename";
             mv $1/$filename $1/$sed_filename;
         fi

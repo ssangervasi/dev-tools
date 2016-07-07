@@ -1,15 +1,17 @@
 #!/bin/bash
 alias 'alias'='alias' #lol
 alias '..'='cd ..'
+alias 'devbin'='cd $DEV_BIN'
 
 # Get ... to work on my different machines
-work_osx='~/Documents/workspace'
-work_win='/b/Documents/GitHub'
+work_osx=~/Documents/workspace
+work_win=/b/Documents/GitHub
 if (test -d $work_osx ); then
 	alias '...'='cd '$work_osx;
 elif (test -d $work_win ); then
 	alias '...'='cd '$work_win;
 else
+    # Lazilly determine DEV_BIN
 	alias '...'='cd $DEV_BIN'
 fi
 
@@ -31,7 +33,7 @@ alias 'gits'='git status -sb'
 # Lock the screen (OSX only)
 alias afk='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
 
-# Alias pip (for windows)
+# Alias pip (Win only)
 if (! which pip &> /dev/null); then
 	alias 'pip'='python -m pip'
 fi
