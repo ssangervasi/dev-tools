@@ -8,9 +8,11 @@ if (test -z $DEV_WORK); then
     dev_osx=~/Documents/workspace
     dev_linux=~/repo
     dev_win=/b/Documents/GitHub
-    for $work in $dev_osx $dev_linux $dev_win $DEV_BIN; do
+    for work in $dev_osx $dev_linux $dev_win $DEV_BIN; do
+        echo $work
         if (test -d $work ); then
             DEV_WORK=$work
+            break
         fi
     done
     export DEV_WORK
