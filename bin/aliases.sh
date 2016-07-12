@@ -2,21 +2,7 @@
 alias 'alias'='alias' #lol
 alias '..'='cd ..'
 alias 'devbin'='cd $DEV_BIN'
-
-# Get ... to work on my different machines
-work_osx=~/Documents/workspace
-work_win=/b/Documents/GitHub
-if (test -d $work_osx ); then
-	alias '...'='cd '$work_osx;
-elif (test -d $work_win ); then
-	alias '...'='cd '$work_win;
-else
-    # Lazilly determine DEV_BIN
-	alias '...'='cd $DEV_BIN'
-fi
-
-# Network
-alias 'shacme'='ssh seb@acme.ditto.com'
+alias '...'='cd $DEV_WORK'
 
 # Git
 alias 'gita'='git add --all'
@@ -37,3 +23,8 @@ alias afk='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 if (! which pip &> /dev/null); then
 	alias 'pip'='python -m pip'
 fi
+
+
+# Acme shortcuts
+alias 'shacme'='ssh seb@acme.ditto.com'
+alias 'racme'=$DEV_WORK'/web/acme/manage.py runserver --settings=acme.test_settings'
