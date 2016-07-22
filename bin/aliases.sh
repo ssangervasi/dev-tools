@@ -5,16 +5,20 @@ alias 'devbin'='cd $DEV_BIN'
 alias '...'='cd $DEV_WORK'
 
 # Git
-alias 'gita'='git add --all'
+alias 'gita'='git add --all .'
+alias 'gitb'='git branch -vv'
 alias 'gitc'='git commit -m'
 alias 'gith'='git diff --name-status'
-alias 'gitg'='git log -n10 --oneline --first-parent --decorate --left-right'
+alias 'gitg'='git log -n10 --oneline --first-parent --decorate --graph --left-right'
 alias 'giti'='git add -i'
 alias 'gitl'='git log --pretty=oneline --abbrev-commit -n5'
 alias 'gitm'='git commit --amend'
 alias 'gitn'='git checkout -b'
 alias 'gitp'='git pull --ff-only'
-alias 'gits'='git status -sb'
+alias 'gits'='git status -sb --ignore-submodules=dirty'
+
+# Grep processes with preferred ps args
+alias 'greps'='ps -eo pid,pcpu,pmem,time,user,command | grep -E '
 
 # Lock the screen (OSX only)
 alias afk='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'

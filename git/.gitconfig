@@ -8,11 +8,11 @@
     liff = !git log \
             -n 10 --oneline --first-parent --decorate \
             --left-right
-    lg = !git --no-pager log \
+    lg = log \
             --branches --tags --graph \
             --date=relative \
             --pretty=format:\"%h  %ad  %C(red)%ae%Creset%x09%C(green)%d %Creset%s\" \
-            -n 30 \
+            -n 50
 
 [push]
     default = simple
