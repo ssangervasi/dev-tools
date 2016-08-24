@@ -61,6 +61,15 @@ cls() {
     ls
 }
 
+gcd() {
+    nav_dir=$(pwd)
+    while [[ ! -d $nav_dir/.git && ! $nav_dir -ef $HOME && ! $nav_dir -ef / ]]
+    do
+        nav_dir=$nav_dir/..
+    done
+    cd $nav_dir/$1
+}
+
 space2csv() {
     echo "$@" | sed 's/[ \n\t]\+/,/g'
 }
@@ -93,6 +102,13 @@ mvsed() {
             mv $1/$filename $1/$sed_filename;
         fi
     done
+}
+
+
+vag() {
+    vag_dir=$DEV_WORK/$(default $1 'web')/vagrant
+    cd $vag_dir
+    vagrant up && vagrant ssh
 }
 
 sublime() {
