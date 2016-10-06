@@ -5,12 +5,9 @@ export DEV_BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PATH="$DEV_BIN:$PATH"
 
 if (test -z $DEV_WORK); then
-    dev_osx=~/Documents/workspace
-    dev_linux=~/repo
-    dev_win=/b/Documents/GitHub
-    for work in $dev_osx $dev_linux $dev_win $DEV_BIN; do
-        echo $work
-        if (test -d $work ); then
+    dev_envs="workspace Documents/workspace repo"
+    for work in $dev_envs; do
+        if (test -d ~/$work ); then
             DEV_WORK=$work
             break
         fi
@@ -27,6 +24,10 @@ source "colors.sh"
 changeprompt INFO
 
 # Other tools:
-if (test -d $DEV_WORK/arcanist/bin); then
-    export PATH="$DEV_WORK/arcanist/bin:$PATH"
-fi
+add_to_path="$DEV_WORK/arcanist/bin
+             /usr/local/go/bin"
+for path_dir in $add_to_path; do
+    if (test -d $path_dir); then
+        export PATH=$path_dir":"$PATH
+    fi
+done
