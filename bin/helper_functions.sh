@@ -1,12 +1,4 @@
 #!/bin/bash
-src() {
-    if [ "$1" ]; then
-        source ~/.venvs/$1/bin/activate;
-    else 
-        source $DEV_BIN"/.bash_profile";
-    fi
-}
-
 default() {
     defval=''
     for val in "$@"
@@ -14,6 +6,21 @@ default() {
         test $val && defval=$val && break;
     done
     echo $defval
+}
+
+src() {
+    if [ ! "$1" ]; then
+        source $DEV_BIN"/.bash_profile";
+        return 0;
+    fi
+    osx_activate='bin/activate'
+    win_activate='Scripts/activate'
+    venvs=$(default $VENVS '~/.venvs')
+    activate=$venvs/$1/$osx_activate
+    if (! test -e $activate); then
+        activate=$venvs/$1/$win_activate;
+    fi
+    source $activate
 }
 
 checktime() {
