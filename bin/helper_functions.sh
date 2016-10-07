@@ -1,4 +1,5 @@
 #!/bin/bash
+
 default() {
     defval=''
     for val in "$@"
@@ -57,7 +58,7 @@ count() {
 }
 
 tabname() {
-    echo -ne "\033]0;$*\007"   
+    echo -ne "\033]0;$*\007"
 }
 
 cls() {
@@ -66,6 +67,15 @@ cls() {
     clear
     pwd
     ls
+}
+
+gcd() {
+    nav_dir=$(pwd)
+    while [[ ! -d $nav_dir/.git && ! $nav_dir -ef $HOME && ! $nav_dir -ef / ]]
+    do
+        nav_dir=$nav_dir/..
+    done
+    cd $nav_dir/$1
 }
 
 space2csv() {
@@ -95,12 +105,18 @@ mvsed() {
     for filename in $(ls -1 $1)
     do
         sed_filename=$(echo $filename | sed -E "$2");
-        if [ "$filename" != "$sed_filename" -a "$sed_filename" != "" ]
-        then
+        if [ "$filename" != "$sed_filename" -a "$sed_filename" != "" ]; then
             echo "$filename --> $sed_filename";
             mv $1/$filename $1/$sed_filename;
         fi
     done
+}
+
+
+vag() {
+    vag_dir=$DEV_WORK/$(default $1 'web')/vagrant
+    cd $vag_dir
+    vagrant up && vagrant ssh
 }
 
 sublime() {
