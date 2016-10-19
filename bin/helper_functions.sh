@@ -70,6 +70,22 @@ gcd() {
     cd $nav_dir/$1
 }
 
+gitco() {
+    # Try and checkout a branch from a remote.
+    # If it already exists, just check it out.
+    local branch=$(default $1 'master')
+    local remote_branch=$(default $2 $branch)
+    local remote=$(default $3 'origin')
+    git checkout --track $remote/$remote_branch -b $branch || git checkout $branch
+}
+gitnew() {
+    local branch=$(default $1 'master')
+    local remote_branch=$(default $2 $branch)
+    local remote=$(default $2 'origin')
+    git checkout -b $branch
+    git push --set-upstream $remote $branch:$remote_branch
+}
+
 space2csv() {
     echo "$@" | sed 's/[ \n\t]\+/,/g'
 }
@@ -87,6 +103,14 @@ howami() {
 
 whatami() {
     echo "A man, or a mouse."
+}
+
+whyami() {
+    echo "You pass butter."
+}
+
+whenami() {
+    date;
 }
 
 rmcache() {
@@ -139,9 +163,5 @@ jcr() {
     test $2 && java $2
 }
 
-# Python is silly too
-mkpy() {
-    test $1 && mkdir -p $1
-    target_dir=$(default $1 '.')
-    touch $target_dir/__init__.py
-}
+source pypackage.sh
+source ssh_bash_profile.sh
