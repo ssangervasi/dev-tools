@@ -4,15 +4,14 @@
 export DEV_BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PATH="$DEV_BIN:$PATH"
 
-if (test -z $DEV_WORK); then
+if [ ! -d '$DEV_WORK' ]; then
     dev_envs="workspace Documents/workspace repo"
     for work in $dev_envs; do
-        if (test -d ~/$work ); then
-            DEV_WORK=$work
+        if [ -d ~/$work ]; then
+            export DEV_WORK=~/$work
             break
         fi
     done
-    export DEV_WORK
 fi
 
 # Tools

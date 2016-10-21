@@ -3,6 +3,8 @@ alias 'alias'='alias' #lol
 alias '..'='cd ..'
 alias 'devbin'='cd $DEV_BIN'
 alias '...'='cd $DEV_WORK'
+alias 'lsa'='ls -a'
+alias 'lsd'='echo Lucy in the Sky with Diamonds && ls -a $DEV_WORK'
 
 # Git
 alias 'gita'='git add --all .'
