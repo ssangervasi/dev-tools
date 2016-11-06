@@ -15,6 +15,9 @@ if (test -z $DEV_WORK); then
     export DEV_WORK
 fi
 
+# Go
+export GOROOT=$DEV_WORK/go
+
 # Tools
 source "aliases.sh"
 source "helper_functions.sh"
@@ -25,7 +28,8 @@ changeprompt INFO
 
 # Other tools:
 add_to_path="$DEV_WORK/arcanist/bin
-             /usr/local/go/bin"
+             /usr/local/go/bin
+             /b/Go/bin"
 for path_dir in $add_to_path; do
     if (test -d $path_dir); then
         export PATH=$path_dir":"$PATH
