@@ -3,6 +3,8 @@ alias 'alias'='alias' #lol
 alias '..'='cd ..'
 alias 'devbin'='cd $DEV_BIN'
 alias '...'='cd $DEV_WORK'
+alias 'lsa'='ls -a'
+alias 'lsd'='echo Lucy in the Sky with Diamonds && ls -a $DEV_WORK'
 
 # Git
 alias 'gita'='git add --all .'
@@ -27,8 +29,3 @@ alias afk='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 if (! which pip &> /dev/null); then
 	alias 'pip'='python -m pip'
 fi
-
-
-# Acme shortcuts
-alias 'shacme'='ssh seb@acme.ditto.com'
-alias 'racme'=$DEV_WORK'/web/acme/manage.py runserver --settings=acme.test_settings'
