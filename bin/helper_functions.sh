@@ -10,18 +10,24 @@ default() {
 }
 
 src() {
-    if [ ! "$1" ]; then
-        source $DEV_BIN"/.bash_profile";
+    if [ ! $1 ]; then
+        deactivate &> /dev/null
+        source $DEV_BIN/.bash_profile
         return 0;
     fi
-    osx_activate='bin/activate'
-    win_activate='Scripts/activate'
-    venvs=$(default $VENVS '~/.venvs')
-    activate=$venvs/$1/$osx_activate
-    if (! test -e $activate); then
-        activate=$venvs/$1/$win_activate;
+    local osx_activate='bin/activate'
+    local win_activate='Scripts/activate'
+    local venvs=$(default $VENVS ~/.venvs)
+    local activate=$venvs/$1/$osx_activate
+    if [ ! -e $activate ]; then
+        activate=$venvs/$1/$win_activate
     fi
-    source $activate
+    source $activate &> /dev/null
+    if [[ $? != 0 ]]; then
+        echo 'No venv "'$1'"'
+        echo 'Options:'
+        ls -1 $venvs
+    fi
 }
 
 checktime() {

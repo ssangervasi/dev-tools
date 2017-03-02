@@ -14,6 +14,11 @@ if [ ! -d '$DEV_WORK' ]; then
     done
 fi
 
+# Python
+export WORKON_HOME=$HOME/.venvs
+export PROJECT_HOME=$DEV_WORK/projects
+source /usr/local/bin/virtualenvwrapper.sh
+
 # Go
 export GOROOT=$DEV_WORK/go
 

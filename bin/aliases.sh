@@ -19,6 +19,9 @@ alias 'gitn'='git checkout -b'
 alias 'gitp'='git pull --ff-only'
 alias 'gits'='git status -sb --ignore-submodules=dirty'
 
+# Tree
+alias 'treef'='tree . --prune -P'
+
 # Grep processes with preferred ps args
 alias 'greps'='ps -eo pid,pcpu,pmem,time,user,command | grep -E '
 
