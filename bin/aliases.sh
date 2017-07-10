@@ -20,6 +20,7 @@ alias 'gitp'='git pull --ff-only'
 alias 'gits'='git status -sb --ignore-submodules=dirty'
 
 # Tree
+alias 'tree'='tree -C'
 alias 'treef'='tree . --prune -P'
 
 # Grep processes with preferred ps args

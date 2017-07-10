@@ -1,5 +1,17 @@
 #!/bin/bash
 
+get_absolute_path()  {
+    relative_path=$1
+    absolute_path=$(
+        cd $relative_path 2>>/dev/null && echo $PWD
+    )
+    if [[ $absolute_path ]]; then
+        echo $absolute_path
+    else
+        return 1
+    fi 
+}
+
 default() {
     defval=''
     for val in "$@"
@@ -30,6 +42,18 @@ src() {
     fi
 }
 
+set_dev_work() {
+    if [[ ! -d '$DEV_WORK' ]]; then
+        dev_envs="workspace Documents/workspace repo"
+        for work in $dev_envs; do
+            if [ -d ~/$work ]; then
+                export DEV_WORK=~/$work
+                break
+            fi
+        done
+    fi
+}
+
 checktime() {
     export CHECK_SECONDS=$((SECONDS-CHECK_SECONDS))
     export ELAPSED=$((CHECK_SECONDS/60)):$((CHECK_SECONDS%60))
@@ -42,15 +66,18 @@ changeprompt() {
     info_prompt='\A:\u:\W\$ '
     export PROMPT_COMMAND=''
     case $1 in
-        INFO)
+        -i|--info)
             export PS1=$info_prompt
             ;;
-        TIMER)
+        -t|--timer)
             export PROMPT_COMMAND=checktime
             export PS1=$timer_prompt
             ;;
-        SIMPLE)
+        -s|--simple)
             PS1=$simple_prompt
+            ;;
+        -h|--help)
+            echo '--info, --timer, --simple'
             ;;
         *)
             PS1=$(default $1 $simple_prompt)
@@ -177,5 +204,13 @@ jcr() {
     test $2 && java $2
 }
 
+add_to_path() {
+    for path_dir in $@; do
+        abs_path_dir=$(get_absolute_path $path_dir)
+        if [[ -d $abs_path_dir ]]; then
+            export PATH=$abs_path_dir":"$PATH
+        fi
+    done
+}
+
 source pypackage.sh
-source ssh_bash_profile.sh

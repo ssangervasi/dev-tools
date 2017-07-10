@@ -4,38 +4,31 @@
 export DEV_BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PATH="$DEV_BIN:$PATH"
 
-if [ ! -d '$DEV_WORK' ]; then
-    dev_envs="workspace Documents/workspace repo"
-    for work in $dev_envs; do
-        if [ -d ~/$work ]; then
-            export DEV_WORK=~/$work
-            break
-        fi
-    done
-fi
-
-# Python
-export WORKON_HOME=$HOME/.venvs
-export PROJECT_HOME=$DEV_WORK/projects
-source /usr/local/bin/virtualenvwrapper.sh
-
-# Go
-export GOROOT=$DEV_WORK/go
-
 # Tools
 source "aliases.sh"
 source "helper_functions.sh"
 
+set_dev_work
+
+
+# Python
+export WORKON_HOME=$HOME/.venvs
+export PROJECT_HOME=$DEV_WORK/projects
+source /usr/local/bin/virtualenvwrapper.sh 2> /dev/null
+
+# Go
+export GOROOT=$DEV_WORK/go
+
 # Custom terminal
 source "colors.sh"
-changeprompt INFO
+changeprompt --info
 
 # Other tools:
-add_to_path="$DEV_WORK/arcanist/bin
-             /usr/local/go/bin
-             /b/Go/bin"
-for path_dir in $add_to_path; do
-    if (test -d $path_dir); then
-        export PATH=$path_dir":"$PATH
-    fi
-done
+add_to_path $DEV_WORK/arcanist/bin \
+            /usr/local/go/bin \
+            /b/Go/bin \
+
+# Homebrew bash completions
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
