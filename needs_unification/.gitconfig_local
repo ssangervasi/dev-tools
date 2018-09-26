@@ -1,0 +1,16 @@
+[alias]
+	a = add --all
+	b = branch -v
+	l = log --oneline -n 10
+	s = status -sb
+	hoist = push -u origin head
+	fix = commit --squash HEAD
+	squash = rebase --interactive --autosquash
+	new = checkout -b
+	wat = !git diff --name-status $(git merge-base master head)
+	stat = !git diff --stat $(git merge-base master head)
+	amen = commit --amend --no-edit
+	ass = add .
+	hamster = checkout master
+	finish = branch -d
+	murder = branch -D

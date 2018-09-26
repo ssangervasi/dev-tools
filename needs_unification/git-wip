@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Pipes:
+# - List git branches in comit-date order, marking the current branch with "*"
+# - Exclude master and the currently checked out branch
+# - Pluck the top of the list
+wip_branch=$(
+	git branch --list --sort -committerdate --format '%(HEAD)%(refname)' \
+		| grep -v master \
+		| grep -v "*" \
+		| sed s!refs/heads/!! \
+		| head -n1
+)
+if [[ $wip_branch =~ ^[[:space:]]*$ ]]; then
+	echo 'No work-in-progress branch'
+	exit 0
+fi
+git checkout $wip_branch
