@@ -10,20 +10,31 @@ cls() {
 # 	bundle show rspec && return 'bundle exec rspec'
 # }
 
-SPEC_HISTORY=''
+SPEC_HISTORY_PATH=~/.spec_history
 
 spec() {
-	SPEC_HISTORY=$@
+	echo $@ > $SPEC_HISTORY_PATH
 	bundle exec rspec --format documentation $@
 }
 
-respec() {
-	if [[ $SPEC_HISTORY =~ ^[[:space:]]*$ ]]; then
-		echo 'No spec history!'
-		return 0
+read_spec_history() {
+	spec_history=$(cat $SPEC_HISTORY_PATH)
+	if empty $spec_history; then
+		echo 'No spec history!' 1>&2
+		return 1
 	fi
-	echo 'Replaying spec:' $SPEC_HISTORY
-	spec $SPEC_HISTORY
+
+	echo $spec_history
+}
+
+respec() {
+	spec_history=$(read_spec_history)
+	if [[ $_ ]]; then
+		return 1
+	fi
+
+	echo 'Replaying spec:' $spec_history $@
+	spec $spec_history $@
 }
 
 globspec() {
@@ -43,40 +54,61 @@ globspec() {
 	fi
 
 	matches=$(find -X . -path $1)
-	if [[ $matches =~ ^[[:space:]]*$ ]]; then
+	if empty $matches; then
 		echo 'Error: no files match pattern!'
 		return 2
 	fi
 
-	echo 'Running spec on these paths:
-	' $matches
+	echo 'Running "spec" on these paths:'
+	ls -1 $matches
 	spec $matches
 }
 
+empty() {
+	if [[ $1 =~ ^[[:space:]]*$ ]]; then
+		return 0
+	fi
+	return 1
+}
+
+
+ls_modified() {
+	local ref=$1
+	if empty $ref; then
+		ref='HEAD'
+	fi
+	git diff $ref --name-only --diff-filter=d
+}
 
 ls_modified_specs() {
-	# $(git ls-files --modified --others spec)
-	git diff HEAD --name-only --diff-filter=d | grep "_spec\.rb$"
+	ls_modified $1 | grep "_spec\.rb$"
 }
 
 ls_modified_rbs() {
-	git diff HEAD --name-only --diff-filter=d | grep "\.rb$"
+	ls_modified $1 | grep "\.rb$"
 }
 
 modspec() {
-	local modified_specs=$(ls_modified_specs)
-	if [[ $modified_specs =~ ^[[:space:]]*$ ]]; then
+	ref=$1
+	shift
+	local modified_specs=$(ls_modified_specs $ref)
+	if empty $modified_specs; then
 		echo 'No modified spec files.'
 		return 0
 	fi
 
-	echo "Running 'rspec $@' on these paths:
-	" $modified_specs
+	echo "Running \"spec $@\" on these paths:"
+	ls -1 $modified_specs
 	spec $modified_specs $@
 }
 
-modcop(){
-	bundle exec rubocop $(ls_modified_rbs)
+modcop() {
+	local modified_rbs=$(ls_modified_rbs $1)
+	if empty $modified_rbs; then
+		echo 'No modified ruby files.'
+		return 0
+	fi
+	bundle exec rubocop $modified_rbs
 }
 
 # Take a pss

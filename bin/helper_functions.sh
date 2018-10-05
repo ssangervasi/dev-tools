@@ -9,7 +9,7 @@ get_absolute_path()  {
         echo $absolute_path
     else
         return 1
-    fi 
+    fi
 }
 
 default() {
@@ -63,7 +63,7 @@ checktime() {
 changeprompt() {
     simple_prompt='\$ '
     timer_prompt='$ELAPSED\$ '
-    info_prompt='\A:\u:\W\$ '
+    info_prompt="\[${COLOR_CYAN}\]\A\[${COLOR_NC}\]:\u:\W\$ "
     export PROMPT_COMMAND=''
     case $1 in
         -i|--info)
