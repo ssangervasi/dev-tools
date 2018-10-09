@@ -10,6 +10,10 @@ cls() {
 # 	bundle show rspec && return 'bundle exec rspec'
 # }
 
+echo_error() {
+	echo $@ 1>&2
+}
+
 SPEC_HISTORY_PATH=~/.spec_history
 
 spec() {
@@ -20,7 +24,7 @@ spec() {
 read_spec_history() {
 	spec_history=$(cat $SPEC_HISTORY_PATH)
 	if empty $spec_history; then
-		echo 'No spec history!' 1>&2
+		echo_error 'No spec history!'
 		return 1
 	fi
 
@@ -46,7 +50,7 @@ globspec() {
 
 	'
 	if [[ $1 == '' ]]; then
-		echo 'Error: must provide a pattern!'
+		echo_error 'Error: must provide a pattern!'
 		return 1
 	elif [[ $1 =~ $help_pattern ]]; then
 		echo $usage
@@ -55,7 +59,7 @@ globspec() {
 
 	matches=$(find -X . -path $1)
 	if empty $matches; then
-		echo 'Error: no files match pattern!'
+		echo_error 'Error: no files match pattern!'
 		return 2
 	fi
 
@@ -93,7 +97,7 @@ modspec() {
 	shift
 	local modified_specs=$(ls_modified_specs $ref)
 	if empty $modified_specs; then
-		echo 'No modified spec files.'
+		echo_error 'No modified spec files.'
 		return 0
 	fi
 
@@ -105,7 +109,7 @@ modspec() {
 modcop() {
 	local modified_rbs=$(ls_modified_rbs $1)
 	if empty $modified_rbs; then
-		echo 'No modified ruby files.'
+		echo_error 'No modified ruby files.'
 		return 0
 	fi
 	bundle exec rubocop $modified_rbs
@@ -125,4 +129,41 @@ tree_find() {
 	local pattern=$1
 	shift
 	tree --prune -P $pattern $@
+}
+
+
+# Example:
+# $ ls -1
+# 	cow.rb
+# 	frep.sh
+# 	horse.rb
+# $ find_mvsed '*.rb' -E "s/([a-z]*)\.rb/moved_\1.py/g"
+# 	./cow.rb => ./moved_cow.py
+# 	./horse.rb => ./moved_horse.py
+# $ ls -1
+# 	frep.sh
+# 	moved_cow.py
+# 	moved_horse.py
+find_mvsed() {
+	local find_pattern=$1
+	shift
+	local sed_args=$@
+	find . -path "$find_pattern" -exec mvsed {} $sed_args \;
+
+}
+
+_mvsed() {
+	local file_path=$1
+	shift
+	local sed_args=$@
+	local new_file_path=$(echo $file_path | sed $sed_args)
+	# if [[ $file_path != $new_file_path && $(empty $new_file_path) != 0 ]]; then
+	if [[ -e $new_file_path ]]; then
+		echo_error "Error: cannot move $file_path to $new_file_path -- path exists"
+	elif [[ $(empty $new_file_path) ]]; then
+		echo_error "Error: cannot move $file_path -- new path is empty"
+	else
+	    echo "$file_path => $new_file_path"
+	    mv $file_path $new_file_path
+	fi
 }
