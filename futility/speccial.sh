@@ -11,7 +11,7 @@ read_spec_history() {
 	spec_history=$(cat $SPEC_HISTORY_PATH)
 	if empty $spec_history; then
 		echo_error 'No spec history!'
-		return YA_DUN_GOOFED
+		return $YA_DUN_GOOFED
 	fi
 
 	echo $spec_history
@@ -20,7 +20,7 @@ read_spec_history() {
 respec() {
 	spec_history=$(read_spec_history)
 	if $_; then
-		return YA_DUN_GOOFED
+		return $YA_DUN_GOOFED
 	fi
 
 	echo 'Replaying spec:' $spec_history $@
@@ -40,13 +40,13 @@ globspec() {
 	if empty $@; then
 		echo_error 'Error: must provide a pattern!'
 		echo $usage
-		return YA_DUN_GOOFED
+		return $YA_DUN_GOOFED
 	fi
 
 	matches=$(find -X . -path $1)
 	if empty $matches; then
 		echo_error 'Error: no files match pattern!'
-		return YA_DUN_GOOFED
+		return $YA_DUN_GOOFED
 	fi
 
 	echo 'Running `spec` on these paths:'

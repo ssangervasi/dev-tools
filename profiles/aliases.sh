@@ -24,3 +24,4 @@ alias gitb="git b"
 alias gitl="git l"
 alias gits="git s"
 alias hamster='git hamster'
+alias gitcd='cd $(git root-dir)'

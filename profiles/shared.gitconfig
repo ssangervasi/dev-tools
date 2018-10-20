@@ -42,6 +42,7 @@
         --date=relative \
         --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
 
+    root-dir=rev-parse --show-toplevel
     dic = diff --cached
     junction = merge-base master head
     wat = !git diff --name-status $(git junction)
