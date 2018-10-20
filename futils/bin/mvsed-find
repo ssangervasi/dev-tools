@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Example:
+# $ ls -1
+#   cow.rb
+#   horse.rb
+#   something_else.txt
+# $ mvsed-find '*.rb' -E "s/([a-z]*)\.rb/moved_\1.py/g"
+#   ./cow.rb => ./moved_cow.py
+#   ./horse.rb => ./moved_horse.py
+# $ ls -1
+#   moved_cow.py
+#   moved_horse.py
+#   something_else.txt
+mvsed-find() {
+  local find_pattern=$1
+  shift
+  local sed_args=$@
+  find . -path "$find_pattern" -exec mvsed {} $sed_args \;
+}

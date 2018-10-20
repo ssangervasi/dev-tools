@@ -1,0 +1,64 @@
+[user]
+    name = Sebastian Sangervasi
+
+[diff]
+    renames = true
+    indentHeuristic = on
+
+[status]
+    showUntrackedFiles = all
+
+[branch]
+    autosetupmerge = true
+
+[merge]
+    summary = true
+    conflictstyle = diff3
+
+[rebase]
+    autosquash = true
+
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+
+[alias]
+    a = add --all
+    ass = add .
+
+    c = commit -m
+    fix = commit --squash HEAD
+    amen = commit --amend --no-edit
+    squash = rebase --interactive
+    
+    co = checkout
+    new = checkout -b
+    hamster = checkout master
+
+    l = log --oneline -n 10
+    lg = log --all --graph --abbrev-commit \
+        --date=relative \
+        --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
+
+    dic = diff --cached
+    junction = merge-base master head
+    wat = !git diff --name-status $(git junction)
+    stat = !git diff --stat $(git junction)
+
+    pf = push --force-with-lease
+    hoist = push -u origin head
+    
+    s = status -sb
+
+    b = branch -v
+    finish = branch -d
+    murder = branch -D
+
+[fetch]
+    prune = true
+
+[pull]
+    rebase = true
+
