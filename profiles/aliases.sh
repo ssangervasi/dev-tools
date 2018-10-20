@@ -4,8 +4,9 @@
 
 # Handydandy
 alias resource='source $HOME/.bashrc $HOME/.bash_profile'
-alias '...'='cd $PROJECT_HOME'
-alias ',,,'="cd ~/workspace"
+alias '..'='cd ..'
+alias '...'='cd $DEV_HOME'
+alias ',,,'='cd $DEV_HOME'
 alias tree='tree -C'
 alias binweb='./bin/web'
 alias ct='change_theme'
@@ -25,3 +26,14 @@ alias gitl="git l"
 alias gits="git s"
 alias hamster='git hamster'
 alias gitcd='cd $(git root-dir)'
+
+# Lock the screen (OSX only)
+MAC_OS_LOCK_SCREEN='/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession'
+if [[ -f $MAC_OS_LOCK_SCREEN ]]; then
+	alias 'afk'='"$MAC_OS_LOCK_SCREEN" -suspend'
+fi
+
+# Alias pip (Win only)
+if (! which pip &> /dev/null); then
+	alias 'pip'='python -m pip'
+fi

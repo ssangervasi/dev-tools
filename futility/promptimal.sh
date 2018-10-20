@@ -18,29 +18,29 @@ ls_modified() {
 cls() {
 	clear
 	pwd
-	gitb || tree -L 1
+	git b || tree -L 1
 }
 
-resource() {
-	if [ ! $1 ]; then
-		deactivate &> /dev/null
-		source $DEV_BIN/.bash_profile
-		return 0;
-	fi
-	local osx_activate='bin/activate'
-	local win_activate='Scripts/activate'
-	local venvs=$(default $VENVS ~/.venvs)
-	local activate=$venvs/$1/$osx_activate
-	if [ ! -e $activate ]; then
-		activate=$venvs/$1/$win_activate
-	fi
-	source $activate &> /dev/null
-	if [[ $? != 0 ]]; then
-		echo 'No venv "'$1'"'
-		echo 'Options:'
-		ls -1 $venvs
-	fi
-}
+# resource() {
+# 	if [ ! $1 ]; then
+# 		deactivate &> /dev/null
+# 		source $DEV_BIN/.bash_profile
+# 		return 0;
+# 	fi
+# 	local osx_activate='bin/activate'
+# 	local win_activate='Scripts/activate'
+# 	local venvs=$(default $VENVS ~/.venvs)
+# 	local activate=$venvs/$1/$osx_activate
+# 	if [ ! -e $activate ]; then
+# 		activate=$venvs/$1/$win_activate
+# 	fi
+# 	source $activate &> /dev/null
+# 	if [[ $? != 0 ]]; then
+# 		echo 'No venv "'$1'"'
+# 		echo 'Options:'
+# 		ls -1 $venvs
+# 	fi
+# }
 
 prompt_clock() {
 	export CHECK_SECONDS=$((SECONDS-CHECK_SECONDS))
@@ -68,7 +68,7 @@ prompt_swap() {
 			echo '--info, --timer, --simple'
 			;;
 		*)
-			PS1=$(default $1 $simple_prompt)
+			export PS1=$(default $1 $simple_prompt)
 	esac
 }
 

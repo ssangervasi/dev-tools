@@ -1,34 +1,30 @@
-# Source this file in your actual ~/.bash_profile or ~/.bashrc
+#!/bin/bash
 
-# Expose custom path
-export DEV_BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export PATH="$DEV_BIN:$PATH"
+# Because I always forget:
+# The file `.bash_profile` is used loaded for interactive shells.
+# So stuff that is only useful at the prompt should go here.
 
-# Tools
-source "./aliases.sh"
-source "../futility/package.sh"
-
-set_dev_work
-
-
-# Python
-export WORKON_HOME=$HOME/.venvs
-export PROJECT_HOME=$DEV_WORK/projects
-source /usr/local/bin/virtualenvwrapper.sh 2> /dev/null
-
-# Go
-export GOROOT=$DEV_WORK/go
+if [[ -z $DEV_TOOLS_ROOT ]]; then
+	error_message='
+		Error: DEV_TOOLS_ROOT is not set!
+		Did you source bashrc.sh correctly?
+	'
+	echo $error_message 1>&2
+fi
 
 # Custom terminal
-source "colors.sh"
-changeprompt --info
-
-# Other tools:
-add_to_path $DEV_WORK/arcanist/bin \
-            /usr/local/go/bin \
-            /b/Go/bin \
+source "$DEV_TOOLS_ROOT/profiles/colors.sh"
+prompt_swap --info
 
 # Homebrew bash completions
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-  . `brew --prefix`/etc/bash_completion
+if type brew 2&>/dev/null; then
+  for completion_file in $(brew --prefix)/etc/bash_completion.d/*; do
+    source "$completion_file"
+  done
 fi
+
+# Rust Cargo -- should be in bashrc.sh?
+add_to_path "$HOME/.cargo/bin"
+
+# Ruby Env
+eval "$(rbenv init -)"

@@ -43,6 +43,11 @@ get_absolute_path()  {
 	echo $absolute_path
 }
 
+current_dir() {
+	local relative_dir=$(dirname $BASH_SOURCE)
+	echo $(get_absolute_path $relative_dir)
+}
+
 check_help() {
 	local usage=$1
 	shift
