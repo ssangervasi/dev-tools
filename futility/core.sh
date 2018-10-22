@@ -34,9 +34,7 @@ add_to_path() {
 
 get_absolute_path()  {
 	local relative_path=$1
-	local absolute_path=$(
-		cd $relative_path 2>>/dev/null && echo $PWD
-	)
+	local absolute_path=$(cd $relative_path 2>>/dev/null && echo $PWD)
 	if empty $absolute_path; then
 		return $YA_DUN_GOOFED
 	fi

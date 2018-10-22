@@ -48,17 +48,19 @@ prompt_clock() {
 	export CHECK_SECONDS=$SECONDS
 }
 
+export prompt_swap_command=''
+export PROMPT_COMMAND=$PROMPT_COMMAND'; $prompt_swap_command'
 prompt_swap() {
+	export prompt_swap_command=''
 	simple_prompt='\$ '
 	timer_prompt='$ELAPSED\$ '
 	info_prompt="\[${COLOR_CYAN}\]\A\[${COLOR_NC}\]:\u:\W\$ "
-	export PROMPT_COMMAND=''
 	case $1 in
 		-i|--info)
 			export PS1=$info_prompt
 			;;
 		-t|--timer)
-			export PROMPT_COMMAND=prompt_clock
+			export prompt_swap_command=prompt_clock
 			export PS1=$timer_prompt
 			;;
 		-s|--simple)

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Because I always forget:
 # The file `.bashrc` is used loaded for non-interactive shells.
 # So anything I might call from a subshell should go here.
 

@@ -18,13 +18,16 @@ prompt_swap --info
 
 # Homebrew bash completions
 if type brew 2&>/dev/null; then
-  for completion_file in $(brew --prefix)/etc/bash_completion.d/*; do
-    source "$completion_file"
-  done
+	source $(brew --prefix)/etc/bash_completion
 fi
 
 # Rust Cargo -- should be in bashrc.sh?
 add_to_path "$HOME/.cargo/bin"
 
 # Ruby Env
-eval "$(rbenv init -)"
+rbenv_lazy() {
+	if ! empty $(which rbenv); then
+		eval "$(rbenv init -)"
+	fi
+}
+alias rbenv='unalias rbenv; rbenv_lazy; rbenv '
