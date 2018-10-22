@@ -1,0 +1,3 @@
+#!/bin/bash
+
+osascript $(dirname $BASH_SOURCE)/TermTheme.scpt "$@"

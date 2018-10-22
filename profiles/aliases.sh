@@ -9,7 +9,7 @@ alias '...'='cd $DEV_HOME'
 alias ',,,'='cd $DEV_HOME'
 alias tree='tree -C'
 alias binweb='./bin/web'
-alias ct='change_theme'
+alias tt='term-theme'
 
 # Ruby & Rails
 alias beer='bundle exec rake'
