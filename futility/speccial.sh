@@ -19,7 +19,7 @@ read_spec_history() {
 
 respec() {
 	spec_history=$(read_spec_history)
-	if $_; then
+	if [[ $? > 0 ]]; then
 		return $YA_DUN_GOOFED
 	fi
 

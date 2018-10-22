@@ -20,14 +20,3 @@ prompt_swap --info
 if type brew 2&>/dev/null; then
 	source $(brew --prefix)/etc/bash_completion
 fi
-
-# Rust Cargo -- should be in bashrc.sh?
-add_to_path "$HOME/.cargo/bin"
-
-# Ruby Env
-rbenv_lazy() {
-	if ! empty $(which rbenv); then
-		eval "$(rbenv init -)"
-	fi
-}
-alias rbenv='unalias rbenv; rbenv_lazy; rbenv '
