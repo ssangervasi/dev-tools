@@ -18,5 +18,8 @@ prompt_swap --info
 
 # Homebrew bash completions
 if type brew 2&>/dev/null; then
-	source $(brew --prefix)/etc/bash_completion
+	bash_completion_file=$(brew --prefix)/etc/bash_completion
+	if [[ -e $bash_completion_file ]]; then
+		source  $bash_completion_file
+	fi	
 fi

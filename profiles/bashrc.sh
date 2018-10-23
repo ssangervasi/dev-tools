@@ -41,27 +41,36 @@ add_to_path "$HOME/.cargo/bin"
 
 # Ruby Env
 rbenv_lazy() {
-	unalias 'rbenv'
-	if ! empty $(which rbenv); then
-		eval "$(rbenv init -)"
+	if empty $(which rbenv); then
+		echo_error "You ain't got no rbenv"
+		return $YA_DUN_GOOFED
 	fi
+	echo "Using rbenv"
+	unalias 'rbenv'
+	eval "$(rbenv init -)"
+	return 0
 }
-alias rbenv='rbenv_lazy'
+alias rbenv='rbenv_lazy; rbenv'
 
 rvm_lazy() {
+	if empty $(which rvm); then
+		echo_error "You ain't got no rvm"
+		return $YA_DUN_GOOFED
+	fi
+	echo "Using rvm"
 	unalias 'rvm'
 	export PATH="$PATH:$HOME/.rvm/bin"
 	if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
 		source "$HOME/.rvm/scripts/rvm"
 	fi
+	return 0
 }
 alias rvm='rvm_lazy; rvm'
 
 bundle_lazy() {
-	unalias bundle
-	rvm_lazy
+	(rvm_lazy || rbenv_lazy) && unalias bundle
 }
-alias bundle='bundle_lazy; bundle'
+alias bundle='bundle_lazy && bundle'
 
 nvm_lazy() {
 	unalias nvm
