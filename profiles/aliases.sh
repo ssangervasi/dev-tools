@@ -12,6 +12,7 @@ alias binweb='./bin/web'
 alias tt='term-theme'
 
 # Ruby & Rails
+alias be='bundle exec'
 alias beer='bundle exec rake'
 alias beer-taste='RAILS_ENV=test beer'
 alias bier='bundle exec rails'

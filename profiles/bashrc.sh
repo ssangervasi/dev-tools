@@ -19,8 +19,13 @@ if [[ ! -d $DEV_TOOLS_ROOT ]]; then
 	exit 92
 fi
 
+##
 # My tools
-source "$DEV_TOOLS_ROOT/futility/core.sh"
+##
+
+source "$DEV_TOOLS_ROOT/futility/package.sh"
+source "$DEV_TOOLS_ROOT/profiles/aliases.sh"
+
 
 # Python
 export WORKON_HOME=$HOME/.venvs
@@ -45,36 +50,61 @@ rbenv_lazy() {
 		echo_error "You ain't got no rbenv"
 		return $YA_DUN_GOOFED
 	fi
-	echo "Using rbenv"
-	unalias 'rbenv'
+	if [[ $(type -t rbenv) != 'function' ]]; then
+		return 0
+	fi
+	unset rbenv
+	unalias 'rbenv' 2> /dev/null
 	eval "$(rbenv init -)"
+	echo "Using rbenv:" $(which rbenv)
 	return 0
 }
-alias rbenv='rbenv_lazy; rbenv'
+
+rbenv() {
+	rbenv_lazy && rbenv
+}
 
 rvm_lazy() {
-	if empty $(which rvm); then
+	local rvm_dir="$HOME/.rvm"
+	if [[ ! -s "$rvm_dir/scripts/rvm" ]]; then
 		echo_error "You ain't got no rvm"
 		return $YA_DUN_GOOFED
 	fi
-	echo "Using rvm"
-	unalias 'rvm'
-	export PATH="$PATH:$HOME/.rvm/bin"
-	if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
-		source "$HOME/.rvm/scripts/rvm"
+	if [[ $(type -t rvm) != 'function' ]]; then
+		return 0
 	fi
+	unset rvm
+	export PATH="$PATH:$rvm_dir/bin"
+	source "$HOME/.rvm/scripts/rvm"
+	echo "Using rvm:" $(which rvm)
 	return 0
 }
-alias rvm='rvm_lazy; rvm'
+
+rvm() {
+	rvm_lazy && rvm $@;
+}
 
 bundle_lazy() {
-	(rvm_lazy || rbenv_lazy) && unalias bundle
+	if [[ $(type -t bundle) != 'function' ]]; then
+		return 0
+	fi
+	unset bundle
+	rvm_lazy || rbenv_lazy
+	if [[ $? > 0 ]]; then
+		echo_error 'Could find ruby environment for bundler'
+		return $YA_DUN_GOOFED
+	fi
+	echo 'Using bundler:' $(which bundler)
+	return 0
 }
-alias bundle='bundle_lazy && bundle'
+
+bundle() {
+	bundle_lazy && bundle $@
+}
 
 nvm_lazy() {
-	unalias nvm
 	export NVM_DIR="$HOME/.nvm"
+	unalias 'nvm' 2> /dev/null
 	# This loads nvm
 	if [[ -s "$NVM_DIR/nvm.sh" ]]; then
 		source "$NVM_DIR/nvm.sh"
@@ -84,12 +114,4 @@ nvm_lazy() {
 		source "$NVM_DIR/bash_completion"
 	fi
 }
-alias nvm='nvm_lazy; nvm'
-
-##
-# It is necessary to load these utilities after the lazy definitions
-# 	because they need bundle, etc. to be in scope.
-##
-
-source "$DEV_TOOLS_ROOT/futility/package.sh"
-source "$DEV_TOOLS_ROOT/profiles/aliases.sh"
+alias nvm='nvm_lazy && nvm'
