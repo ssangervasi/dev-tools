@@ -2,9 +2,13 @@
 
 SPEC_HISTORY_PATH=~/.spec_history
 
+SPEC_RSPEC_COMMAND='bundle exec rspec'
+
 spec() {
+	echo "Running: $SPEC_RSPEC_COMMAND"
+	echo "With args: --format documentation $@"
 	echo $@ > $SPEC_HISTORY_PATH
-	bundle exec rspec --format documentation $@
+	$SPEC_RSPEC_COMMAND --format documentation $@
 }
 
 read_spec_history() {
@@ -15,6 +19,11 @@ read_spec_history() {
 	fi
 
 	echo $spec_history
+}
+
+echo_spec_paths() {
+	echo 'Found these spec paths:'
+	ls -1 $1
 }
 
 respec() {
@@ -49,8 +58,7 @@ globspec() {
 		return $YA_DUN_GOOFED
 	fi
 
-	echo 'Running `spec` on these paths:'
-	ls -1 $matches
+	echo_spec_paths $matches
 	spec $matches
 }
 
@@ -71,8 +79,7 @@ modspec() {
 		return 0
 	fi
 
-	echo "Running \"spec $@\" on these paths:"
-	ls -1 $modified_specs
+	echo_spec_paths $modified_specs
 	spec $modified_specs $@
 }
 
