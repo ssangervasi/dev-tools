@@ -3,16 +3,28 @@
 SPEC_HISTORY_PATH=~/.spec_history
 
 SPEC_RSPEC_COMMAND='bundle exec rspec'
+SPEC_RUBOCOP_COMMAND='bundle exec rubocop'
 
 spec() {
 	echo "Running: $SPEC_RSPEC_COMMAND"
 	echo "With args: --format documentation $@"
-	echo $@ > $SPEC_HISTORY_PATH
+	echo "" >> $SPEC_HISTORY_PATH
+	echo "$@" >> $SPEC_HISTORY_PATH
 	$SPEC_RSPEC_COMMAND --format documentation $@
 }
 
 read_spec_history() {
-	spec_history=$(cat $SPEC_HISTORY_PATH)
+	local range_end=$1
+	local spec_history;
+	if empty $range_end; then
+		spec_history=$(tail -n 1 $SPEC_HISTORY_PATH)
+	elif [[ $range_end =~ [0-9]+
+	 ]]; then
+		echo 'digits'
+		spec_history=$(tail -n $range_end $SPEC_HISTORY_PATH)
+	elif [[ $range_end =~ all ]]; then
+		spec_history=$(cat $SPEC_HISTORY_PATH)
+	fi
 	if empty $spec_history; then
 		echo_error 'No spec history!'
 		return $YA_DUN_GOOFED
@@ -89,5 +101,5 @@ modcop() {
 		echo_error 'No modified ruby files.'
 		return 0
 	fi
-	bundle exec rubocop $modified_rbs
+	$SPEC_RUBOCOP_COMMAND $modified_rbs
 }

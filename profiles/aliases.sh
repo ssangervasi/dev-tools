@@ -11,6 +11,7 @@ TREE_DEFAULT_OPTIONS='--dirsfirst -C'
 alias tree='tree ${TREE_DEFAULT_OPTIONS}'
 alias binweb='./bin/web'
 alias tt='term-theme'
+alias 'pgrep'='pgrep -lfi'
 
 # Ruby & Rails
 alias be='bundle exec'

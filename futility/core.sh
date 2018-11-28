@@ -9,11 +9,11 @@ echo_error() {
 
 default() {
 	local default_value=''
-	while empty $default_value; do
-		default_value=$1
+	while empty "$default_value"; do
+		default_value="$1"
 		shift
 	done
-	echo $default_value
+	echo "$default_value"
 }
 
 empty() {
@@ -67,4 +67,16 @@ stacktrace() {
 		((frame++));
 	done
 	echo_error "~~ End Stacktrace: $* ~~"
+}
+
+source_if_exists() {
+	local file_path="$1"
+	local else_log="$2"
+	if [[ -f "$file_path" ]]; then
+		source "$file_path"
+	elif [[ "$else_log" =~ ^-l|--log$ ]]; then
+		echo_error "Could not source $file_path"
+		return $YA_DUN_GOOFED
+	fi
+	return 0
 }

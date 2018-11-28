@@ -70,7 +70,7 @@ prompt_swap() {
 			echo '--info, --timer, --simple'
 			;;
 		*)
-			export PS1=$(default $1 $simple_prompt)
+			export PS1=$(default "$1" "$simple_prompt")
 	esac
 }
 

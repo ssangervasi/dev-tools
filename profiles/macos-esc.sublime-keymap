@@ -1,0 +1,87 @@
+[
+	// Definition!
+	{ "keys": ["super+alt+d"], "command": "goto_definition" },
+	// Reference!
+	{ "keys": ["super+alt+r"], "command": "goto_reference" },
+
+	// I always want to paste indentation
+	{ "keys": ["super+shift+v"], "command": "paste" },
+	{ "keys": ["super+v"], "command": "paste_and_indent" },
+
+	// I always want to place bookmarks
+	{ "keys": ["ctrl+r"], "command": "toggle_bookmark" },
+	{ "keys": ["ctrl+up"], "command": "prev_bookmark" },
+	{ "keys": ["ctrl+down"], "command": "next_bookmark" },
+
+	// Redo can be annoying, but...
+	// { "keys": ["super+y"], "command": "redo" },
+
+	// Dismissing annoying build errors
+	{
+		"keys": ["super+ctrl+alt+h"],
+		"command": "exec",
+		"args": {
+			"hide_phantoms_only": true
+		}
+	},
+
+	// It's always more convenient to show find *and* replace.
+	{ "keys": ["super+f"], "command": "show_panel", "args": {"panel": "replace", "reverse": false} },
+
+	// Default case toggle conflicts with Spectacle
+	{ "keys": ["ctrl+super+c"], "command": "toggle_case_sensitive", "context":
+		[
+			{ "key": "setting.is_widget", "operator": "equal", "operand": true }
+		]
+	},
+	// Default regex toggle conflicts with custom goto-references
+	{ "keys": ["super+ctrl+r"], "command": "toggle_regex", "context":
+		[
+			{ "key": "setting.is_widget", "operator": "equal", "operand": true }
+		]
+	},
+
+	// https://github.com/facelessuser/BracketHighlighter/blob/master/Example.sublime-keymap
+	// Select text including brackets
+	{
+		"keys": ["super+shift+space"],
+		"command": "bh_key",
+		"args":
+		{
+			"no_outside_adj": null,
+			"lines" : true,
+			"plugin":
+			{
+				"type": ["__all__"],
+				"command": "bh_modules.bracketselect",
+				"args": {"always_include_brackets": false}
+			}
+		}
+	},
+	{
+		"keys": ["super+ctrl+shift+space"],
+		"command": "bh_key",
+		"args":
+		{
+			"no_outside_adj": null,
+			"lines" : true,
+			"plugin":
+			{
+				"type": ["__all__"],
+				"command": "bh_modules.bracketselect",
+				"args": {"always_include_brackets": true}
+			}
+		}
+	},
+
+	// Auto-wrap spaces
+	{ "keys": [" "], "command": "insert_snippet", "args": {"contents": " ${0:$SELECTION} "}, "context":
+		[
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+		]
+	},
+
+	// Quick reindent
+	{ "keys": ["ctrl+super+tab"], "command": "reindent" },
+]

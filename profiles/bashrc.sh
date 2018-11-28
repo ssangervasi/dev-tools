@@ -26,6 +26,9 @@ fi
 source "$DEV_TOOLS_ROOT/futility/package.sh"
 source "$DEV_TOOLS_ROOT/profiles/aliases.sh"
 
+# General Use
+
+add_to_path "$HOME/bin"
 
 # Python
 export WORKON_HOME=$HOME/.venvs
