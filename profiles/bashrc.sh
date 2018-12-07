@@ -42,6 +42,9 @@ add_to_path "/usr/local/go/bin" "/b/Go/bin"
 # Rust Cargo -- should be in bashrc.sh?
 add_to_path "$HOME/.cargo/bin"
 
+# Haskell Stack Binaries
+add_to_path "$HOME/.local/bin"
+
 ##
 # These things are slow to source, so on-demand aliases
 # 	speed up the creation of new shells a lot.
