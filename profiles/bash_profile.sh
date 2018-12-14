@@ -23,3 +23,7 @@ if type brew 2&>/dev/null; then
 		source  $bash_completion_file
 	fi	
 fi
+
+# Sublime "subl" CLI
+
+add_to_path "/Applications/Sublime Text.app/Contents/SharedSupport/bin"

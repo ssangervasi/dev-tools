@@ -24,26 +24,28 @@ empty() {
 }
 
 add_to_path() {
-	for path_dir in $@; do
-		abs_path_dir=$(get_absolute_path $path_dir)
-		if [[ -d $abs_path_dir ]]; then
-			export PATH=$abs_path_dir":"$PATH
+	local path_dir abs_path_dir
+	for path_dir in "$@"; do
+		abs_path_dir=$(get_absolute_path "$path_dir")
+		if [[ -d "${abs_path_dir}" ]]; then
+			export PATH="${abs_path_dir}:$PATH"
 		fi
 	done
 }
 
 get_absolute_path()  {
-	local relative_path=$1
-	local absolute_path=$(cd $relative_path 2>>/dev/null && echo $PWD)
-	if empty $absolute_path; then
+	local relative_path absolute_path
+	relative_path="$1"
+	absolute_path=$(cd "$relative_path" 2>>/dev/null && echo "$PWD")
+	if empty "$absolute_path"; then
 		return $YA_DUN_GOOFED
 	fi
-	echo $absolute_path
+	echo "$absolute_path"
 }
 
 current_dir() {
-	local relative_dir=$(dirname $BASH_SOURCE)
-	echo $(get_absolute_path $relative_dir)
+	local relative_dir=$(dirname "$BASH_SOURCE")
+	echo $(get_absolute_path "$relative_dir")
 }
 
 check_help() {
