@@ -83,7 +83,7 @@ ls_modified_rbs() {
 }
 
 modspec() {
-	ref=$1
+	local ref=$1
 	shift
 	local modified_specs=$(ls_modified_specs $ref)
 	if empty $modified_specs; then

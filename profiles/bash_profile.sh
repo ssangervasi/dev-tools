@@ -17,12 +17,19 @@ source "$DEV_TOOLS_ROOT/profiles/colors.sh"
 prompt_swap --info
 
 # Homebrew bash completions
-if type brew 2&>/dev/null; then
-	bash_completion_file=$(brew --prefix)/etc/bash_completion
-	if [[ -e $bash_completion_file ]]; then
-		source  $bash_completion_file
-	fi	
-fi
+brew_bash_completions() {
+  local else="$1"
+
+  if type brew 2&>/dev/null; then
+  	bash_completion_file=$(brew --prefix)/etc/bash_completion
+  	if [[ -e $bash_completion_file ]]; then
+  		source  $bash_completion_file
+  	fi	
+  elif [[ "$else_log" =~ ^-l|--log$ ]]; then
+    echo
+  fi 
+}
+brew_bash_completions
 
 # Sublime "subl" CLI
 
