@@ -16,19 +16,23 @@ fi
 source "$DEV_TOOLS_ROOT/profiles/colors.sh"
 prompt_swap --info
 
+##
 # Homebrew bash completions
-brew_bash_completions() {
-  local else="$1"
 
+brew_bash_completions() {
   if type brew 2&>/dev/null; then
   	bash_completion_file=$(brew --prefix)/etc/bash_completion
   	if [[ -e $bash_completion_file ]]; then
   		source  $bash_completion_file
-  	fi	
-  elif [[ "$else_log" =~ ^-l|--log$ ]]; then
-    echo
-  fi 
+    else
+      echo_error 'Homebrew bash completions do not exist!'
+      echo_error 'Homebrew suggests running: brew install git bash-completion'
+      return $YA_DUN_GOOFED
+    fi
+  fi
+  return 0 
 }
+
 brew_bash_completions
 
 # Sublime "subl" CLI

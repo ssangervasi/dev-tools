@@ -1,16 +1,33 @@
 #!/bin/bash
 
+##
+# Generic framework for specification testing and linting.
+##
+
+## 
+# Spec testing 
+
 SPEC_HISTORY_PATH=~/.spec_history
 
-SPEC_RSPEC_COMMAND='bundle exec rspec'
-SPEC_RUBOCOP_COMMAND='bundle exec rubocop'
-
 spec() {
-	echo "Running: $SPEC_RSPEC_COMMAND"
-	echo "With args: --format documentation $@"
+	print_spec_header $@
+	write_spec_history $@
+	run_spec_command $@
+}
+
+print_spec_header() {
+	echo "Running: run_spec_command"
+	echo "With args: $@"
+}
+
+run_spec_command() {
+	echo_error 'You need to implement a "run_spec_command" function!'
+	return $YA_DUN_GOOFED
+}
+
+write_spec_history() {
 	echo "" >> $SPEC_HISTORY_PATH
 	echo "$@" >> $SPEC_HISTORY_PATH
-	$SPEC_RSPEC_COMMAND --format documentation $@
 }
 
 read_spec_history() {
@@ -74,14 +91,6 @@ globspec() {
 	spec $matches
 }
 
-ls_modified_specs() {
-	ls_modified $1 | grep "_spec\.rb$"
-}
-
-ls_modified_rbs() {
-	ls_modified $1 | grep "\.rb$"
-}
-
 modspec() {
 	local ref=$1
 	shift
@@ -95,11 +104,53 @@ modspec() {
 	spec $modified_specs $@
 }
 
-modcop() {
-	local modified_rbs=$(ls_modified_rbs $1)
-	if empty $modified_rbs; then
-		echo_error 'No modified ruby files.'
+ls_modified_specs() {
+	ls_modified $1 | grep -E "(^(Test|Spec)|.+(_spec|_test)[.].+)"
+}
+
+##
+# Linting
+
+modlint() {
+	local modified_sources=$(ls_modified_sources $1)
+	if empty $modified_sources; then
+		echo_error 'No modified source files.'
 		return 0
 	fi
-	$SPEC_RUBOCOP_COMMAND $modified_rbs
+	run_lint_command $modified_sources
+}
+
+ls_modified_sources() {
+	ls_modified $1 | grep -E ".+[.](hs|rb|py|js)$"
+}
+
+run_lint_command() {
+	echo_error 'You need to implement a "run_lint_command" function!'
+	return $YA_DUN_GOOFED
+}
+
+##
+# Ruby w/ RSpec & RuboCop spec plugin implementation.
+##
+
+load_ruby_speccial_plugin() {
+	##
+	# Tests with RSpec
+
+	SPEC_RSPEC_COMMAND='bundle exec rspec'
+
+	run_spec_command() {
+		$SPEC_RSPEC_COMMAND --format documentation $@
+	}
+
+	##
+	# Linting with RuboCop
+
+	SPEC_RUBOCOP_COMMAND='bundle exec rubocop'
+
+	alias modcop="modlint"
+
+	run_lint_command() {
+		$SPEC_RUBOCOP_COMMAND $@
+	}
 }
