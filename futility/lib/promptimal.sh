@@ -2,19 +2,20 @@
 
 prompt_swap() {
 	export prompt_swap_command=''
-	simple_prompt='\$ '
 	timer_prompt='$ELAPSED\$ '
-	info_prompt="\[${COLOR_CYAN}\]\A\[${COLOR_NC}\]:\u:\W\$ "
 	case $1 in
 		-i|--info)
-			export PS1=$info_prompt
+			_info_prompt
 			;;
 		-t|--timer)
 			mangle_prompt_command "prompt_clock"
 			export PS1=$timer_prompt
 			;;
 		-s|--simple)
-			PS1=$simple_prompt
+			_simple_prompt
+			;;
+		-d|--dynamic)
+			mangle_prompt_command _dynamic_prompt
 			;;
 		-h|--help)
 			echo '--info, --timer, --simple'
@@ -22,6 +23,33 @@ prompt_swap() {
 		*)
 			export PS1=$(default "$1" "$simple_prompt")
 	esac
+}
+
+_simple_prompt() { export PS1='\$ '; }
+
+_dynamic_prompt() {
+	local min_width=100
+	# Wow math comparisons are ugly.
+	if [[ $(($COLUMNS > $min_width)) == 1 ]]; then
+		_info_prompt
+	else
+		_simple_prompt
+	fi
+}
+
+_info_prompt() {
+	local info_ps1="\
+\[${COLOR_CYAN}\]\
+\T\
+\[${COLOR_NC}\]\
+|\
+\[${COLOR_GREY}\]\
+\u\
+\[${COLOR_NC}\]\
+|\
+\W\
+\$ "
+	export PS1="${info_ps1}"
 }
 
 prefix_prompt() {

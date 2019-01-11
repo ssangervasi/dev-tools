@@ -14,7 +14,7 @@ fi
 
 # Custom terminal
 source "$DEV_TOOLS_ROOT/profiles/colors.sh"
-prompt_swap --info
+prompt_swap --dynamic
 
 ##
 # Homebrew bash completions
@@ -30,7 +30,7 @@ brew_bash_completions() {
       return $YA_DUN_GOOFED
     fi
   fi
-  return 0 
+  return 0
 }
 
 brew_bash_completions
