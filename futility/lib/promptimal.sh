@@ -24,6 +24,17 @@ prompt_swap() {
 	esac
 }
 
+prefix_prompt() {
+	local prefix="$1"
+	export PS1="${prefix}${PS1}"
+}
+
+unprefix_prompt() {
+	local prefix="$1"
+	local unprefixed=$(echo "$PS1" | sed "s/^${prefix}//")
+	export PS1="${unprefixed}"
+}
+
 prompt_clock() {
 	export CHECK_SECONDS=$((SECONDS-CHECK_SECONDS))
 	export ELAPSED=$((CHECK_SECONDS/60)):$((CHECK_SECONDS%60))

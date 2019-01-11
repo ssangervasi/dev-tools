@@ -3,20 +3,25 @@
 # The file `.bashrc` is used loaded for non-interactive shells.
 # So anything I might call from a subshell should go here.
 
+echo_info() {
+	local emoji_prefix='♾ '
+	echo "${emoji_prefix} $@"
+}
+
 if [[ -z $DEV_HOME ]]; then
-	echo 'Error: DEV_HOME is not set!' 1>&2
-	exit 92
+	echo_error 'Error: DEV_HOME is not set!'
+	exit ${YA_DUN_GOOFED}
 elif [[ ! -d $DEV_HOME ]]; then
-	echo 'Error: DEV_HOME does not exist!' 1>&2
-	exit 92
+	echo_error 'Error: DEV_HOME does not exist!'
+	exit ${YA_DUN_GOOFED}
 fi
 
 if [[ -z $DEV_TOOLS_ROOT ]]; then
 	DEV_TOOLS_ROOT="$(dirname $BASH_SOURCE)/.."
 fi
 if [[ ! -d $DEV_TOOLS_ROOT ]]; then
-	echo 'Error: DEV_TOOLS_ROOT does not exist !' 1>&2
-	exit 92
+	echo_error 'Error: DEV_TOOLS_ROOT does not exist !'
+	exit ${YA_DUN_GOOFED}
 fi
 
 ##
@@ -62,7 +67,7 @@ rbenv_lazy() {
 	unset rbenv
 	unalias 'rbenv' 2> /dev/null
 	eval "$(rbenv init -)"
-	echo "Using rbenv:" $(which rbenv)
+	echo_info "Using rbenv:" $(which rbenv)
 	return 0
 }
 
@@ -82,7 +87,7 @@ rvm_lazy() {
 	unset rvm
 	export PATH="$PATH:$rvm_dir/bin"
 	source "$HOME/.rvm/scripts/rvm"
-	echo "Using rvm:" $(which rvm)
+	echo_info "Using rvm:" $(which rvm)
 	return 0
 }
 
@@ -100,7 +105,8 @@ bundle_lazy() {
 		echo_error 'Could find ruby environment for bundler'
 		return $YA_DUN_GOOFED
 	fi
-	echo 'Using bundler:' $(which bundler)
+	echo_info 'Using bundler:' $(which bundler)
+	load_ruby_speccial_plugin
 	return 0
 }
 
@@ -119,5 +125,6 @@ nvm_lazy() {
 	if [[ -s "$NVM_DIR/bash_completion" ]]; then
 		source "$NVM_DIR/bash_completion"
 	fi
+	echo_info "Using nvm node: $(nvm current)"
 }
 alias nvm='nvm_lazy && nvm'

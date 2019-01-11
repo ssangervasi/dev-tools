@@ -20,7 +20,7 @@ load_futility_lib() {
 }
 
 load_futility_bin() {
-  add_to_path $FUTILITY_PACKAGE_ROOT/bin  
+  add_to_path $FUTILITY_PACKAGE_ROOT/bin
 }
 
 load_futility_package
