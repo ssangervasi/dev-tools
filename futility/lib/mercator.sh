@@ -2,10 +2,15 @@
 
 enter_project() {
 	local project_name="$1"
+	echo "Entering ${project_name}..."
+	# An interactive login shell
 	env PROJECT_NAME="${project_name}" \
 			PROJECT_INIT_COMMAND="init_project_${project_name}" \
 			PROJECT_EXIT_COMMAND="exit_project_${project_name}" \
-			bash -il # An interactive login shell
+			bash --init-file <(echo 'source $HOME/.bash_profile; init_project') \
+					 -i 
+					 
+			# bash -il --init-file=<(echo ${interactive_subshell_init_command})
 }
 
 init_project() {
@@ -28,9 +33,11 @@ init_project() {
 
 	eval "${PROJECT_INIT_COMMAND}" || exit
 
+	echo "Entered ${PROJECT_NAME}."
+
 	cleanup_project() {
-		term-theme DevBlack
-		eval "${PROJECT_EXIT_COMMAND}" || echo "Exiting $PROJECT_NAME"
+		echo "Exiting $PROJECT_NAME..."
+		eval "${PROJECT_EXIT_COMMAND}"
 	}
 
 	exit_project() { exit; }
@@ -69,7 +76,7 @@ MERCATOR
 
 init_project_temp() {
 	prefix_prompt '⏳ '
-	term-theme DevOrange || echo 'No orange theme 😞'
+	term-theme DevOrange &> /dev/null || echo 'No orange theme 😞'
 
 	temp_location=$(mktemp -d)
 	cd "${temp_location}"

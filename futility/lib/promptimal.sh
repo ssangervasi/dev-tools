@@ -53,6 +53,7 @@ _dynamic_prompt() {
 _info_prompt() {
 	local basename=$(default "$1" "\W")
 	local info_ps1="\
+${PROMPT_PREFIX}\
 \[${COLOR_CYAN}\]\
 \T\
 \[${COLOR_NC}\]\
@@ -67,8 +68,8 @@ ${basename}\
 }
 
 prefix_prompt() {
-	local prefix="$1"
-	export PS1="${prefix}${PS1}"
+	export PROMPT_PREFIX="$1"
+	export PS1="${PROMPT_PREFIX}${PS1}"
 }
 
 unprefix_prompt() {
