@@ -21,3 +21,5 @@ export COLOR_BROWN='\e[0;33m'
 export COLOR_YELLOW='\e[1;33m'
 export COLOR_GRAY='\e[1;30m'
 export COLOR_LIGHT_GRAY='\e[0;37m'
+export COLOR_GREY="$COLOR_GRAY"
+export COLOR_LIGHT_GREY="$COLOR_LIGHT_GRAY"

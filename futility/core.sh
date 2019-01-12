@@ -49,9 +49,8 @@ get_absolute_path()  {
 	echo "$absolute_path"
 }
 
-current_dir() {
-	local relative_dir=$(dirname "$BASH_SOURCE")
-	echo $(get_absolute_path "$relative_dir")
+current_dir_command() {
+  echo 'get_absolute_path $(dirname "$BASH_SOURCE")'
 }
 
 check_help() {

@@ -2,9 +2,10 @@
 
 enter_project() {
 	local project_name="$1"
-	env PROJECT_INIT_COMMAND="init_project_${project_name}" \
+	env PROJECT_NAME="${project_name}" \
+			PROJECT_INIT_COMMAND="init_project_${project_name}" \
 			PROJECT_EXIT_COMMAND="exit_project_${project_name}" \
-			bash -i
+			bash -il # An interactive login shell
 }
 
 init_project() {
@@ -15,11 +16,21 @@ init_project() {
 	# Jump out of any existing project.
 	exit_project &> /dev/null
 
-	eval "${PROJECT_INIT_COMMAND} || exit"
+	type "${PROJECT_INIT_COMMAND}" &>/dev/null
+
+	if [[ $? == 1 ]]; then
+		dump_logo
+		dump_world_map
+		dump_no_project_help
+
+		exit
+	fi
+
+	eval "${PROJECT_INIT_COMMAND}" || exit
 
 	cleanup_project() {
 		term-theme DevBlack
-		eval "${PROJECT_EXIT_COMMAND} || Exiting project."
+		eval "${PROJECT_EXIT_COMMAND}" || echo "Exiting $PROJECT_NAME"
 	}
 
 	exit_project() { exit; }
@@ -29,6 +40,26 @@ init_project() {
 
 exit_project() {
 	echo_error 'Not in a project!'
+}
+
+dump_no_project_help() {
+		cat <<HELP_TEXT
+Looks like you tried to enter project "$PROJECT_NAME",
+but there is no init command "$PROJECT_INIT_COMMAND".
+You need to define that in order to use Mercator.
+HELP_TEXT
+}
+
+dump_world_map() {
+	cat $FUTILITY_PACKAGE_LIB/world_map.txt
+}
+
+dump_logo() {
+	cat <<MERCATOR
+/=================\\
+  M E R C A T O R
+\\=================/
+MERCATOR
 }
 
 ##

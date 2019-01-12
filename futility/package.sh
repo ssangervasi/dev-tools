@@ -8,7 +8,7 @@ load_futility_package() {
   FUTILITY_PACKAGE_CORE="$FUTILITY_PACKAGE_ROOT/core.sh"
   source "$FUTILITY_PACKAGE_CORE"
 
-  FUTILITY_PACKAGE_ROOT=$(current_dir)
+  FUTILITY_PACKAGE_ROOT=$(eval $(current_dir_command))
   FUTILITY_PACKAGE_LIB="$FUTILITY_PACKAGE_ROOT/lib"
 
   load_futility_bin
@@ -19,7 +19,7 @@ load_futility_lib() {
   # Yes this tempfile deal is hacky,
   #   but handles files with spaces and other odd things.
   local lib_file_list=$(mktemp)
-  ls -1 "$FUTILITY_PACKAGE_LIB" > ${lib_file_list}
+  ls -1 "$FUTILITY_PACKAGE_LIB" | grep '.sh' > ${lib_file_list}
 
   local lib_file
   while read lib_file; do
