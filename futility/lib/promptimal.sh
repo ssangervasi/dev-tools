@@ -28,7 +28,7 @@ prompt_swap() {
 _simple_prompt() { export PS1='\$ '; }
 
 _dynamic_prompt() {
-	local min_info_width=100
+	local min_info_width=70
 	local columns=$(default ${COLUMNS} ${min_info_width})
 	# Wow math comparisons are ugly.
 	if [[ $((${columns} >= ${min_info_width})) == 1 ]]; then

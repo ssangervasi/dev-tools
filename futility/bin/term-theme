@@ -1,3 +1,9 @@
 #!/bin/bash
 
-osascript $(dirname $BASH_SOURCE)/TermTheme.scpt "$@"
+theme_name="$@"
+
+osascript \
+    $(dirname $BASH_SOURCE)/TermTheme.scpt \
+    "${theme_name}" \
+  &> /dev/null \
+  || echo_error "No theme named ${theme_name} 😞"

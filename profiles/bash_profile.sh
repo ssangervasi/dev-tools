@@ -38,3 +38,17 @@ brew_bash_completions
 # Sublime "subl" CLI
 
 add_to_path "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
+
+# Project navigation
+
+.dev_tools() { enter_project 'dev_tools'; }
+alias '.dev'='.dev_tools'
+
+init_project_dev_tools() {
+  prefix_prompt '🛠  '
+  term-theme DevPurple
+
+  cd "$DEV_TOOLS_ROOT"
+}
+
+

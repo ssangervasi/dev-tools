@@ -11,6 +11,6 @@ for the decisions I made.
 These are the work horse utilities. This probably deserves to be in its own
 repository as it expand to be quite a project.
 
-More details in [FUTILITY.md].
+More details in [Futility].
 
-[FUTILITY.md]: ./futility/FUTILITY.md
+[Futility]: ./futility/README.md
