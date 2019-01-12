@@ -111,6 +111,10 @@ ls_modified_specs() {
 ##
 # Linting
 
+lint() {
+	run_lint_command "$@"
+}
+
 modlint() {
 	local modified_sources=$(ls_modified_sources $1)
 	if empty $modified_sources; then
