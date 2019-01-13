@@ -1,0 +1,24 @@
+
+##
+# {{ name }}
+# Project created by Mercator
+##
+
+# Template variables:
+#   directory
+#   icon
+#   name
+
+.{{ name }}() { enter_project '{{ name }}'; }
+
+init_project_{{ name }}() {
+	prefix_prompt '{{ icon }} '
+
+	cd '{{ directory }}'
+
+	exit_project_{{ name }} () {
+		echo "Exited {{ name }}"
+	}
+	
+	echo "Entered {{ name }}"
+}

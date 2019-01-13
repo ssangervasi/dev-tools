@@ -54,13 +54,11 @@ current_dir_command() {
 }
 
 check_help() {
-	local usage=$1
-	shift
+	local args="$@"
 	local help_pattern='^(-h|--help)$'
 	local arg
 	for arg in $args; do
-		if [[ $1 =~ $help_pattern ]]; then
-			echo $usage
+		if [[ $arg =~ ${help_pattern} ]]; then
 			return 0
 		fi
 	done

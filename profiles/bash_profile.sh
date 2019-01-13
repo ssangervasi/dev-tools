@@ -49,6 +49,8 @@ init_project_dev_tools() {
   term-theme DevPurple
 
   cd "$DEV_TOOLS_ROOT"
+
+  exit_project_dev_tools() { return; }
 }
 
 

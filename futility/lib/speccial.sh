@@ -66,29 +66,31 @@ respec() {
 }
 
 globspec() {
-	usage='Usage: globspec */glob/pattern/*.txt
-	=> run `spec` on all files matching the pattern
-	Example:
-		globspec *animals/*horse_spec.rb
+	check_help $@ && globspec_help && return 0
 
-	'
-	if check_help $usage $@; then
-		return 0
-	fi
 	if empty $@; then
 		echo_error 'Error: must provide a pattern!'
 		echo $usage
 		return $YA_DUN_GOOFED
 	fi
 
-	matches=$(find -X . -path $1)
-	if empty $matches; then
+	local matches=$(find -X . -path $1)
+	if empty ${matches}; then
 		echo_error 'Error: no files match pattern!'
 		return $YA_DUN_GOOFED
 	fi
 
-	echo_spec_paths $matches
-	spec $matches
+	echo_spec_paths ${matches}
+	spec ${matches}
+}
+
+globspec_help() {
+	cat <<HELP_TEXT
+Usage: globspec */glob/pattern/*.txt
+	=> run \`spec\` on all files matching the pattern
+Example:
+	globspec *animals/*horse_spec.rb
+HELP_TEXT
 }
 
 modspec() {
