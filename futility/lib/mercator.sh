@@ -9,7 +9,7 @@ enter_project() {
 	env PROJECT_NAME="${project_name}" \
 			PROJECT_INIT_COMMAND="init_project_${project_name}" \
 			PROJECT_EXIT_COMMAND="exit_project_${project_name}" \
-			bash --init-file <(echo 'source $HOME/.bash_profile; init_project') -i 
+			bash --init-file <(echo 'source $HOME/.bash_profile; init_project') -i
 }
 
 init_project() {
@@ -36,7 +36,7 @@ init_project() {
 
 	cleanup_project() {
 		echo "Exiting $PROJECT_NAME..."
-		eval "${PROJECT_EXIT_COMMAND}"
+		eval "${PROJECT_EXIT_COMMAND}" 2> /dev/null
 	}
 
 	exit_project() { exit; }
@@ -102,7 +102,7 @@ icon       : The icon that will prefix PS1 when inside the proejct. Default is '
 
 This command genates a boilerplate Mercator project with the given arguments.
 The result is printed to stdout. To preserve the project, run something like:
-	
+
 	$ generate_project . my_proj >> ~/bash_profile
 
 Replace "~/bash_profile" with your preferred shell initializer script,

@@ -32,12 +32,12 @@
     fix = commit --squash HEAD
     amen = commit --amend --no-edit
     squash = rebase --interactive
-    
+
     co = checkout
     new = checkout -b
     hamster = checkout master
 
-    l = log --oneline -n 10
+    l = log --oneline -n 10 --no-merges
     lg = log --all --graph --abbrev-commit \
         --date=relative \
         --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
@@ -50,7 +50,7 @@
 
     pf = push --force-with-lease
     hoist = push -u origin head
-    
+
     s = status -sb
 
     b = branch -v
