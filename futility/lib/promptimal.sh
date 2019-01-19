@@ -1,31 +1,44 @@
 #!/bin/bash
 
 prompt_swap() {
-	export prompt_swap_command=''
-	timer_prompt='$ELAPSED\$ '
+	check_help $@ && prompt_swap_help && return 0
 	case $1 in
+		-s|--simple)
+			_simple_prompt
+			;;
 		-i|--info)
 			_info_prompt
 			;;
 		-t|--timer)
-			mangle_prompt_command "prompt_clock"
-			export PS1=$timer_prompt
-			;;
-		-s|--simple)
-			_simple_prompt
+			_timer_prompt
 			;;
 		-d|--dynamic)
 			mangle_prompt_command _dynamic_prompt
-			;;
-		-h|--help)
-			echo '--info, --timer, --simple'
 			;;
 		*)
 			export PS1=$(default "$1" "$simple_prompt")
 	esac
 }
 
-_simple_prompt() { export PS1='\$ '; }
+prompt_swap_help() {
+	cat <<HELP_TEXT
+Supported prompts:
+	-s, --simple
+	-i, --info
+	-t, --timer
+	-d, --dynamic
+HELP_TEXT
+}
+
+_simple_prompt() {
+	mangle_prompt_command ''
+	export PS1='\$ ';
+}
+
+_timer_prompt() {
+	mangle_prompt_command 'prompt_clock'
+	export PS1='$ELAPSED\$ '
+}
 
 _dynamic_prompt() {
 	local min_info_width=70

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+##
+# Initializing
+
 enter_project() {
 	local project_name="$1"
 	echo "Entering ${project_name}..."
@@ -30,9 +33,6 @@ init_project() {
 		exit
 	fi
 
-	eval "${PROJECT_INIT_COMMAND}" || exit
-
-	echo "Entered ${PROJECT_NAME}."
 
 	cleanup_project() {
 		echo "Exiting $PROJECT_NAME..."
@@ -41,11 +41,27 @@ init_project() {
 
 	exit_project() { exit; }
 
+	.help() {
+		project_default_help
+	}
+
+	eval "${PROJECT_INIT_COMMAND}" || exit
+
+	echo "Entered ${PROJECT_NAME}."
+
 	trap cleanup_project EXIT
 }
 
 exit_project() {
 	echo_error 'Not in a project!'
+}
+
+project_default_help() {
+		cat <<HELP_TEXT
+Project ${PROJECT_NAME}
+This the default Mercator help message.
+Define your own .help in ${PROJECT_INIT_COMMAND}
+HELP_TEXT
 }
 
 dump_no_project_help() {
@@ -69,7 +85,7 @@ MERCATOR
 }
 
 ##
-#
+# Generating
 
 generate_project() {
 	check_help $@ && generate_project_help && return 0
@@ -142,13 +158,15 @@ init_project_temp() {
 		rm -r "${temp_location}"
 	}
 
-	cat <<HELP_TEXT > ./help.txt
+	.help() {
+		cat <<HELP_TEXT
 This is a temporary location!:
 
 	${temp_location}
 
 Everything will be deleted when you exit!
 HELP_TEXT
+	}
 
-	cat ./help.txt
+	.help
 }

@@ -4,8 +4,8 @@
 # Generic framework for specification testing and linting.
 ##
 
-## 
-# Spec testing 
+##
+# Spec testing
 
 SPEC_HISTORY_PATH=~/.spec_history
 
@@ -26,33 +26,42 @@ run_spec_command() {
 }
 
 write_spec_history() {
-	echo "" >> $SPEC_HISTORY_PATH
-	echo "$@" >> $SPEC_HISTORY_PATH
+	local new_entry="$@"
+	local prev_entry=$(read_spec_history 1)
+	if [[ "${new_entry}" == "${prev_entry}" ]]; then
+		return 0
+	fi
+	echo "${new_entry}" >> $SPEC_HISTORY_PATH
 }
 
 read_spec_history() {
 	local range_end=$1
 	local spec_history;
+
+	local out_path=$(mktemp)
+	trap "rm ${out_path}" RETURN
+
 	if empty $range_end; then
-		spec_history=$(tail -n 1 $SPEC_HISTORY_PATH)
-	elif [[ $range_end =~ [0-9]+
-	 ]]; then
-		echo 'digits'
-		spec_history=$(tail -n $range_end $SPEC_HISTORY_PATH)
+		tail -n 1 $SPEC_HISTORY_PATH > ${out_path}
+
+	elif [[ $range_end =~ [0-9]+ ]]; then
+		tail -n $range_end $SPEC_HISTORY_PATH > ${out_path}
+
 	elif [[ $range_end =~ all ]]; then
-		spec_history=$(cat $SPEC_HISTORY_PATH)
+		cat $SPEC_HISTORY_PATH > ${out_path}
 	fi
-	if empty $spec_history; then
+
+	if [[ ! -s ${out_path} ]]; then
 		echo_error 'No spec history!'
 		return $YA_DUN_GOOFED
 	fi
 
-	echo $spec_history
+	cat ${out_path}
 }
 
-echo_spec_paths() {
-	echo 'Found these spec paths:'
-	ls -1 $1
+echo_paths() {
+	echo 'Found these paths:'
+	ls -1 $@
 }
 
 respec() {
@@ -80,7 +89,7 @@ globspec() {
 		return $YA_DUN_GOOFED
 	fi
 
-	echo_spec_paths ${matches}
+	echo_paths ${matches}
 	spec ${matches}
 }
 
@@ -102,7 +111,7 @@ modspec() {
 		return 0
 	fi
 
-	echo_spec_paths $modified_specs
+	echo_paths $modified_specs
 	spec $modified_specs $@
 }
 
@@ -118,16 +127,21 @@ lint() {
 }
 
 modlint() {
-	local modified_sources=$(ls_modified_sources $1)
+	local ref="$1"
+	shift
+	local modified_sources=$(ls_modified_sources ${ref})
 	if empty $modified_sources; then
 		echo_error 'No modified source files.'
 		return 0
 	fi
-	run_lint_command $modified_sources
+
+	echo_paths $modified_sources
+	run_lint_command $modified_sources $@
 }
 
 ls_modified_sources() {
-	ls_modified $1 | grep -E ".+[.](hs|rb|py|js)$"
+	# TODO: Come up with a better way of extending this pattern.
+	ls_modified $1 | grep -E '^((Gemfile)|(.+[.])(hs|rb|py|js))$'
 }
 
 run_lint_command() {

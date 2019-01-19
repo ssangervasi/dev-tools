@@ -24,6 +24,20 @@ if [[ ! -d $DEV_TOOLS_ROOT ]]; then
 	exit ${YA_DUN_GOOFED}
 fi
 
+
+##
+# Bash history
+##
+
+# Number of lines to keep in the history file
+export HISTSIZE=1000000
+# bash history is timestamped as YYYY-MM-DD HH:MM:SS
+export c='%F %T '
+# Don't put duplicate lines or lines beinning with a space in the history.
+export HISTCONTROL=ignoreboth
+# Unify history across shells
+shopt -s histappend
+
 ##
 # My tools
 ##

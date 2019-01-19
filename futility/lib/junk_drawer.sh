@@ -37,12 +37,12 @@ space_to_csv() {
 
 slackpost() {
 	test ! "$SLACK_WEBHOOK_URL" && echo 'No SLACK_WEBHOOK_URL set!' && return 1
-	
+
 	local message channel botname
 	message=$@;
 	channel=$(default $channel "@slackbot")
 	botname=$(default $botname "HookBot")
-	
+
 
 	slack_payload="payload={\"channel\": \"${channel}\", \"username\": \"${botname}\", \"text\": \"${message}\", \"icon_emoji\": \":warning:\"}"
 	echo "Posting to slack: " $slack_payload
