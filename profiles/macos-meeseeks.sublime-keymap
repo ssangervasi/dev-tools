@@ -1,0 +1,284 @@
+[
+	// 
+	// Custom Find and Replace
+	// 
+	{ "keys": ["super+alt+f"], "command": "show_panel", "args": {"panel": "find", "reverse": false} },
+	{ "keys": ["super+f"], "command": "show_panel", "args": {"panel": "replace", "reverse": false} },	
+
+	//
+	// Custom Auto-Pair Symbols
+	// 
+	// Auto-pair angle brackets
+	{ "keys": ["<"], "command": "insert_snippet", "args": {"contents": "<${0:$SELECTION}>"}, "context":
+		[
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+		]
+	},
+	// { "keys": ["<"], "command": "insert_snippet", "args": {"contents": "<$0>"}, "context":
+	//  [
+	//    { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+	//    { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+	//    { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|;|\\}|$)", "match_all": true }
+	//  ]
+	// },
+	// { "keys": ["]"], "command": "move", "args": {"by": "characters", "forward": true}, "context":
+	// 	[
+	// 		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+	// 		{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+	// 		{ "key": "following_text", "operator": "regex_contains", "operand": "^\\]", "match_all": true }
+	// 	]
+	// },
+	// { "keys": ["backspace"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Delete Left Right.sublime-macro"}, "context":
+	// 	[
+	// 		{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+	// 		{ "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+	// 		{ "key": "preceding_text", "operator": "regex_contains", "operand": "\\<$", "match_all": true },
+	// 		{ "key": "following_text", "operator": "regex_contains", "operand": "^\\>", "match_all": true }
+	// 	]
+	// },
+
+	// Auto-pair spaces
+	{ "keys": [" "], "command": "insert_snippet", "args": {"contents": " ${0:$SELECTION} "}, "context":
+		[
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+		]
+	},
+	
+	// 
+	// JsPrettier: create keybinding.
+	// 
+	{ "keys": ["super+alt+j"],
+		"command": "js_prettier",
+		"context": [
+			{ "operand": "source.js", 
+				"operator": "equal", 
+				"match_all": true, 
+				"key": "selector"
+			}
+		]
+	},
+
+	//
+	// PEP8 Autoformat: custom keybinding.
+	// 
+	{ "keys": ["super+alt+j"],
+		"command": "pep8_autoformat",
+		"context": [
+			{ "operand": "source.python", 
+				"operator": "equal", 
+				"match_all": false, 
+				"key": "selector"
+			}
+		]
+	},
+
+	// 
+	// Emmet: Enable in non-html syntaxes, such as JSX.
+	//
+	{
+		"keys": ["tab"], 
+		"command": "expand_abbreviation_by_tab", 
+
+		// put comma-separated syntax selectors for which 
+		// you want to expandEmmet abbreviations into "operand" key 
+		// instead of SCOPE_SELECTOR.
+		// Examples: source.js, text.html - source
+		"context": [
+			{
+				"operand": "meta.jsx.js", 
+				"operator": "equal", 
+				"match_all": true, 
+				"key": "selector"
+			}, 
+
+			// run only if there's no selected text
+			{
+				"match_all": true, 
+				"key": "selection_empty"
+			},
+
+			// don't work if there are active tabstops
+			{
+				"operator": "equal", 
+				"operand": false, 
+				"match_all": true, 
+				"key": "has_next_field"
+			}, 
+
+			// don't work if completion popup is visible and you
+			// want to insert completion with Tab. If you want to
+			// expand Emmet with Tab even if popup is visible -- 
+			// remove this section
+			{
+				"operand": false, 
+				"operator": "equal", 
+				"match_all": true, 
+				"key": "auto_complete_visible"
+			}, 
+			{
+				"match_all": true, 
+				"key": "is_abbreviation"
+			}
+		]
+	},
+
+	//
+	// DoxyDoxygen: Replace stupid "Q" commands with "forward_slash".
+	// 
+	{
+		"keys": ["super+shift+forward_slash"],
+		"command": "doxy_comment_nearest_entity",
+		"args": {},
+		"context": [
+			{ "key": "selector", "operator": "equal", "operand": "source, text.html.cshtml, text.jade", "match_all": true }
+		]
+	},
+	{
+		"keys": ["super+shift+alt+forward_slash"],
+		"command": "doxy_update_comments",
+		"args": { "reparse": true, "new_style": "roll_2" },
+		"context": [
+			{ "key": "selector", "operator": "equal",  "operand": "comment, string.quoted.double.block.cython, string.quoted.single.block.cython, string.quoted.double.block.python, string.quoted.single.block.python, string.quoted.docstring.multi.python", "match_all": true }
+		]
+	},
+	// Users coming from others plugins may be interested in uncommenting it
+	// {
+	//     "keys": ["shift+alt+tab"],
+	//     "command": "doxy_update_comments",
+	//     "args": { "reparse": true },
+	//     "context": [
+	//         { "key": "selector", "operator": "equal",  "operand": "comment, string.quoted.double.block.cython, string.quoted.single.block.cython, string.quoted.double.block.python, string.quoted.single.block.python, string.quoted.docstring.multi.python", "match_all": true }
+	//     ]
+	// },
+	{
+		"keys": ["super+shift+forward_slash"],
+		"command": "doxy_update_comments",
+		"args": { "reparse": true },
+		"context": [
+			{ "key": "selector", "operator": "equal",  "operand": "comment, string.quoted.double.block.cython, string.quoted.single.block.cython, string.quoted.double.block.python, string.quoted.single.block.python, string.quoted.docstring.multi.python", "match_all": true }
+		]
+	},
+
+	////
+	// LSP
+	////
+
+	// Show/Hide Diagnostics Panel
+  { "keys": ["super+alt+m"], "command": "lsp_show_diagnostics_panel" },
+
+	// Format Document
+  { "keys": ["super+ctrl+m"], "command": "lsp_format_document" },
+
+  // Find/replace menu - swap alt to ctrl
+  { "keys": ["super+ctrl+c"], "command": "toggle_case_sensitive", "context":
+  	[
+  		{ "key": "setting.is_widget", "operator": "equal", "operand": true }
+  	]
+  },
+  { "keys": ["super+ctrl+r"], "command": "toggle_regex", "context":
+		[
+			{ "key": "setting.is_widget", "operator": "equal", "operand": true }
+		]
+	},
+	{ "keys": ["super+ctrl+w"], "command": "toggle_whole_word", "context":
+		[
+			{ "key": "setting.is_widget", "operator": "equal", "operand": true }
+		]
+	},
+	{ "keys": ["super+ctrl+a"], "command": "toggle_preserve_case", "context":
+		[
+			{ "key": "setting.is_widget", "operator": "equal", "operand": true }
+		]
+	},
+
+	// Definition!
+	{ "keys": ["super+alt+d"], "command": "goto_definition" },
+	// Reference!
+	{ "keys": ["super+alt+r"], "command": "goto_reference" },
+
+	// I always want to paste indentation
+	{ "keys": ["super+shift+v"], "command": "paste" },
+	{ "keys": ["super+v"], "command": "paste_and_indent" },
+
+	// I always want to place bookmarks
+	{ "keys": ["ctrl+r"], "command": "toggle_bookmark" },
+	{ "keys": ["ctrl+up"], "command": "prev_bookmark" },
+	{ "keys": ["ctrl+down"], "command": "next_bookmark" },
+
+	// Redo can be annoying, but...
+	// { "keys": ["super+y"], "command": "redo" },
+
+	// Dismissing annoying build errors
+	{
+		"keys": ["super+ctrl+alt+h"],
+		"command": "exec",
+		"args": {
+			"hide_phantoms_only": true
+		}
+	},
+
+	// It's always more convenient to show find *and* replace.
+	{ "keys": ["super+f"], "command": "show_panel", "args": {"panel": "replace", "reverse": false} },
+
+	// Default case toggle conflicts with Spectacle
+	{ "keys": ["ctrl+super+c"], "command": "toggle_case_sensitive", "context":
+		[
+			{ "key": "setting.is_widget", "operator": "equal", "operand": true }
+		]
+	},
+	// Default regex toggle conflicts with custom goto-references
+	{ "keys": ["super+ctrl+r"], "command": "toggle_regex", "context":
+		[
+			{ "key": "setting.is_widget", "operator": "equal", "operand": true }
+		]
+	},
+
+	// https://github.com/facelessuser/BracketHighlighter/blob/master/Example.sublime-keymap
+	// Select text including brackets
+	{
+		"keys": ["super+shift+space"],
+		"command": "bh_key",
+		"args":
+		{
+			"no_outside_adj": null,
+			"lines" : true,
+			"plugin":
+			{
+				"type": ["__all__"],
+				"command": "bh_modules.bracketselect",
+				"args": {"always_include_brackets": false}
+			}
+		}
+	},
+	{
+		"keys": ["super+ctrl+shift+space"],
+		"command": "bh_key",
+		"args":
+		{
+			"no_outside_adj": null,
+			"lines" : true,
+			"plugin":
+			{
+				"type": ["__all__"],
+				"command": "bh_modules.bracketselect",
+				"args": {"always_include_brackets": true}
+			}
+		}
+	},
+
+	// Auto-wrap spaces
+	{ "keys": [" "], "command": "insert_snippet", "args": {"contents": " ${0:$SELECTION} "}, "context":
+		[
+			{ "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+			{ "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+		]
+	},
+
+	// Quick reindent
+	{ "keys": ["ctrl+super+tab"], "command": "reindent" },
+	
+	// Keep as last thing.
+	{}
+]

@@ -2,12 +2,8 @@
 ##
 # {{ name }}
 # Project created by Mercator
+# {{ date }}
 ##
-
-# Template variables:
-#   directory
-#   icon
-#   name
 
 .{{ name }}() { enter_project '{{ name }}'; }
 
@@ -17,8 +13,8 @@ init_project_{{ name }}() {
 	cd '{{ directory }}'
 
 	exit_project_{{ name }} () {
-		echo "Exited {{ name }}"
+		echo "Exited {{ name }}."
 	}
 	
-	echo "Entered {{ name }}"
+	echo "Entered {{ name }}."
 }

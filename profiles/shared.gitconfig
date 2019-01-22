@@ -34,7 +34,6 @@
     squash = rebase --interactive
 
     co = checkout
-    new = checkout -b
     hamster = checkout master
 
     l = log --oneline -n 10 --no-merges
@@ -50,10 +49,12 @@
 
     pf = push --force-with-lease
     hoist = push -u origin head
-
-    s = status -sb
-
+    
     b = branch -v
+    s = status -sb
+    current = symbolic-ref --short HEAD
+
+    new = checkout -b
     finish = branch -d
     murder = branch -D
 

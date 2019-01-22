@@ -33,6 +33,7 @@ init_project() {
 		exit
 	fi
 
+	eval "${PROJECT_INIT_COMMAND}" || exit
 
 	cleanup_project() {
 		echo "Exiting $PROJECT_NAME..."
@@ -44,10 +45,6 @@ init_project() {
 	.help() {
 		project_default_help
 	}
-
-	eval "${PROJECT_INIT_COMMAND}" || exit
-
-	echo "Entered ${PROJECT_NAME}."
 
 	trap cleanup_project EXIT
 }
@@ -103,7 +100,8 @@ generate_project() {
 	cat <(cat "$FUTILITY_PACKAGE_LIB/data-files/new_project.sh.template" |
 				sub_var 'name' "${name}" |
 				sub_var 'directory' "${directory}" |
-				sub_var 'icon' "${icon}")
+				sub_var 'icon' "${icon}" |
+				sub_var 'date' "$(date)")
 }
 
 generate_project_help() {
