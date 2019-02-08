@@ -1,20 +1,40 @@
 #!/bin/bash
 
-# Example:
-# $ ls -1
-#   cow.rb
-#   horse.rb
-#   something_else.txt
-# $ mvsed-find '*.rb' -E "s/([a-z]*)\.rb/moved_\1.py/g"
-#   ./cow.rb => ./moved_cow.py
-#   ./horse.rb => ./moved_horse.py
-# $ ls -1
-#   moved_cow.py
-#   moved_horse.py
-#   something_else.txt
-mvsed-find() {
-  local find_pattern=$1
-  shift
-  local sed_args=$@
-  find . -path "$find_pattern" -exec mvsed {} $sed_args \;
+source $(dirname $BASH_SOURCE)/../core.sh
+
+_mvsed_find() {
+	check_help $@ && mvsed_find_help && exit 0
+
+	local find_pattern=$1
+	shift
+	local sed_args=$@
+	find . -path "$find_pattern" -exec mvsed {} $sed_args \;
 }
+
+mvsed_find_help() {
+	cat <<HELP_TEXT
+usage: mvsed-find [-h|--help] <find_pattern> [<sed_args>...]
+
+-h, --help     : Print this help and exit.
+<find_pattern> : The file glob pattern to pass to find.
+								 Find is run from the current directory.
+<sed_args>     : One or more arguments to pass to mvsed for each found path.
+
+Example:
+	$ ls -1
+	> cow.rb
+	> horse.rb
+	> something_else.txt
+
+	$ mvsed-find '*.rb' -E "s/([a-z]*)\.rb/moved_\1.py/g"
+	> ./cow.rb => ./moved_cow.py
+	> ./horse.rb => ./moved_horse.py
+
+	$ ls -1
+	> moved_cow.py
+	> moved_horse.py
+	> something_else.txt
+HELP_TEXT
+}
+
+_mvsed_find $@

@@ -106,13 +106,13 @@ generate_project() {
 
 generate_project_help() {
 	cat <<HELP_TEXT
-usage: generate_project [-h|--help] [directory] [name] [icon]
+usage: generate_project [-h|--help] [<directory>] [<name>] [<icon>]
 
--h, --help : Print this help and exit.
-directory  : Path to where the project should be located. Default is the current directory.
-name       : The name of the project, which will be used to generate functions.
-             Default is the basename of the directory argument.
-icon       : The icon that will prefix PS1 when inside the proejct. Default is '🆕'.
+-h, --help   : Print this help and exit.
+<directory>  : Path to where the project should be located. Default is the current directory.
+<name>       : The name of the project, which will be used to generate functions.
+               Default is the basename of the directory argument.
+<icon>       : The icon that will prefix PS1 when inside the proejct. Default is '🆕'.
 
 This command genates a boilerplate Mercator project with the given arguments.
 The result is printed to stdout. To preserve the project, run something like:

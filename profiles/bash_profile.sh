@@ -38,7 +38,7 @@ brew_bash_completions
 # Sublime "subl" CLI
 
 add_to_path "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
-export EDITOR='subl'
+export EDITOR='subl -n -w'
 alias 'sublime'='subl'
 
 # Project navigation

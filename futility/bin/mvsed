@@ -1,6 +1,10 @@
 #!/bin/bash
 
+source $(dirname $BASH_SOURCE)/../core.sh
+
 _mvsed() {
+  check_help $@ && mvsed_help && exit 0
+
   local file_path=$1
   shift
   local sed_args=$@
@@ -16,4 +20,16 @@ _mvsed() {
   fi
 }
 
-mvsed
+
+mvsed_help() {
+  cat <<HELP_TEXT
+usage: mvsed [-h|--help] <file_path> [<sed_args>...]
+
+-h, --help  : Print this help and exit.
+<file_path> : The file path to move.
+<sed_args>  : One or more arguments to pass to sed.
+HELP_TEXT
+}
+
+
+_mvsed $@
