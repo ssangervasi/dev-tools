@@ -1,0 +1,212 @@
+#!/bin/bash
+
+source load_futility
+source bequest
+
+TEST_FAILURE=24
+
+test() {
+	test_parse_endowment
+	test_write_will
+	# test_acc
+}
+
+test_parse_endowment() {
+	echo 'describe 
+	parse_endowment'
+	
+	echo 'it parses an accumulator'
+	(
+		parse_endowment 'acc_var+:-a|--acc'
+
+		if [[ ${gift} != 'acc_var' ]]; then
+			echo_error "gift was: '${gift}'"
+			echo_error "expected: 'acc_var'"
+			exit $TEST_FAILURE
+		elif [[ ${kind} != '+:' ]]; then
+			echo_error "kind was: '${kind}'"
+			echo_error "expected: '+:'"
+			exit $TEST_FAILURE
+		elif [[ ${pattern} != '-a|--acc' ]]; then
+			echo_error "pattern was: '${pattern}'"
+			echo_error "expected: '-a|--acc'"
+			exit $TEST_FAILURE
+		else
+			echo_success "passed"
+		fi
+	)
+
+	echo 'it parses a keyword arg'
+	(
+		parse_endowment 'key_var:-k|--key'
+
+		if [[ ${gift} != 'key_var' ]]; then
+			echo_error "gift was: '${gift}'"
+			echo_error "expected: 'key_var'"
+			exit $TEST_FAILURE
+		elif [[ ${kind} != ':' ]]; then
+			echo_error "kind was: '${kind}'"
+			echo_error "expected: ':'"
+			exit $TEST_FAILURE
+		elif [[ ${pattern} != '-k|--key' ]]; then
+			echo_error "pattern was: '${pattern}'"
+			echo_error "expected: '-k|--key'"
+			exit $TEST_FAILURE
+		else
+			echo_success "passed"
+		fi
+	)
+
+	echo 'it parses a function arg'
+	(
+		parse_endowment 'parser():--parseable'
+
+		if [[ ${gift} != 'parser' ]]; then
+			echo_error "gift was: '${gift}'"
+			echo_error "expected: 'parser'"
+			exit $TEST_FAILURE
+		elif [[ ${kind} != '():' ]]; then
+			echo_error "kind was: '${kind}'"
+			echo_error "expected: '():'"
+			exit $TEST_FAILURE
+		elif [[ ${pattern} != '--parseable' ]]; then
+			echo_error "pattern was: '${pattern}'"
+			echo_error "expected: '--parseable'"
+			exit $TEST_FAILURE
+		else
+			echo_success "passed"
+		fi
+	)
+}
+
+test_write_will() {
+	echo 'describe write_will'
+
+	(
+		will_file=$(mktemp)
+		trap "rm ${will_file}" EXIT
+
+		input_will=$(cat <<-INPUT
+			acc_var+:-a|--acc
+			key_var:-k|--key
+			parser():--parsable
+		INPUT
+		)
+
+		write_will
+
+		cat <<-RESULT
+			input_will:
+			---
+			${input_will} 
+			---
+			will_file:
+			---
+			$(cat ${will_file})
+			---
+		RESULT
+
+		if [[ ! $(grep 'gift acc_var' ${will_file}) ]]; then
+			echo_error 'no acc_var'
+			exit $TEST_FAILURE
+		elif [[ ! $(grep 'gift key_var' ${will_file}) ]]; then
+			echo_error 'no key_var'
+			exit $TEST_FAILURE
+		elif [[ ! $(grep 'gift parser' ${will_file}) ]]; then
+			echo_error 'no parser'
+			exit $TEST_FAILURE
+		else
+			echo_success
+		fi 
+	)
+}
+
+test_acc() {
+	echo 'describe accumulator'
+
+	local executor=$(
+		bequest 'acc_var+:-a|--acc'
+	)
+
+	echo 'the executor'
+	echo 'should not be blank'
+	(
+		echo "executor: $executor"
+		if [[ -z $executor ]]; then
+			echo_error "executor was blank"
+		else
+			echo_success "passed"
+		fi
+	)
+
+	echo 'it counts no flags as zero'
+	(
+		$executor
+
+		if [[ $acc_var != '0' ]]; then
+			echo_error "acc_var was: '$acc_var'"
+			echo_error "   expected: '0'"
+			exit $TEST_FAILURE
+		else
+			echo_success "passed"
+		fi
+	)
+
+	echo 'it counts a short flag as one'
+	(
+		echo_success "skipped"
+	)
+	echo 'it counts a long flag as one'
+	(
+		echo_success "skipped"
+	)
+	
+	echo 'it counts a long and a short as two'
+	(
+		$executor -a --acc
+
+		if [[ $acc_var != '2' ]]; then
+			echo_error "acc_var was: '$acc_var'"
+			echo_error "   expected: '2'"
+			exit $TEST_FAILURE
+		else
+			echo_success "passed"
+		fi
+	)
+}
+
+test_full_bequest() {
+	local executor=$(
+		bequest \
+			'acc_var+:-a|--acc' \
+			'key_var:-k|--key' \
+			'parser():--parsable'
+	)
+
+	parser() {
+		parsed="parsed-$1"
+	}
+
+	$executor \
+		-a --acc \
+		--key key-val \
+		--parsable parsable-val
+
+	if [[ $acc_var != '2' ]]; then
+		echo_error "acc_var was: '$acc_var'"
+		echo_error "   expected: '2'"
+		return $TEST_FAILURE
+	fi
+	if [[ $key_var != 'key_val' ]]; then
+		echo_error "key_var was: '$key_var'"
+		echo_error "   expected: 'key_val'"
+		return $TEST_FAILURE
+	fi
+	if [[ $parsed != 'parsed-parsable-val' ]]; then
+		echo_error "parsed was: '$parsed'"
+		echo_error "  expected: 'parsed-parsable-val'"
+		return $TEST_FAILURE
+	fi
+}
+
+test

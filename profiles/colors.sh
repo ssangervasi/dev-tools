@@ -5,28 +5,39 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 export LS_COLORS=$LS_COLORS
 
 def_colors() {
-  # MacOS doesn't support '\e' for some reason.
-  local e='\033'
+  export COLOR_NO_COLOR=$(tput sgr0)
+  export COLOR_NC="$COLOR_NO_COLOR"
+  
+  c() { tput setaf "$1"; }
+  b() { tput bold; }
 
-  export COLOR_NC="$e[0m" # No Color
-  export COLOR_WHITE="$e[1;37m"
-  export COLOR_BLACK="$e[0;30m"
-  export COLOR_BLUE="$e[0;34m"
-  export COLOR_LIGHT_BLUE="$e[1;34m"
-  export COLOR_GREEN="$e[0;32m"
-  export COLOR_LIGHT_GREEN="$e[1;32m"
-  export COLOR_CYAN="$e[0;36m"
-  export COLOR_LIGHT_CYAN="$e[1;36m"
-  export COLOR_RED="$e[0;31m"
-  export COLOR_LIGHT_RED="$e[1;31m"
-  export COLOR_PURPLE="$e[0;35m"
-  export COLOR_LIGHT_PURPLE="$e[1;35m"
-  export COLOR_BROWN="$e[0;33m"
-  export COLOR_YELLOW="$e[1;33m"
-  export COLOR_GRAY="$e[1;30m"
-  export COLOR_LIGHT_GRAY="$e[0;37m"
+  export COLOR_BOLD=$(b)
+  export COLOR_BLACK=$(c 0)
+  export COLOR_BLUE=$(c 4)
+  export COLOR_BROWN=$(c 52)
+  export COLOR_CYAN=$(c 6)
+  export COLOR_GRAY=$(c 7)
   export COLOR_GREY="$COLOR_GRAY"
+  export COLOR_GREEN=$(c 2)
+  export COLOR_LIGHT_BLUE="$(b)$(c 4)"
+  export COLOR_LIGHT_CYAN="$(b)$(c 6)"
+  export COLOR_LIGHT_GRAY="$(b)$(c 7)"
   export COLOR_LIGHT_GREY="$COLOR_LIGHT_GRAY"
+  export COLOR_LIGHT_GREEN="$(b)$(c 2)"
+  export COLOR_LIGHT_PURPLE="$(b)$(c 5)"
+  export COLOR_LIGHT_RED="$(b)$(c 1)"
+  export COLOR_PURPLE=$(c 5)
+  export COLOR_RED=$(c 1)
+  export COLOR_WHITE=$(c 7)
+  export COLOR_YELLOW=$(c 3)
+}
+
+dump_tput_colors() {
+  for c in {0..255}; do
+    tput setaf $c
+    tput setaf $c | cat -v
+    echo =$c
+  done
 }
 
 def_colors

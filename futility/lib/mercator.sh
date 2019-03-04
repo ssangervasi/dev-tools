@@ -138,6 +138,7 @@ sub_var() {
 		echo ${template} |
 			sed -E "s'{{[[:space:]]*(${var_name})[[:space:]]*}}'${var_content}'g"
 	done
+	unset IFS
 }
 
 ##

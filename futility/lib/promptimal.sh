@@ -75,7 +75,9 @@ ${PROMPT_PREFIX}\
 \u\
 \[${COLOR_NC}\]\
 |\
+\[${COLOR_GREY}\]\
 ${basename}\
+\[${COLOR_NC}\]\
 \$ "
 	export PS1="${info_ps1}"
 }

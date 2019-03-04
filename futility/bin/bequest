@@ -1,0 +1,95 @@
+#!/bin/bash
+
+source load_futility
+
+PARSE_ERROR=88
+
+setup_files() {
+	will_dir=${HOME}/.bequest/${will_signature}
+	will_file="${will_dir}/living.will"
+	executor_file="${will_dir}/executor.sh"
+
+	mdkir -p ${will_dir}
+	echo '' > ${will_file}
+	echo '' > ${executor_file}
+}
+
+write_will() {
+	for endowment in ${input_will}; do
+		parse_endowment "${endowment}"
+
+		gift_signature=$(sign "${gift}")
+
+		sub_patterns=$(echo ${pattern} |
+			sed -E 's/[|]/ /g'
+		)
+		for sub_pattern in ${sub_patterns}; do
+			pattern_signature=$(sign ${sub_pattern})
+			echo "${pattern_signature} ${gift_signature}">>${will_file}	
+		done
+
+		(
+			cat <<-ENDOWMENT
+				${gift_signature} gift ${gift}
+				${gift_signature} kind ${kind}
+				${gift_signature} pattern ${pattern}
+			ENDOWMENT
+		)>>${will_file}
+	done
+}
+
+parse_endowment() {
+	local endowment="$1"
+	# Hyphen gotta come last cuz char ranges
+	local special_chars=":()+|-"
+	local g_k_p='^([^'"${special_chars}"']+)(['"${special_chars}"']*:)(.+)'
+
+	gift=$(echo "${endowment}" |
+		sed -E "s/${g_k_p}/\1/"
+	)
+	kind=$(echo "${endowment}" |
+		sed -E "s/${g_k_p}/\2/"
+	)
+	pattern=$(echo "${endowment}" |
+		sed -E "s/${g_k_p}/\3/"
+	)
+
+	if [[ -z ${gift} ]]; then
+		echo_error 'Could not parse an argument name from '"${endowment}"
+		exit $PARSE_ERROR
+	elif [[ -z ${kind} ]]; then
+		echo_error 'Could not parse an argument type from '"${endowment}"
+		exit $PARSE_ERROR
+	elif [[ -z ${pattern} ]]; then
+		echo_error 'Could not parse a pattern from '"${endowment}"
+		exit $PARSE_ERROR
+	fi
+}
+
+write_executor() {
+	local arg
+
+	while [[ -n "$1" ]]; do
+		arg="$1"
+		if [[ "$arg" =~ .+: ]]; then
+			key=$(echo $arg | sed -E s/([^:]+){1}:.*/\1/)
+			val=$(echo $arg | sed -E s/(?[^:]+){1}:(.*)/\1/)
+		fi
+
+		shift
+	done
+}
+
+sign() {
+	md5 -qs "$1"
+}
+
+_bequest() {
+	input_will="$@"
+	will_signature=$(sign ${input_will})
+	
+	setup_files
+	write_will
+	write_executor
+}
+

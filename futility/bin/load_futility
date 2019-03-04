@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Make this ensure only one load?
+# if [[ -z FUTILITY_VERSION ]] ...
+source $(dirname $BASH_SOURCE)/../package.sh

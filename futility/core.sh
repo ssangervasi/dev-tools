@@ -3,8 +3,13 @@
 YA_DUN_GOOFED=92
 
 echo_error() {
-	echo $@ 1>&2
+	echo "$COLOR_RED""$@""$COLOR_NC" 1>&2
 	return $YA_DUN_GOOFED
+}
+
+echo_success() {
+	echo "$COLOR_GREEN""$@""$COLOR_NC" 1>&2
+	return 0
 }
 
 default() {

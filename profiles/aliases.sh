@@ -12,6 +12,7 @@ alias tree='tree ${TREE_DEFAULT_OPTIONS}'
 alias binweb='./bin/web'
 alias tt='term-theme'
 alias 'pgrep'='pgrep -lfi'
+alias lsa='ls -a1lh'
 
 # Ruby & Rails
 alias be='bundle exec'

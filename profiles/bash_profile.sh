@@ -41,6 +41,11 @@ add_to_path "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
 export EDITOR='subl -n -w'
 alias 'sublime'='subl'
 
+# Chrome CLI
+
+add_to_path '/Applications/Google Chrome.app/Contents/MacOS'
+alias 'chrome'='Google\ Chrome'
+
 # Project navigation
 
 .dev_tools() { enter_project 'dev_tools'; }
