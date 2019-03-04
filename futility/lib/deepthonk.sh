@@ -5,11 +5,11 @@ whereami() {
 }
 
 howami() {
-	echo "
-I'm looking nice.
-	My shadow's looking nice.
-		We're a real nice team!
-	"
+	cat <<-NICE
+		I'm looking nice.
+			My shadow's looking nice.
+				We're a real nice team!
+	NICE
 }
 
 whatami() {

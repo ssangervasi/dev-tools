@@ -7,14 +7,14 @@ export LS_COLORS=$LS_COLORS
 def_colors() {
   export COLOR_NO_COLOR=$(tput sgr0)
   export COLOR_NC="$COLOR_NO_COLOR"
-  
+
   c() { tput setaf "$1"; }
   b() { tput bold; }
 
   export COLOR_BOLD=$(b)
   export COLOR_BLACK=$(c 0)
   export COLOR_BLUE=$(c 4)
-  export COLOR_BROWN=$(c 52)
+  export COLOR_BROWN=$(c 58)
   export COLOR_CYAN=$(c 6)
   export COLOR_GRAY=$(c 7)
   export COLOR_GREY="$COLOR_GRAY"

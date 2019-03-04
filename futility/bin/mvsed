@@ -3,32 +3,32 @@
 source load_futility
 
 _mvsed() {
-  check_help $@ && mvsed_help && exit 0
+	check_help $@ && mvsed_help && exit 0
 
-  local file_path=$1
-  shift
-  local sed_args=$@
-  local new_file_path=$(echo $file_path | sed $sed_args)
-  # if [[ $file_path != $new_file_path && $(empty $new_file_path) != 0 ]]; then
-  if [[ -e $new_file_path ]]; then
-    echo_error "Error: cannot move $file_path to $new_file_path -- path exists"
-  elif [[ $(empty $new_file_path) ]]; then
-    echo_error "Error: cannot move $file_path -- new path is empty"
-  else
-      echo "$file_path => $new_file_path"
-      mv $file_path $new_file_path
-  fi
+	local file_path=$1
+	shift
+	local sed_args=$@
+	local new_file_path=$(echo $file_path | sed $sed_args)
+	# if [[ $file_path != $new_file_path && $(empty $new_file_path) != 0 ]]; then
+	if [[ -e $new_file_path ]]; then
+		echo_error "Error: cannot move $file_path to $new_file_path -- path exists"
+	elif [[ $(empty $new_file_path) ]]; then
+		echo_error "Error: cannot move $file_path -- new path is empty"
+	else
+			echo "$file_path => $new_file_path"
+			mv $file_path $new_file_path
+	fi
 }
 
 
 mvsed_help() {
-  cat <<HELP_TEXT
-usage: mvsed [-h|--help] <file_path> [<sed_args>...]
+	cat <<-HELP_TEXT
+		usage: mvsed [-h|--help] <file_path> [<sed_args>...]
 
--h, --help  : Print this help and exit.
-<file_path> : The file path to move.
-<sed_args>  : One or more arguments to pass to sed.
-HELP_TEXT
+		-h, --help  : Print this help and exit.
+		<file_path> : The file path to move.
+		<sed_args>  : One or more arguments to pass to sed.
+	HELP_TEXT
 }
 
 

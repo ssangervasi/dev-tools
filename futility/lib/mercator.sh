@@ -54,19 +54,19 @@ exit_project() {
 }
 
 project_default_help() {
-		cat <<HELP_TEXT
-Project ${PROJECT_NAME}
-This the default Mercator help message.
-Define your own .help in ${PROJECT_INIT_COMMAND}
-HELP_TEXT
+	cat <<-HELP_TEXT
+		Project ${PROJECT_NAME}
+		This the default Mercator help message.
+		Define your own .help in ${PROJECT_INIT_COMMAND}
+	HELP_TEXT
 }
 
 dump_no_project_help() {
-		cat <<HELP_TEXT
-Looks like you tried to enter project "$PROJECT_NAME",
-but there is no init command "$PROJECT_INIT_COMMAND".
-You need to define that in order to use Mercator.
-HELP_TEXT
+	cat <<-HELP_TEXT
+		Looks like you tried to enter project "$PROJECT_NAME",
+		but there is no init command "$PROJECT_INIT_COMMAND".
+		You need to define that in order to use Mercator.
+	HELP_TEXT
 }
 
 dump_world_map() {
@@ -76,7 +76,7 @@ dump_world_map() {
 dump_logo() {
 	cat <<MERCATOR
 /=================\\
-  M E R C A T O R
+	M E R C A T O R
 \\=================/
 MERCATOR
 }
@@ -105,24 +105,24 @@ generate_project() {
 }
 
 generate_project_help() {
-	cat <<HELP_TEXT
-usage: generate_project [-h|--help] [<directory>] [<name>] [<icon>]
+	cat <<-HELP_TEXT
+		usage: generate_project [-h|--help] [<directory>] [<name>] [<icon>]
 
--h, --help   : Print this help and exit.
-<directory>  : Path to where the project should be located. Default is the current directory.
-<name>       : The name of the project, which will be used to generate functions.
-               Default is the basename of the directory argument.
-<icon>       : The icon that will prefix PS1 when inside the proejct. Default is '🆕'.
+		-h, --help   : Print this help and exit.
+		<directory>  : Path to where the project should be located. Default is the current directory.
+		<name>       : The name of the project, which will be used to generate functions.
+									 Default is the basename of the directory argument.
+		<icon>       : The icon that will prefix PS1 when inside the proejct. Default is '🆕'.
 
-This command genates a boilerplate Mercator project with the given arguments.
-The result is printed to stdout. To preserve the project, run something like:
+		This command genates a boilerplate Mercator project with the given arguments.
+		The result is printed to stdout. To preserve the project, run something like:
 
-	$ generate_project . my_proj >> ~/bash_profile
+			$ generate_project . my_proj >> ~/bash_profile
 
-Replace "~/bash_profile" with your preferred shell initializer script,
-or in a file devoted to the project. If you choose the latter, remember that
-you will need to source that file in your init script.
-HELP_TEXT
+		Replace "~/bash_profile" with your preferred shell initializer script,
+		or in a file devoted to the project. If you choose the latter, remember that
+		you will need to source that file in your init script.
+	HELP_TEXT
 }
 
 ##
@@ -158,13 +158,13 @@ init_project_temp() {
 	}
 
 	.help() {
-		cat <<HELP_TEXT
-This is a temporary location!:
+		cat <<-HELP_TEXT
+			This is a temporary location!:
 
-	${temp_location}
+				${temp_location}
 
-Everything will be deleted when you exit!
-HELP_TEXT
+			Everything will be deleted when you exit!
+		HELP_TEXT
 	}
 
 	.help
