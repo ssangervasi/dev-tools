@@ -33,6 +33,10 @@ init_project() {
 		exit
 	fi
 
+	.help() {
+		project_default_help
+	}
+
 	eval "${PROJECT_INIT_COMMAND}" || exit
 
 	cleanup_project() {
@@ -41,10 +45,6 @@ init_project() {
 	}
 
 	exit_project() { exit; }
-
-	.help() {
-		project_default_help
-	}
 
 	trap cleanup_project EXIT
 }

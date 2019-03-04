@@ -129,6 +129,10 @@ bundle() {
 }
 
 nvm_lazy() {
+	if [[ -n $NVM_DIR ]]; then
+		stacktrace
+		return 0
+	fi
 	export NVM_DIR="$HOME/.nvm"
 	unalias 'nvm' 2> /dev/null
 	# This loads nvm
