@@ -7,7 +7,7 @@ def custom_prompt(obj, nest_level, pry_inst)
 end
 
 def custom_wait_prompt(obj, nest_level, pry_inst)
-  default_proc = default_prompt.second
+  default_proc = default_prompt[1]
   default_result = default_proc.call(obj, nest_level, pry_inst)
   abbreviate(default_result)
 end
@@ -22,10 +22,13 @@ def abbreviate(str, max_len: 40)
 end
 
 def default_prompt
+  # Modern pry
   Pry::Prompt[:default][:value]
 rescue NoMethodError
+  # Old pry
   Pry::DEFAULT_PROMPT
 rescue
+  # If things go super wrong
   [
     proc { |obj, nest_level, _pry_inst| "woop<#{obj}:#{nest_level}> " },
     proc { |obj, nest_level, _pry_inst| "woop<#{obj}:#{nest_level}>* " }
