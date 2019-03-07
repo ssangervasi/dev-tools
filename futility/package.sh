@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export FUTILITY_VERSION='0.1.2'
+FUTILITY_VERSION='0.1.2'
 
 load_futility_package() {
 	FUTILITY_PACKAGE_ROOT=$(dirname $BASH_SOURCE)

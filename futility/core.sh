@@ -79,6 +79,19 @@ stacktrace() {
 	echo_error "~~ End Stacktrace: $* ~~"
 }
 
+# This is pretty dang limited, but it's been helpful.
+# 	It doesn't handle special characters, so arrows keys
+# 	for navigation doesn't work.
+breakpoint() {
+	echo "~~ Begin Breakpoint: $* ~~"
+	echo -n '> '
+	while read cmd; do
+		eval "$cmd"
+		echo -n '> '
+	done
+	echo "~~ End Breakpoint $* ~~"
+}
+
 source_if_exists() {
 	local file_path="$1"
 	local else_log="$2"

@@ -1,9 +1,11 @@
 #!/bin/bash
 
 tree_find() {
-	local pattern=$1
+	local dir="$1"
+	local pattern="$2"
 	shift
-	tree --prune -P $pattern $@
+	shift
+	tree --prune -P "$pattern" "$dir" "$@"
 }
 
 ls_modified() {

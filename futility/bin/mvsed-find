@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source load_futility
+source futility
 
 _mvsed_find() {
 	check_help $@ && mvsed_find_help && exit 0

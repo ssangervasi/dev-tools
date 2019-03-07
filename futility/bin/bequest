@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source load_futility
+source futility
 
 NOT_FOUND_ERROR=44
 PARSE_ERROR=88
@@ -26,7 +26,7 @@ write_will() {
 		)
 		for sub_pattern in ${sub_patterns}; do
 			pattern_signature=$(sign ${sub_pattern})
-			echo "${pattern_signature} ${gift_signature}">>${will_file}	
+			echo "${pattern_signature} ${gift_signature}">>${will_file}
 		done
 
 		(
@@ -60,7 +60,7 @@ gift_signature_for_pattern() {
 		echo_error "No gift signature found in pattern line: '${matched_line}'"
 		return $PARSE_ERROR
 	fi
-	
+
 	echo "${gift_signature}"
 }
 
@@ -113,7 +113,7 @@ sign() {
 _bequest() {
 	input_will="$@"
 	will_signature=$(sign ${input_will})
-	
+
 	setup_files
 	write_will
 	write_executor

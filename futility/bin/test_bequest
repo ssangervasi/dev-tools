@@ -1,77 +1,7 @@
 #!/bin/bash
 
-source load_futility
+source futility
 source bequest
-
-TEST_FAILURE=24
-
-describe() {
-	echo "${COLOR_BLUE}describe ${@}${COLOR_NC}"
-}
-
-it() {
-	echo "${COLOR_LIGHT_BLUE}it ${@}${COLOR_NC}"
-}
-
-passed() {
-	echo_success 'passed'
-}
-
-expect() {
-	case "$2" in
-		'to be')
-			expect_to_be "$1" "$3"
-			;;
-		'to eq')
-			expect_to_eq "$1" "$3"
-			;;
-		*)
-			echo_error "What is '$2'?"
-	esac
-}
-
-expect_to_be() {
-	local actual_var="$1"
-	local expected_var="$2"
-
-	if [[ -z ${actual_var} || -z ${expected_var} ]]; then
-		echo_error "expect 'to be' requires two variables"
-		exit $TEST_FAILURE
-	fi		
-
-	# Gross?
-	local actual="${!actual_var}"
-	local expected="${!expected_var}"
-
-	if [[ ${actual} != ${expected} ]]; then
-		echo_error "Varible ${actual_var} was not ${expected_var}!"
-		echo_error "expected: '${expected}'"
-		echo_error "received: '${actual}'"
-		exit $TEST_FAILURE
-	fi
-}
-
-expect_to_eq() {
-	local actual="$1"
-	local expected="$2"
-
-	if [[ ${actual} != ${expected} ]]; then
-		echo_error "Values were not equal!"
-		echo_error "expected: '${expected}'"
-		echo_error "received: '${actual}'"
-		exit $TEST_FAILURE
-	fi
-}
-
-breakpoint() {
-	echo '<breakpoint>'
-	echo -n '> '
-	while read cmd; do
-		eval "$cmd"
-		echo -n '> '
-	done
-	echo '</breakpoint>'
-}
 
 demo_will() {
 	cat <<-INPUT
@@ -85,12 +15,13 @@ test() {
 	test_parse_endowment
 	test_write_will
 	test_gift_signature_for_pattern
+	test_end_to_end_bequest
 	# test_acc
 }
 
 test_parse_endowment() {
 	describe 'parse_endowment'
-	
+
 	it 'parses an accumulator'
 	(
 		parse_endowment 'acc_var+:-a|--acc'
@@ -132,7 +63,7 @@ test_write_will() {
 		# cat <<-RESULT
 		# 	input_will:
 		# 	---
-		# 	${input_will} 
+		# 	${input_will}
 		# 	---
 		# 	will_file:
 		# 	---
@@ -142,14 +73,14 @@ test_write_will() {
 
 		if [[ ! $(grep 'gift acc_var' ${will_file}) ]]; then
 			echo_error 'no acc_var'
-			exit $TEST_FAILURE
+			failed
 		elif [[ ! $(grep 'gift key_var' ${will_file}) ]]; then
 			echo_error 'no key_var'
-			exit $TEST_FAILURE
+			failed
 		elif [[ ! $(grep 'gift parser' ${will_file}) ]]; then
 			echo_error 'no parser'
-			exit $TEST_FAILURE
-		fi 
+			failed
+		fi
 	) && passed
 }
 
@@ -174,7 +105,7 @@ test_gift_signature_for_pattern() {
 		(
 			sig_for_pattern=$(gift_signature_for_pattern '--acc')
 			expected_sig=$(sign 'acc_var')
-			
+
 			expect sig_for_pattern	'to be' expected_sig
 		) && passed
 	)
@@ -190,26 +121,19 @@ test_acc() {
 	echo 'the executor'
 	echo 'should not be blank'
 	(
-		echo "executor: $executor"
-		if [[ -z $executor ]]; then
+		echo "executor: ${executor}"
+		if [[ -z ${executor} ]]; then
 			echo_error "executor was blank"
-		else
-			passed
+			failed
 		fi
-	)
+	) && passed
 
 	it 'counts no flags as zero'
 	(
-		$executor
+		${executor}
 
-		if [[ $acc_var != '0' ]]; then
-			echo_error "acc_var was: '$acc_var'"
-			echo_error "   expected: '0'"
-			exit $TEST_FAILURE
-		else
-			passed
-		fi
-	)
+		expect ${acc_var} 'to eq' '0'
+	) && passed
 
 	it 'counts a short flag as one'
 	(
@@ -219,51 +143,34 @@ test_acc() {
 	(
 		echo_success "skipped"
 	)
-	
+
 	it 'counts a long and a short as two'
 	(
-		$executor -a --acc
+		${executor} -a --acc
 
-		if [[ $acc_var != '2' ]]; then
-			echo_error "acc_var was: '$acc_var'"
-			echo_error "   expected: '2'"
-			exit $TEST_FAILURE
-		else
-			passed
-		fi
-	)
+		expect ${acc_var} 'to eq' '2'
+	) && passed
 }
 
-test_full_bequest() {
-	local input_will=$(demo_will | xargs)
-	local executor=$(
-		bequest ${input_will}
-	)
+test_end_to_end_bequest() {
+	describe 'end to end bequest'
+	(
+		input_will=$(demo_will | xargs)
+		executor=$(bequest ${input_will})
 
-	parser() {
-		parsed="parsed-$1"
-	}
+		parser() {
+			parsed_var="parsed-$1"
+		}
 
-	$executor \
-		-a --acc \
-		--key key-val \
-		--parsable parsable-val
+		${executor} \
+			-a --acc \
+			--key key-val \
+			--parsable parsable-val
 
-	if [[ $acc_var != '2' ]]; then
-		echo_error "acc_var was: '$acc_var'"
-		echo_error "   expected: '2'"
-		return $TEST_FAILURE
-	fi
-	if [[ $key_var != 'key_val' ]]; then
-		echo_error "key_var was: '$key_var'"
-		echo_error "   expected: 'key_val'"
-		return $TEST_FAILURE
-	fi
-	if [[ $parsed != 'parsed-parsable-val' ]]; then
-		echo_error "parsed was: '$parsed'"
-		echo_error "  expected: 'parsed-parsable-val'"
-		return $TEST_FAILURE
-	fi
+		expect ${acc_var} 'to eq' '2'
+		expect ${key_var} 'to eq' 'key-val'
+		expect ${parsed_var} 'to eq' 'parsed-parsable-val'
+	) && passed
 }
 
 test
