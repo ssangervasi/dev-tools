@@ -90,3 +90,42 @@ source_if_exists() {
 	fi
 	return 0
 }
+
+args_and_or_stdin() {
+	local arg
+	local args=()
+	local use_stdin='no'
+	for arg in "$@"; do
+		if [[ ${arg} = '-' ]]; then
+			use_stdin='yes'
+		else
+			args+=("${arg}")
+		fi
+	done
+
+	if [[ ${use_stdin} != 'yes' ]]; then
+		echo "${args[@]}"
+		return 0
+	fi
+
+	local arg_line
+	while read arg_line; do
+		args+=("${arg_line}")
+	done
+
+	echo "${args[@]}"
+}
+
+args_and_or_stdin_help() {
+	cat <<-HELP_TEXT
+		Example:
+			my_util() {
+				local args=$(args_and_or_stdin $@ - <&0)
+				echo ${args} | sed -E 's/[ ]/<space>/g'
+			}
+
+			echo 'a horse' 'is a horse' |
+				my_util 'is a horse' 'of course'
+			# > is<space>a<space>horse<space>of<space>course<space>a<space>horse<space>is<space>a<space>horse
+	HELP_TEXT
+}

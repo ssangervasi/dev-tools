@@ -10,9 +10,10 @@
 SPEC_HISTORY_PATH=~/.spec_history
 
 spec() {
-	print_spec_header $@
-	write_spec_history $@
-	run_spec_command $@
+	local args=$(args_and_or_stdin $@ <&0)
+	print_spec_header ${args}
+	write_spec_history ${args}
+	run_spec_command ${args}
 }
 
 print_spec_header() {
