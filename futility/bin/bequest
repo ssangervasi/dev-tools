@@ -118,4 +118,3 @@ _bequest() {
 	write_will
 	write_executor
 }
-

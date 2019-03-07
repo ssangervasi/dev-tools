@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -n FUTILITY_VERSION ]]; then
+if [[ -n $FUTILITY_VERSION ]]; then
   # For now this is a bug.
   echo 'FUTILITY_VERSION has been set. Something is loading this twice!' 1>&2
 else
