@@ -2,6 +2,7 @@
 
 source load_futility
 
+NOT_FOUND_ERROR=44
 PARSE_ERROR=88
 
 setup_files() {
@@ -36,6 +37,31 @@ write_will() {
 			ENDOWMENT
 		)>>${will_file}
 	done
+}
+
+gift_signature_for_pattern() {
+	local pattern="$1"
+	local pattern_signature=$(sign ${pattern})
+
+	local matched_line=$(
+		grep --max-count 1 \
+			"^${pattern_signature}" \
+			"${will_file}"
+	)
+	if [[ -z ${matched_line} ]]; then
+		echo_error "No such pattern defined: '${pattern}'"
+		return $NOT_FOUND_ERROR
+	fi
+
+	# Trying out arrays. Probably should be doing this other places.
+	local line_arr=(${matched_line})
+	local gift_signature="${line_arr[1]}"
+	if [[ -z ${gift_signature} ]]; then
+		echo_error "No gift signature found in pattern line: '${matched_line}'"
+		return $PARSE_ERROR
+	fi
+	
+	echo "${gift_signature}"
 }
 
 parse_endowment() {

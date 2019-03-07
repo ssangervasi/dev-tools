@@ -5,106 +5,140 @@ source bequest
 
 TEST_FAILURE=24
 
+describe() {
+	echo "${COLOR_BLUE}describe ${@}${COLOR_NC}"
+}
+
+it() {
+	echo "${COLOR_LIGHT_BLUE}it ${@}${COLOR_NC}"
+}
+
+passed() {
+	echo_success 'passed'
+}
+
+expect() {
+	case "$2" in
+		'to be')
+			expect_to_be "$1" "$3"
+			;;
+		'to eq')
+			expect_to_eq "$1" "$3"
+			;;
+		*)
+			echo_error "What is '$2'?"
+	esac
+}
+
+expect_to_be() {
+	local actual_var="$1"
+	local expected_var="$2"
+
+	if [[ -z ${actual_var} || -z ${expected_var} ]]; then
+		echo_error "expect 'to be' requires two variables"
+		exit $TEST_FAILURE
+	fi		
+
+	# Gross?
+	local actual="${!actual_var}"
+	local expected="${!expected_var}"
+
+	if [[ ${actual} != ${expected} ]]; then
+		echo_error "Varible ${actual_var} was not ${expected_var}!"
+		echo_error "expected: '${expected}'"
+		echo_error "received: '${actual}'"
+		exit $TEST_FAILURE
+	fi
+}
+
+expect_to_eq() {
+	local actual="$1"
+	local expected="$2"
+
+	if [[ ${actual} != ${expected} ]]; then
+		echo_error "Values were not equal!"
+		echo_error "expected: '${expected}'"
+		echo_error "received: '${actual}'"
+		exit $TEST_FAILURE
+	fi
+}
+
+breakpoint() {
+	echo '<breakpoint>'
+	echo -n '> '
+	while read cmd; do
+		eval "$cmd"
+		echo -n '> '
+	done
+	echo '</breakpoint>'
+}
+
+demo_will() {
+	cat <<-INPUT
+		acc_var+:-a|--acc
+		key_var:-k|--key
+		parser():--parsable
+	INPUT
+}
+
 test() {
 	test_parse_endowment
 	test_write_will
+	test_gift_signature_for_pattern
 	# test_acc
 }
 
 test_parse_endowment() {
-	echo 'describe 
-	parse_endowment'
+	describe 'parse_endowment'
 	
-	echo 'it parses an accumulator'
+	it 'parses an accumulator'
 	(
 		parse_endowment 'acc_var+:-a|--acc'
 
-		if [[ ${gift} != 'acc_var' ]]; then
-			echo_error "gift was: '${gift}'"
-			echo_error "expected: 'acc_var'"
-			exit $TEST_FAILURE
-		elif [[ ${kind} != '+:' ]]; then
-			echo_error "kind was: '${kind}'"
-			echo_error "expected: '+:'"
-			exit $TEST_FAILURE
-		elif [[ ${pattern} != '-a|--acc' ]]; then
-			echo_error "pattern was: '${pattern}'"
-			echo_error "expected: '-a|--acc'"
-			exit $TEST_FAILURE
-		else
-			echo_success "passed"
-		fi
-	)
+		expect "${gift}" 'to eq' 'acc_var'
+		expect "${kind}" 'to eq' '+:'
+		expect "${pattern}" 'to eq' '-a|--acc'
+	) && passed
 
-	echo 'it parses a keyword arg'
+	it 'parses a keyword arg'
 	(
 		parse_endowment 'key_var:-k|--key'
 
-		if [[ ${gift} != 'key_var' ]]; then
-			echo_error "gift was: '${gift}'"
-			echo_error "expected: 'key_var'"
-			exit $TEST_FAILURE
-		elif [[ ${kind} != ':' ]]; then
-			echo_error "kind was: '${kind}'"
-			echo_error "expected: ':'"
-			exit $TEST_FAILURE
-		elif [[ ${pattern} != '-k|--key' ]]; then
-			echo_error "pattern was: '${pattern}'"
-			echo_error "expected: '-k|--key'"
-			exit $TEST_FAILURE
-		else
-			echo_success "passed"
-		fi
-	)
+		expect "${gift}" 'to eq' 'key_var'
+		expect "${kind}" 'to eq' ':'
+		expect "${pattern}" 'to eq' '-k|--key'
+	) && passed
 
-	echo 'it parses a function arg'
+	it 'parses a function arg'
 	(
 		parse_endowment 'parser():--parseable'
 
-		if [[ ${gift} != 'parser' ]]; then
-			echo_error "gift was: '${gift}'"
-			echo_error "expected: 'parser'"
-			exit $TEST_FAILURE
-		elif [[ ${kind} != '():' ]]; then
-			echo_error "kind was: '${kind}'"
-			echo_error "expected: '():'"
-			exit $TEST_FAILURE
-		elif [[ ${pattern} != '--parseable' ]]; then
-			echo_error "pattern was: '${pattern}'"
-			echo_error "expected: '--parseable'"
-			exit $TEST_FAILURE
-		else
-			echo_success "passed"
-		fi
-	)
+		expect "${gift}" 'to eq' 'parser'
+		expect "${kind}" 'to eq'  '():'
+		expect "${pattern}" 'to eq' '--parseable'
+	) && passed
 }
 
 test_write_will() {
-	echo 'describe write_will'
+	describe 'write_will'
 
 	(
 		will_file=$(mktemp)
 		trap "rm ${will_file}" EXIT
 
-		input_will=$(cat <<-INPUT
-			acc_var+:-a|--acc
-			key_var:-k|--key
-			parser():--parsable
-		INPUT
-		)
-
+		input_will=$(demo_will)
 		write_will
 
-		cat <<-RESULT
-			input_will:
-			---
-			${input_will} 
-			---
-			will_file:
-			---
-			$(cat ${will_file})
-			---
-		RESULT
+		# cat <<-RESULT
+		# 	input_will:
+		# 	---
+		# 	${input_will} 
+		# 	---
+		# 	will_file:
+		# 	---
+		# 	$(cat ${will_file})
+		# 	---
+		# RESULT
 
 		if [[ ! $(grep 'gift acc_var' ${will_file}) ]]; then
 			echo_error 'no acc_var'
@@ -115,14 +149,39 @@ test_write_will() {
 		elif [[ ! $(grep 'gift parser' ${will_file}) ]]; then
 			echo_error 'no parser'
 			exit $TEST_FAILURE
-		else
-			echo_success
 		fi 
+	) && passed
+}
+
+test_gift_signature_for_pattern() {
+	describe 'gift_signature_for_pattern'
+	(
+		will_file=$(mktemp)
+		trap "rm ${will_file}" EXIT
+
+		input_will=$(demo_will)
+		write_will
+
+		it 'works for a short pattern'
+		(
+			sig_for_pattern=$(gift_signature_for_pattern '-a')
+			expected_sig=$(sign 'acc_var')
+
+			expect sig_for_pattern	'to be' expected_sig
+		) && passed
+
+		it 'works for a long pattern'
+		(
+			sig_for_pattern=$(gift_signature_for_pattern '--acc')
+			expected_sig=$(sign 'acc_var')
+			
+			expect sig_for_pattern	'to be' expected_sig
+		) && passed
 	)
 }
 
 test_acc() {
-	echo 'describe accumulator'
+	describe 'accumulator'
 
 	local executor=$(
 		bequest 'acc_var+:-a|--acc'
@@ -135,11 +194,11 @@ test_acc() {
 		if [[ -z $executor ]]; then
 			echo_error "executor was blank"
 		else
-			echo_success "passed"
+			passed
 		fi
 	)
 
-	echo 'it counts no flags as zero'
+	it 'counts no flags as zero'
 	(
 		$executor
 
@@ -148,20 +207,20 @@ test_acc() {
 			echo_error "   expected: '0'"
 			exit $TEST_FAILURE
 		else
-			echo_success "passed"
+			passed
 		fi
 	)
 
-	echo 'it counts a short flag as one'
+	it 'counts a short flag as one'
 	(
 		echo_success "skipped"
 	)
-	echo 'it counts a long flag as one'
+	it 'counts a long flag as one'
 	(
 		echo_success "skipped"
 	)
 	
-	echo 'it counts a long and a short as two'
+	it 'counts a long and a short as two'
 	(
 		$executor -a --acc
 
@@ -170,17 +229,15 @@ test_acc() {
 			echo_error "   expected: '2'"
 			exit $TEST_FAILURE
 		else
-			echo_success "passed"
+			passed
 		fi
 	)
 }
 
 test_full_bequest() {
+	local input_will=$(demo_will | xargs)
 	local executor=$(
-		bequest \
-			'acc_var+:-a|--acc' \
-			'key_var:-k|--key' \
-			'parser():--parsable'
+		bequest ${input_will}
 	)
 
 	parser() {
