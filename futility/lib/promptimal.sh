@@ -2,6 +2,8 @@
 
 prompt_swap() {
 	check_help $@ && prompt_swap_help && return 0
+	clear_prompt
+
 	case $1 in
 		-s|--simple)
 			_simple_prompt
@@ -30,8 +32,12 @@ Supported prompts:
 HELP_TEXT
 }
 
+clear_prompt() {
+	unprefix_prompt
+	unmangle_prompt_command
+}
+
 _simple_prompt() {
-	mangle_prompt_command ''
 	export PS1='\$ ';
 }
 
@@ -40,7 +46,7 @@ _timer_prompt() {
 	export PS1='$ELAPSED\$ '
 }
 
-_dynamic_prompt() {
+_dynamic_prompt() { 
 	local min_info_width=70
 	local columns=$(default ${COLUMNS} ${min_info_width})
 	# Wow math comparisons are ugly.
@@ -83,13 +89,16 @@ ${basename}\
 }
 
 prefix_prompt() {
+	unprefix_prompt
 	export PROMPT_PREFIX="$1"
 	export PS1="${PROMPT_PREFIX}${PS1}"
 }
 
 unprefix_prompt() {
-	local prefix="$1"
-	local unprefixed=$(echo "$PS1" | sed "s/^${prefix}//")
+	if [[ -z $PROMPT_PREFIX ]]; then
+		return 0
+	fi
+	local unprefixed=$(echo "$PS1" | sed "s/^${PROMPT_PREFIX}//")
 	export PS1="${unprefixed}"
 }
 
@@ -102,15 +111,11 @@ prompt_clock() {
 mangle_prompt_command() {
 	export PROMPT_COMMAND_CUSTOM="$1"
 	local original=$(
-		echo "$PROMPT_COMMAND" \
-		| sed s/[[:space:]]*prompt_command_function[[:space:]]*//
+		echo "$PROMPT_COMMAND" |
+			sed s/[[:space:]]*prompt_command_function[[:space:]]*//
 	)
-	if empty ${original}; then
-		export PROMPT_COMMAND="$PROMPT_COMMAND_CUSTOM"
-	else
-		export PROMPT_COMMAND_ORIGINAL="${original}"
-		export PROMPT_COMMAND="prompt_command_function"
-	fi
+	export PROMPT_COMMAND_ORIGINAL="${original}"
+	export PROMPT_COMMAND="prompt_command_function"
 }
 
 prompt_command_function() {
@@ -120,17 +125,22 @@ prompt_command_function() {
 	fi
 	type $PROMPT_COMMAND_CUSTOM &>/dev/null
 	if [[ $? == 0 ]]; then
-		$PROMPT_COMMAND_CUSTOM
+		eval "$PROMPT_COMMAND_CUSTOM"
 	fi
 }
 
-prompt_command_help() {
-	cat <<HELP_TEXT
-PROMPT_COMMAND          : $PROMPT_COMMAND
-PROMPT_COMMAND_CUSTOM   : $PROMPT_COMMAND_CUSTOM
-PROMPT_COMMAND_ORIGINAL : $PROMPT_COMMAND_ORIGINAL
+unmangle_prompt_command() {
+	export PROMPT_COMMAND="$PROMPT_COMMAND_ORIGINAL"
+	export PROMPT_COMMAND_CUSTOM=''
+}
 
-prompt_command_function
-$(type prompt_command_function)
-HELP_TEXT
+prompt_command_help() {
+	cat <<-HELP_TEXT
+		PROMPT_COMMAND          : $PROMPT_COMMAND
+		PROMPT_COMMAND_CUSTOM   : $PROMPT_COMMAND_CUSTOM
+		PROMPT_COMMAND_ORIGINAL : $PROMPT_COMMAND_ORIGINAL
+
+		prompt_command_function
+		$(type prompt_command_function)
+	HELP_TEXT
 }
