@@ -48,11 +48,6 @@ source "$DEV_TOOLS_ROOT/profiles/aliases.sh"
 
 add_to_path "$HOME/bin"
 
-# Python
-export WORKON_HOME=$HOME/.venvs
-export PROJECT_HOME=$DEV_HOME/projects
-source /usr/local/bin/virtualenvwrapper.sh 2> /dev/null
-
 # Go
 export GOROOT="$DEV_HOME/go"
 add_to_path "/usr/local/go/bin" "/b/Go/bin"
@@ -68,6 +63,21 @@ add_to_path "$HOME/.local/bin"
 # 	speed up the creation of new shells a lot.
 ##
 
+# Python
+export WORKON_HOME=$HOME/.venvs
+export PROJECT_HOME=$DEV_HOME/projects
+
+virtualenvwrapper_lazy() {
+	echo 'Dang this tool is janky'
+	unset virtualenvwrapper
+	source /usr/local/bin/virtualenvwrapper.sh
+}
+
+virtualenvwrapper() {
+	virtualenvwrapper_lazy && virtualenvwrapper $@
+}
+
+
 # Ruby Env
 rbenv_lazy() {
 	if empty $(which rbenv); then
@@ -78,7 +88,6 @@ rbenv_lazy() {
 		return 0
 	fi
 	unset rbenv
-	unalias 'rbenv' 2> /dev/null
 	eval "$(rbenv init -)"
 	echo_info "Using rbenv:" $(which rbenv)
 	return 0
