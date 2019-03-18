@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Strip underscores.Allows big numbers to be written '1_930_055'
+# Smiley eyes operator
+n_n ()
+{
+	args_and_or_stdin $@ | sed s/_//g
+}
+
 tree_find() {
 	local dir="$1"
 	local pattern="$2"

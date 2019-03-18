@@ -162,14 +162,19 @@ test_end_to_end_bequest() {
 			parsed_var="parsed-$1"
 		}
 
+		# expect
+		if [[ ! -x ${executor} ]]; then
+			'e'
+		fi
+
 		${executor} \
 			-a --acc \
 			--key key-val \
 			--parsable parsable-val
 
-		expect ${acc_var} 'to eq' '2'
-		expect ${key_var} 'to eq' 'key-val'
-		expect ${parsed_var} 'to eq' 'parsed-parsable-val'
+		expect "${acc_var}" 'to eq' '2'
+		expect "${key_var}" 'to eq' 'key-val'
+		expect "${parsed_var}" 'to eq' 'parsed-parsable-val'
 	) && passed
 }
 

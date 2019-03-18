@@ -8,6 +8,7 @@
 # Spec testing
 
 SPEC_HISTORY_PATH=~/.spec_history
+SPEC_HISTORY_SIZE='100'
 
 spec() {
 	local args=$(args_and_or_stdin $@ <&0)
@@ -28,16 +29,21 @@ run_spec_command() {
 
 write_spec_history() {
 	local new_entry="$@"
-	local prev_entry=$(read_spec_history 1)
+	local prev_entry=$(read_spec_history 1 &>/dev/null)
 	if [[ "${new_entry}" == "${prev_entry}" ]]; then
 		return 0
 	fi
 	echo "${new_entry}" >> $SPEC_HISTORY_PATH
+
+	# Hacky file rotation
+	local temp_path="${SPEC_HISTORY_PATH}.tmp"
+	tail -n "$SPEC_HISTORY_SIZE" "$SPEC_HISTORY_PATH" > "${temp_path}"
+	mv "${temp_path}" "$SPEC_HISTORY_PATH"
 }
 
 read_spec_history() {
 	local range_end=$1
-	local spec_history;
+	local spec_history
 
 	local out_path=$(mktemp)
 	trap "rm ${out_path}" RETURN
