@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # Strip underscores.Allows big numbers to be written '1_930_055'
 # Smiley eyes operator

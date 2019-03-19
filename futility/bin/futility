@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ -n $FUTILITY_VERSION ]]; then
   # For now this is a bug.

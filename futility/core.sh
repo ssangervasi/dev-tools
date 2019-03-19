@@ -1,4 +1,3 @@
-#!/bin/bash
 
 YA_DUN_GOOFED=92
 

@@ -1,4 +1,3 @@
-#!/bin/bash
 
 killmoji() {
 	check_help $@ && killmoji_help && return 0

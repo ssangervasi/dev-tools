@@ -1,4 +1,3 @@
-#!/bin/bash
 
 ##
 # Generic framework for specification testing and linting.

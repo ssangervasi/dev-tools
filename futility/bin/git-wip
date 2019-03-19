@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Pipes:
 # - List git branches in comit-date order, marking the current branch with "*"

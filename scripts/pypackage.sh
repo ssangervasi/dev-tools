@@ -1,4 +1,3 @@
-#!/bin/bash
 
 mkpy() {
     test $1 && mkdir -p $1

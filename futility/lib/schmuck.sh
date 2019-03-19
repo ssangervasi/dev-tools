@@ -1,4 +1,3 @@
-#!/bin/bash
 
 TEST_FAILURE=37
 

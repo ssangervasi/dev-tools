@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # Because I always forget:
 # The file `.bash_profile` is used loaded for interactive shells.

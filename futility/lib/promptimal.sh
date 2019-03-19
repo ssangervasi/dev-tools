@@ -1,4 +1,3 @@
-#!/bin/bash
 
 prompt_swap() {
 	check_help $@ && prompt_swap_help && return 0
@@ -46,7 +45,7 @@ _timer_prompt() {
 	export PS1='$ELAPSED\$ '
 }
 
-_dynamic_prompt() { 
+_dynamic_prompt() {
 	local min_info_width=70
 	local columns=$(default ${COLUMNS} ${min_info_width})
 	# Wow math comparisons are ugly.
