@@ -64,3 +64,14 @@ jcr() {
 	find $rootdir -name '*.java' | xargs javac
 	test $2 && java $2
 }
+
+find_func() {
+	(
+		# Turn on extended shell debugging
+		shopt -s extdebug
+		# Dump the function's name, line number and fully qualified source file
+		declare -F $1
+		# Turn off extended shell debugging
+		shopt -u extdebug
+	)
+}

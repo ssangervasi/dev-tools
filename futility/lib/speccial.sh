@@ -164,7 +164,7 @@ load_ruby_speccial_plugin() {
 	# Tests with RSpec
 
 	SPEC_RSPEC_COMMAND='bundle exec rspec'
-	SPEC_RSPEC_DEFAULT_ARGS="--format documentation "
+	SPEC_RSPEC_DEFAULT_ARGS="--format documentation --fail-fast"
 
 	run_spec_command() {
 		$SPEC_RSPEC_COMMAND $SPEC_RSPEC_DEFAULT_ARGS $@

@@ -118,12 +118,10 @@ mangle_prompt_command() {
 }
 
 prompt_command_function() {
-	type $PROMPT_COMMAND_ORIGINAL &>/dev/null
-	if [[ $? == 0 ]]; then
+	if [[ -n $(type $PROMPT_COMMAND_ORIGINAL) ]]; then
 		eval "$PROMPT_COMMAND_ORIGINAL"
 	fi
-	type $PROMPT_COMMAND_CUSTOM &>/dev/null
-	if [[ $? == 0 ]]; then
+	if [[ -n $(type $PROMPT_COMMAND_CUSTOM) ]]; then
 		eval "$PROMPT_COMMAND_CUSTOM"
 	fi
 }
