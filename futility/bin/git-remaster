@@ -1,15 +1,29 @@
 #!/usr/bin/env bash
 
 original_branch=$(git symbolic-ref --short HEAD)
+original_status=$(git status --porcelain)
 
-echo 'Stashing changes' &&
-  git stash push -m "Remastering on ${original_branch}" &&
-  echo 'Pulling master' &&
-  git checkout master &&
+if [[ -n "${original_status}" ]]; then
+  echo 'Stashing dirty changes'
+  git stash push \
+    -m "remaster on ${original_branch}" \
+    --include-untracked \
+    || exit 1
+fi
+
+echo 'Pulling master'
+git checkout master &&
   git pull &&
   echo "Rebasing ${original_branch} onto master" &&
   git checkout "${original_branch}" &&
-  git rebase master &&
+  git rebase master
+
+if [[ $? != 0 ]]; then
+  echo_error 'Remaster failed!'
+  exit 1
+fi
+
+if [[ -n "${original_status}" ]]; then
   echo "Restoring stash" &&
-  git stash pop ||
-    echo_error 'Could not remaster!'
+  git stash pop
+fi
