@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+original_branch=$(git symbolic-ref --short HEAD)
+
+echo 'Stashing changes' &&
+  git stash push -m "Remastering on ${original_branch}" &&
+  echo 'Pulling master' &&
+  git checkout master &&
+  git pull &&
+  echo "Rebasing ${original_branch} onto master" &&
+  git checkout "${original_branch}" &&
+  git rebase master &&
+  echo "Restoring stash" &&
+  git stash pop ||
+    echo_error 'Could not remaster!'

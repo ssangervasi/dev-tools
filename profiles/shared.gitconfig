@@ -49,7 +49,7 @@
 
     pf = push --force-with-lease
     hoist = push -u origin head
-    
+
     b = branch -v
     s = status -sb
     current = symbolic-ref --short HEAD
