@@ -5,8 +5,28 @@ describe() {
 	echo "${COLOR_BLUE}describe ${@}${COLOR_NC}"
 }
 
+log_result() {
+	cat <<-OUT >> results.txt
+		$(date +%s) | $1 | IT_VAR: $IT_VAR 
+	OUT
+}
+
 it() {
-	echo "${COLOR_LIGHT_BLUE}it ${@}${COLOR_NC}"
+	local description="$1"
+	local result_fd="$2"
+	echo "${COLOR_LIGHT_BLUE}it ${1}${COLOR_NC}"
+	
+	export IT_VAR='the var of it'
+	# log_result 'before cat'
+	echo_error 'error date'
+	echo "$(date +%s)" 'before cat'
+	echo_error "$(date +%s)" 'error before cat'
+	# echo 'before cat'
+	# sleep 1
+	cat ${result_fd} >> results.txt
+	sleep 1
+	echo_error "$(date +%s)" 'error after cat'
+	log_result 'after cat'
 }
 
 passed() {

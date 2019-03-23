@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-if [[ -n $FUTILITY_VERSION ]]; then
+if [[ -n $(type -t load_futility_package) ]]; then
   # For now this is a bug.
-  echo 'FUTILITY_VERSION has been set. Something is loading this twice!' 1>&2
+  echo 'load_futility_package has been set. Something is loading this twice!' 1>&2
 else
   source $(dirname $BASH_SOURCE)/../package.sh
 fi
