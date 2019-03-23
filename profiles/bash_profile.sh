@@ -72,7 +72,8 @@ init_project_dev_tools() {
 	term-theme DevPurple
 
 	cd "$DEV_TOOLS_ROOT"
-
+	add_to_path "$DEV_TOOLS_ROOT/futility/tests"
+	
 	exit_project_dev_tools() { return; }
 }
 
