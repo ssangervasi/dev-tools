@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+source futility
+
+sing_lyrics() {
+  header='yes'
+  while read line; do
+    if [[ ${line} == '--' ]]; then
+      header='no'
+      continue
+    elif [[ ${header} == 'yes' ]]; then
+      continue
+    fi
+    echo "${line}"
+    sleep '.5'
+  done
+}
+
+lyrics_folder="$FUTILITY_PACKAGE_LIB/data-files/lyrics"
+sing_lyrics < "${lyrics_folder}/one_week.txt"

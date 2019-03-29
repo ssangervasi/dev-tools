@@ -28,7 +28,7 @@ run_spec_command() {
 
 write_spec_history() {
 	local new_entry="$@"
-	local prev_entry=$(read_spec_history 1 &>/dev/null)
+	local prev_entry=$(read_spec_history 1 2>/dev/null)
 	if [[ "${new_entry}" == "${prev_entry}" ]]; then
 		return 0
 	fi

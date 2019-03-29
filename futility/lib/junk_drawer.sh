@@ -25,7 +25,8 @@ ls_modified() {
 cls() {
 	clear
 	pwd
-	git b || tree -L 1
+	# git b ||
+	tree -L 1 --dirsfirst -C
 }
 
 tabname() {

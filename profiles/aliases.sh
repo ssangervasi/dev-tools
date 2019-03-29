@@ -14,14 +14,16 @@ alias tt='term-theme'
 alias 'pgrep'='pgrep -lfi'
 alias lsa='ls -a1lh'
 
+# Originally for Rails, but made more generic.
+alias taste='RAILS_ENV=test RACK_ENV=test FLASK_ENV=test'
+
 # Ruby & Rails
 alias be='bundle exec'
 alias beer='bundle exec rake'
-alias beer-taste='RAILS_ENV=test beer'
 alias bier='bundle exec rails'
 alias berps='spec'
 alias belch='bundle exec spring rspec'
-alias bemigrate='bundle install && beer db:migrate && beer-taste db:migrate'
+alias bemigrate='bundle install && beer db:migrate && taste beer db:migrate'
 
 # Git
 alias gita="git a"
