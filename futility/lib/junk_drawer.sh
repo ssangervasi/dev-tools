@@ -15,18 +15,30 @@ tree_find() {
 }
 
 ls_modified() {
-	local ref=$1
-	if empty $ref; then
-		ref='HEAD'
-	fi
+	local ref=${1:-HEAD}
 	git diff $ref --name-only --diff-filter=d
 }
 
 cls() {
 	clear
-	pwd
-	# git b ||
-	tree -L 1 --dirsfirst -C
+	summary
+}
+
+summary() {
+	local dir_path=$(get_absolute_path ${1:-.})
+	local ls_result="$(ls -A1F $dir_path)"
+	local dir_count=$(echo "$ls_result" | grep -c '/$')
+	local exe_count=$(echo "$ls_result" | grep -c '*$')
+	local specials='/*%@=%|'
+	local reg_count=$(echo "$ls_result" | grep -vc "[${specials}]$")
+	local total_count=$(echo "$ls_result" | grep -c '.')
+	cat <<-SUMMARY
+		${dir_path}
+		Directories: ${dir_count}
+		Executables: ${exe_count}
+		Regular:     ${reg_count}
+		Total:       ${total_count}
+	SUMMARY
 }
 
 tabname() {
@@ -35,8 +47,8 @@ tabname() {
 
 count_files() {
 	local what where
-	what=$(default $1 '.')
-	where=$(default $2 '.')
+	what=${1:-.}
+	where=${2:-.}
 	ls -1 $where | grep $what --count
 }
 
