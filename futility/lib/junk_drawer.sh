@@ -88,3 +88,21 @@ find_func() {
 		shopt -u extdebug
 	)
 }
+
+kanye() {
+	json_extract_key "$(curl -s api.kanye.rest)" "quote"
+}
+
+json_extract_key() {
+	local json="$1"
+	local key="$2"
+	local py_script=$(
+		cat <<-PYTHON
+			from __future__ import print_function
+			import sys
+			import json
+			print(json.loads(sys.argv[1])[sys.argv[2]])
+		PYTHON
+	)
+	python -c "${py_script}" "${json}" "${key}"
+}

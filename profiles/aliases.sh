@@ -12,7 +12,7 @@ alias tree='tree ${TREE_DEFAULT_OPTIONS}'
 alias binweb='./bin/web'
 alias tt='term-theme'
 alias 'pgrep'='pgrep -lfi'
-alias lsa='ls -a1lh'
+alias lsa='ls -A1lh'
 
 # Originally for Rails, but made more generic.
 alias taste='RAILS_ENV=test RACK_ENV=test FLASK_ENV=test'
