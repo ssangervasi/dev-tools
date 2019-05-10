@@ -16,16 +16,6 @@ spec() {
 	run_spec_command ${args}
 }
 
-print_spec_header() {
-	echo "Running: run_spec_command"
-	echo "With args: $@"
-}
-
-run_spec_command() {
-	echo_error 'You need to implement a "run_spec_command" function!'
-	return $YA_DUN_GOOFED
-}
-
 write_spec_history() {
 	local new_entry="$@"
 	local prev_entry=$(read_spec_history 1 2>/dev/null)
@@ -108,10 +98,15 @@ Example:
 HELP_TEXT
 }
 
+ls_modified() {
+	local ref=${1:-HEAD}
+	git diff $ref --name-only --diff-filter=d
+}
+
 modspec() {
 	local ref=$1
 	shift
-	local modified_specs=$(ls_modified_specs $ref)
+	local modified_specs=$(ls_modified ${ref} | select_spec_paths)
 	if empty $modified_specs; then
 		echo_error 'No modified spec files.'
 		return 0
@@ -121,21 +116,17 @@ modspec() {
 	spec $modified_specs $@
 }
 
-ls_modified_specs() {
-	ls_modified $1 | grep -E "(^(Test|Spec)|.+(_spec|_test)[.].+)"
-}
-
 ##
 # Linting
 
 lint() {
-	run_lint_command "$@"
+	run_lint_command $@
 }
 
 modlint() {
 	local ref="$1"
 	shift
-	local modified_sources=$(ls_modified_sources ${ref})
+	local modified_sources=$(ls_modified ${ref} | select_lint_paths)
 	if empty $modified_sources; then
 		echo_error 'No modified source files.'
 		return 0
@@ -145,9 +136,26 @@ modlint() {
 	run_lint_command $modified_sources $@
 }
 
-ls_modified_sources() {
-	# TODO: Come up with a better way of extending this pattern.
-	ls_modified $1 | grep -E '^((Gemfile)|(.+[.])(hs|rb|py|js))$'
+##
+# Default methods that can be overridded by plugins
+# TODO: How can I make a clean API for plugging these things?
+
+print_spec_header() {
+	echo "Running: run_spec_command"
+	echo "With args: $@"
+}
+
+run_spec_command() {
+	echo_error 'You need to implement a "run_spec_command" function!'
+	return $YA_DUN_GOOFED
+}
+
+select_spec_paths() {
+	grep -E "(^(Test|Spec)|.+(_spec|_test)[.].+)"
+}
+
+select_lint_paths() {
+	grep -E '^((Gemfile)|(.+[.])(hs|rb|py|js))$'
 }
 
 run_lint_command() {

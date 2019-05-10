@@ -14,11 +14,6 @@ tree_find() {
 	tree --prune -P "$pattern" "$dir" "$@"
 }
 
-ls_modified() {
-	local ref=${1:-HEAD}
-	git diff $ref --name-only --diff-filter=d
-}
-
 cls() {
 	clear
 	summary
