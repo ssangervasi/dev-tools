@@ -35,7 +35,24 @@ rescue
   ]
 end
 
-Pry.config.prompt = [
-  method(:custom_prompt),
-  method(:custom_wait_prompt)
-]
+def use_custom_prompt!
+  Pry.config.prompt = [
+    method(:custom_prompt),
+    method(:custom_wait_prompt)
+  ]
+end
+
+def try_to_use_awesome_print!
+  begin
+    require 'awesome_print'
+  rescue LoadErrror
+    return
+  end
+
+  Pry.config.print = proc do |output, value|
+    output.ap(value)
+  end
+end
+
+use_custom_prompt!
+# try_to_use_awesome_print!

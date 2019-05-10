@@ -32,10 +32,6 @@ init_project() {
 		exit
 	fi
 
-	.help() {
-		project_default_help
-	}
-
 	eval "${PROJECT_INIT_COMMAND}" || exit
 
 	cleanup_project() {

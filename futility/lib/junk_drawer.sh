@@ -41,6 +41,17 @@ summary() {
 	SUMMARY
 }
 
+summary_table() {
+	summary |
+		column -t |
+		while read line; do
+			echo "$line" |
+				sed -E 's/[[:space:]]{2}/· /g' |
+				cat
+			read line && echo "$line"
+		done
+}
+
 tabname() {
 	echo -ne "\033]0;$*\007"
 }

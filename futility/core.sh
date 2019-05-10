@@ -1,6 +1,14 @@
 
 YA_DUN_GOOFED=92
 
+futility_log() {
+	local log_path="$HOME/.futility/futility.log"
+	mkdir -p $(dirname ${log_path})
+	touch log_path || return $YA_DUN_GOOFED
+	echo "$(date +'%D %T') | $@" >> ${log_path}
+	# tail -n 1000 ${log_path} > ${log_path}
+}
+
 echo_error() {
 	echo "$COLOR_RED""$@""$COLOR_NC" 1>&2
 	return $YA_DUN_GOOFED
@@ -32,7 +40,10 @@ add_to_path() {
 	for path_dir in "$@"; do
 		abs_path_dir=$(get_absolute_path "$path_dir")
 		if [[ -d "${abs_path_dir}" ]]; then
-			export PATH="${abs_path_dir}:$PATH"
+			export PATH="${abs_path_dir}:$PATH" &&
+				futility_log "add_to_path: Added '${path_dir}' as '${abs_path_dir}'"
+		else
+			futility_log "add_to_path: Error with '${path_dir}' as '${abs_path_dir}'"
 		fi
 	done
 }
@@ -93,11 +104,11 @@ breakpoint() {
 
 source_if_exists() {
 	local file_path="$1"
-	local else_log="$2"
-	if [[ -f "$file_path" ]]; then
-		source "$file_path"
-	elif [[ "$else_log" =~ ^-l|--log$ ]]; then
-		echo_error "Could not source $file_path"
+	if [[ -f "${file_path}" ]]; then
+		source "${file_path}" &&
+			futility_log "source_if_exists: Sourced ${file_path}"
+	else
+		futility_log "source_if_exists: Error with ${file_path}"
 		return $YA_DUN_GOOFED
 	fi
 	return 0

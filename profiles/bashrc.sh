@@ -151,6 +151,7 @@ nvm_lazy() {
 	if [[ -s "$NVM_DIR/bash_completion" ]]; then
 		source "$NVM_DIR/bash_completion"
 	fi
+	nvm use &> /dev/null
 	echo_info "Using nvm node: $(nvm current)"
 }
 alias nvm='nvm_lazy && nvm'

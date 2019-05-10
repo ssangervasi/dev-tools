@@ -10,11 +10,18 @@
 init_project_{{ name }}() {
 	prefix_prompt '{{ icon }} '
 
-	cd '{{ directory }}'
+  .cd() {
+  	cd '{{ directory }}'
+  }
+  .cd
+
+  .help() {
+    project_default_help
+  }
 
 	exit_project_{{ name }} () {
 		echo "Exited {{ name }}."
 	}
-	
+
 	echo "Entered {{ name }}."
 }

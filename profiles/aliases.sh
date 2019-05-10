@@ -32,6 +32,7 @@ alias gitl="git l"
 alias gits="git s"
 alias hamster='git hamster'
 alias gitcd='cd $(git root-dir)'
+alias new='git new'
 
 # Lock the screen (OSX only)
 MAC_OS_LOCK_SCREEN='/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession'

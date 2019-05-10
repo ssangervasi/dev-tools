@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# This was necessary to make Sublime Linter find the right installation
+# of ES-Lint per project. For example, here's the Sublime Linter settings:
+#
+# "linters": {
+#   "eslint": {
+#     "executable": ["nvm-yarn", "eslint"]
+#   }
+# }
+
+export NVM_DIR="$HOME/.nvm"
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  source "$NVM_DIR/nvm.sh"
+else
+  echo "No NVM at '$NVM_DIR/nvm.sh'" >&2
+  exit 1
+fi
+
+# Gotta silence both NVM and Yarn, otherwise the output can't be parsed.
+nvm exec --silent $(which yarn) --silent $@
