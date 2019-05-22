@@ -4,7 +4,7 @@ YA_DUN_GOOFED=92
 futility_log() {
 	local log_path="$HOME/.futility/futility.log"
 	mkdir -p $(dirname ${log_path})
-	touch log_path || return $YA_DUN_GOOFED
+	touch "${log_path}" || return $YA_DUN_GOOFED
 	echo "$(date +'%D %T') | $@" >> ${log_path}
 	# tail -n 1000 ${log_path} > ${log_path}
 }

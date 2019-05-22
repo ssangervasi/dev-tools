@@ -90,12 +90,12 @@ globspec() {
 }
 
 globspec_help() {
-	cat <<HELP_TEXT
-Usage: globspec */glob/pattern/*.txt
-	=> run \`spec\` on all files matching the pattern
-Example:
-	globspec *animals/*horse_spec.rb
-HELP_TEXT
+	cat <<-HELP_TEXT
+		Usage: globspec */glob/pattern/*.txt
+			=> run \`spec\` on all files matching the pattern
+		Example:
+			globspec *animals/*horse_spec.rb
+	HELP_TEXT
 }
 
 ls_modified() {
