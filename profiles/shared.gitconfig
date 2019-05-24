@@ -43,8 +43,8 @@
 
     root-dir=rev-parse --show-toplevel
     dic = diff --cached
-    junction = merge-base master head
-    wat = !git diff --name-status $(git junction)
+    junction = merge-base master
+    wat = !git diff --name-status $(git junction $1)
     stat = !git diff --stat $(git junction)
 
     pf = push --force-with-lease

@@ -1,0 +1,8 @@
+<snippet>
+<content><![CDATA[
+todo: :ssangervasi
+]]></content>
+<tabTrigger>todo:</tabTrigger>
+<description>ruby rspec todo ssangervasi</description>
+<scope>source.ruby</scope>
+</snippet>

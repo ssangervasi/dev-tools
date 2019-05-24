@@ -1,0 +1,8 @@
+<snippet>
+<content><![CDATA[
+function() {${0:$SELECTION}}
+]]></content>
+<tabTrigger>fn</tabTrigger>
+<description>anonymous function</description>
+<scope>source.js</scope>
+</snippet>

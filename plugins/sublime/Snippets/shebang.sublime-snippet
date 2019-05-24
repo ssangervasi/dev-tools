@@ -1,0 +1,9 @@
+<snippet>
+<content><![CDATA[
+#!/usr/bin/env ${1:bash}
+]]></content>
+<tabTrigger>shebang</tabTrigger>
+<!-- <tabTrigger>#!</tabTrigger> -->
+<description>Executable env comment</description>
+<scope>source,text</scope>
+</snippet>

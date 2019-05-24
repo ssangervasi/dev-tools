@@ -61,7 +61,7 @@ echo_paths() {
 }
 
 respec() {
-	spec_history=$(read_spec_history)
+	local spec_history=$(read_spec_history)
 	if [[ $? > 0 ]]; then
 		return $YA_DUN_GOOFED
 	fi
@@ -181,6 +181,10 @@ load_ruby_speccial_plugin() {
 	print_spec_header() {
 		echo "Running: $SPEC_RSPEC_COMMAND"
 		echo "With args: $SPEC_RSPEC_DEFAULT_ARGS $@"
+	}
+
+	use_spring() {
+		SPEC_RSPEC_COMMAND='bundle exec spring rspec'
 	}
 
 	##
