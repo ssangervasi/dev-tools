@@ -164,7 +164,7 @@ run_lint_command() {
 }
 
 ##
-# Ruby w/ RSpec & RuboCop spec plugin implementation.
+# Ruby w/ Bundler, RSpec, & RuboCop plugin implementation.
 ##
 
 load_ruby_speccial_plugin() {
@@ -196,5 +196,24 @@ load_ruby_speccial_plugin() {
 
 	run_lint_command() {
 		$SPEC_RUBOCOP_COMMAND $@
+	}
+}
+
+##
+# Pyton w/ Pipenv, Pytest, Flake8 plugin implementation.
+##
+
+load_python_speccial_plugin() {
+	run_spec_command() {
+		pipenv run pytest $@
+	}
+
+	print_spec_header() {
+		echo "Running: pipenv run pytest "
+		echo "With args: $@"
+	}
+
+	run_lint_command() {
+		pipenv run flake8 $@
 	}
 }
