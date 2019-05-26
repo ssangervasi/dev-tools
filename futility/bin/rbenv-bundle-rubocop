@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# This is necessary to make Sublime Linter find the right installation
+# of rubocop per project.
+#
+eval "$(rbenv init -)"
+
+# rbenv local >> ~/wat.log
+# which bundler >> ~/wat.log
+# bundler --version >> ~/wat.log
+# echo "bundle exec rubocop $fixed_args" >> ~/wat.log
+# tee ~/wat.log | bundle exec rubocop $fixed_args
+
+fixed_args=$(echo "$@" | sed 's/-S rubocop//')
+cat | bundle exec rubocop $fixed_args
+
