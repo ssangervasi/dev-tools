@@ -9,7 +9,7 @@ wip_branch=$(
     grep -v master |
     grep -v "*" |
     sed s!refs/heads/!! |
-    head -n
+    head -n 1
 )
 if [[ $wip_branch =~ ^[[:space:]]*$ ]]; then
   echo 'No work-in-progress branch'
