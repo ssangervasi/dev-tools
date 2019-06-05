@@ -5,18 +5,18 @@ source futility
 _mvsed() {
 	check_help $@ && mvsed_help && exit 0
 
-	local file_path=$1
+	local file_path="$1"
 	shift
-	local sed_args=$@
-	local new_file_path=$(echo $file_path | sed $sed_args)
-	# if [[ $file_path != $new_file_path && $(empty $new_file_path) != 0 ]]; then
+	local sed_args="$@"
+	# echo local new_file_path="echo $file_path | sed $sed_args"
+	local new_file_path=$(echo "$file_path" | sed $sed_args)
 	if [[ -e $new_file_path ]]; then
 		echo_error "Error: cannot move $file_path to $new_file_path -- path exists"
 	elif [[ $(empty $new_file_path) ]]; then
 		echo_error "Error: cannot move $file_path -- new path is empty"
 	else
 			echo "$file_path => $new_file_path"
-			mv $file_path $new_file_path
+			mv "$file_path" "$new_file_path"
 	fi
 }
 
@@ -32,4 +32,4 @@ mvsed_help() {
 }
 
 
-_mvsed $@
+_mvsed "$@"

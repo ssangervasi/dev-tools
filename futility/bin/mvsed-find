@@ -5,9 +5,10 @@ source futility
 _mvsed_find() {
 	check_help $@ && mvsed_find_help && exit 0
 
-	local find_pattern=$1
+	local find_pattern="$1"
 	shift
-	local sed_args=$@
+	local sed_args="$@"
+	# echo find . -path "$find_pattern" -exec mvsed {} $sed_args \;
 	find . -path "$find_pattern" -exec mvsed {} $sed_args \;
 }
 
@@ -37,4 +38,4 @@ mvsed_find_help() {
 	HELP_TEXT
 }
 
-_mvsed_find $@
+_mvsed_find "$@"
