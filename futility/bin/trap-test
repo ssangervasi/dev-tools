@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+logfile="./trap.log"
+echo '' > "${logfile}"
+
+log() {
+  echo "$@" | tee -a "${logfile}"
+}
+
+calls_sets_trap() {
+  handle_tag='calls_sets_trap above'
+  log '~~ calls_sets_trap ~~'
+
+  sets_trap
+
+  # trap 'handle_trap outer' RETURN
+  handle_tag='calls_sets_trap below'
+}
+
+sets_trap() {
+  handle_tag='sets_trap above'
+  log '~~ sets_trap ~~'
+
+  handle_trap() {
+    echo 'haha I stole your trap handler'
+  }
+  trap 'handle_trap inner' RETURN
+
+  called_within_sets_trap
+  handle_tag='sets_trap below'
+}
+
+called_within_sets_trap() {
+  handle_tag='called_within_sets_trap'
+  log '-- called_within_sets_trap --'
+}
+
+called_outside() {
+  handle_tag='called_outside'
+  log '-- called_outside --'
+}
+
+handle_trap() {
+  log "!! handle_trap '$1' '${handle_tag}' !!"
+}
+
+
+# WOW! "RETURN" traps apply to the entire call stack above them!
+# The output shows that a trap fires when `calls_sets_trap` returns,
+# in addition to the expected fire for `sets_trap`.
+
+sets_trap
+calls_sets_trap
+called_outside

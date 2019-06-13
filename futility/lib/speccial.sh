@@ -174,6 +174,9 @@ load_ruby_speccial_plugin() {
 	SPEC_RSPEC_COMMAND='bundle exec rspec'
 	SPEC_RSPEC_DEFAULT_ARGS="--format documentation --fail-fast"
 
+	# I'm not a fan of the retry gem...
+	export RSPEC_RETRY_RETRY_COUNT=0
+
 	run_spec_command() {
 		$SPEC_RSPEC_COMMAND $SPEC_RSPEC_DEFAULT_ARGS $@
 	}

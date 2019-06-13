@@ -18,13 +18,13 @@ load_futility_lib() {
 	# Yes this tempfile deal is hacky,
 	#   but handles files with spaces and other odd things.
 	local lib_file_list=$(mktemp -t futility_lib_file_list)
-	trap "rm ${lib_file_list}" EXIT
+	trap "rm ${lib_file_list} &>/dev/null" EXIT
 
 	ls -1 "$FUTILITY_PACKAGE_LIB" | grep '.sh' > ${lib_file_list}
 
 	local lib_file
 	while read lib_file; do
-		source_if_exists "$FUTILITY_PACKAGE_LIB/$lib_file" --log
+		source_if_exists "$FUTILITY_PACKAGE_LIB/$lib_file"
 	done < ${lib_file_list}
 }
 
