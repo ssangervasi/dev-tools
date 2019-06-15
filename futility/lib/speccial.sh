@@ -18,7 +18,7 @@ spec() {
 
 write_spec_history() {
 	local new_entry="$@"
-	local prev_entry=$(read_spec_history 1 2>/dev/null)
+	local prev_entry=$(spec_history 1 2>/dev/null)
 	if [[ "${new_entry}" == "${prev_entry}" ]]; then
 		return 0
 	fi
@@ -30,25 +30,23 @@ write_spec_history() {
 	mv "${temp_path}" "$SPEC_HISTORY_PATH"
 }
 
-read_spec_history() {
-	local range_end=$1
-	local spec_history
+spec_history() {
+	local range_end="$1"
 
 	local out_path=$(mktemp)
 	trap "rm ${out_path}" RETURN
 
-	if empty $range_end; then
-		tail -n 1 $SPEC_HISTORY_PATH > ${out_path}
-
-	elif [[ $range_end =~ [0-9]+ ]]; then
-		tail -n $range_end $SPEC_HISTORY_PATH > ${out_path}
-
-	elif [[ $range_end =~ all ]]; then
+	if [[ ${range_end} =~ [0-9]+ ]]; then
+		tail -n ${range_end} $SPEC_HISTORY_PATH > ${out_path}
+	elif [[ -z ${range_end} || ${range_end} =~ all ]]; then
 		cat $SPEC_HISTORY_PATH > ${out_path}
+	else
+		echo_error "Invalid history range: '${range_end}'"
 	fi
 
 	if [[ ! -s ${out_path} ]]; then
 		echo_error 'No spec history!'
+		echo_error "Expected it to be present in: '$SPEC_HISTORY_PATH'"
 		return $YA_DUN_GOOFED
 	fi
 
@@ -61,13 +59,13 @@ echo_paths() {
 }
 
 respec() {
-	local spec_history=$(read_spec_history)
+	local last_spec=$(spec_history 1)
 	if [[ $? > 0 ]]; then
 		return $YA_DUN_GOOFED
 	fi
 
-	echo 'Replaying spec:' $spec_history $@
-	spec $spec_history $@
+	echo 'Replaying spec:' $last_spec $@
+	spec $last_spec $@
 }
 
 globspec() {
