@@ -10,12 +10,20 @@ futility_log() {
 }
 
 echo_error() {
-	echo "$COLOR_RED""$@""$COLOR_NC" 1>&2
+	local echo_prefix=${ECHO_PREFIX:-'‼ '}
+	echo "${COLOR_RED}${echo_prefix}$@${COLOR_NC}" 1>&2
 	return $YA_DUN_GOOFED
 }
 
+echo_info() {
+	local echo_prefix=${ECHO_PREFIX:-'♾  '}
+	echo "${COLOR_YELLOW}${echo_prefix}$@${COLOR_NC}" 1>&2
+	return 0
+}
+
 echo_success() {
-	echo "$COLOR_GREEN""$@""$COLOR_NC" 1>&2
+	local echo_prefix=${ECHO_PREFIX:-'✅ '}
+	echo "${COLOR_GREEN}${echo_prefix}$@${COLOR_NC}" 1>&2
 	return 0
 }
 
