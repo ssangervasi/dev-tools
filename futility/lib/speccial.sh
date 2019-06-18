@@ -68,6 +68,18 @@ respec() {
 	spec $last_spec $@
 }
 
+
+_complete_spec_history() {
+	COMPREPLY=(
+		$(compgen \
+				-W "$(spec_history 10)" \
+				"${COMP_WORDS[$COMP_CWORD]}"
+		)
+	)
+}
+
+complete -F _complete_spec_history spec
+
 globspec() {
 	check_help $@ && globspec_help && return 0
 
