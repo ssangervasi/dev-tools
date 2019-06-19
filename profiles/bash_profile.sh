@@ -67,13 +67,14 @@ alias 'chrome'='Google\ Chrome'
 .dev_tools() { enter_project 'dev_tools'; }
 alias '.dev'='.dev_tools'
 
+register_project 'dev_tools'
 init_project_dev_tools() {
 	prefix_prompt '🛠  '
 	term-theme DevPurple
 
 	cd "$DEV_TOOLS_ROOT"
 	add_to_path "$DEV_TOOLS_ROOT/futility/tests"
-	
+
 	exit_project_dev_tools() { return; }
 }
 

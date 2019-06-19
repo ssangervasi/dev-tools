@@ -25,3 +25,5 @@ init_project_{{ name }}() {
 
 	echo "Entered {{ name }}."
 }
+
+register_project {{ name }}

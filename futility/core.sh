@@ -110,6 +110,34 @@ breakpoint() {
 	echo "~~ End Breakpoint $* ~~"
 }
 
+is_defined() {
+	type -t "$1" &>/dev/null &&
+		return 0 ||
+		return 1
+}
+
+find_func() {
+	local fn_name="$1"
+	# Turn on extended shell debugging
+	shopt -s extdebug
+	# Turn off extended shell debugging on return
+	trap 'shopt -u extdebug' EXIT
+	# Dump the function's name, line number and fully qualified source file
+	local fn_dec=$(declare -F ${fn_name})
+	if [[ -n ${fn_dec} ]]; then
+		echo ${fn_dec}
+		return 1
+	fi
+
+	local alias_dec=$(alias ${fn_name} 2>/dev/null)
+	if [[ -z ${alias_dec} ]]; then
+		echo_error "No function or alias named '${fn_name}'"
+		return 1
+	fi
+
+	echo ${alias_dec}
+}
+
 source_if_exists() {
 	local file_path="$1"
 	if [[ -f "${file_path}" ]]; then

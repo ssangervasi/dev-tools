@@ -70,11 +70,18 @@ respec() {
 
 
 _complete_spec_history() {
-	COMPREPLY=(
-		$(compgen \
-				-W "$(spec_history 10)" \
-				"${COMP_WORDS[$COMP_CWORD]}"
+	local current_word="${COMP_WORDS[$COMP_CWORD]}"
+
+	# Allows using file paths instead of history completion.
+	if [[ ${current_word} =~ ^(/|\./|~/) ]]; then
+		COMPREPLY=(
+			$(compgen -o default "${current_word}")
 		)
+		return 0
+	fi
+
+	COMPREPLY=(
+		$(compgen -W "$(spec_history 10)" "${current_word}")
 	)
 }
 

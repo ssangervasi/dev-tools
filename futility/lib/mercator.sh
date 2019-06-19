@@ -1,6 +1,33 @@
 
 ##
-# Initializing
+# Registration
+
+register_project() {
+	local project_name="$1"
+	local init_command=$(_init_command_from_name "${project_name}")
+
+
+	MERCATOR_PROJECTS+=("${project_name}")
+}
+
+# Bash completion based on registered names
+
+_complete_enter_project() {
+	local current_word="${COMP_WORDS[$COMP_CWORD]}"
+	# Note the difference between:
+	# 	array=(foo bar)
+	# 	"${array[@]}" => "foo" "bar"
+	# 	"${array[*]}" => "foo bar"
+	COMPREPLY=(
+		$(compgen -W "${MERCATOR_PROJECTS[*]}" "${current_word}")
+	)
+}
+
+alias ep=enter_project
+complete -F _complete_enter_project enter_project ep
+
+##
+# Entering the shell
 
 enter_project() {
 	local project_name="$1"
@@ -8,40 +35,48 @@ enter_project() {
 	# An interactive login shell...
 	# 	though, technically, it doesn' use the official '-l' argument to
 	# 	make it a login shell because I'm mangling the init file.
-	env PROJECT_NAME="${project_name}" \
-			PROJECT_INIT_COMMAND="init_project_${project_name}" \
-			PROJECT_EXIT_COMMAND="exit_project_${project_name}" \
-			bash --init-file <(echo 'source $HOME/.bash_profile; init_project') -i
+	env MERCATOR_PROJECT_NAME="${project_name}" \
+			MERCATOR_PROJECT_INIT_COMMAND=$(_init_command_from_name "${project_name}") \
+			MERCATOR_PROJECT_EXIT_COMMAND=$(_exit_command_from_name "${project_name}") \
+			bash --init-file <(echo 'source $HOME/.bash_profile; _init_project') -i
 }
 
-init_project() {
-	if [[ -z "${PROJECT_INIT_COMMAND}" ]]; then
+_init_command_from_name() {
+	local project_name="$1"
+	echo "init_project_${project_name}"
+}
+
+_exit_command_from_name() {
+	local project_name="$1"
+	echo "exit_project_${project_name}"
+}
+
+_init_project() {
+	if [[ -z "${MERCATOR_PROJECT_INIT_COMMAND}" ]]; then
 		return
 	fi
 
 	# Jump out of any existing project.
 	exit_project &> /dev/null
 
-	type "${PROJECT_INIT_COMMAND}" &>/dev/null
-
-	if [[ $? == 1 ]]; then
-		dump_logo
-		dump_world_map
-		dump_no_project_help
+	if ! is_defined "$MERCATOR_PROJECT_INIT_COMMAND"; then
+		_dump_logo
+		_dump_world_map
+		_dump_no_project_help
 
 		exit
 	fi
 
-	eval "${PROJECT_INIT_COMMAND}" || exit
+	eval "${MERCATOR_PROJECT_INIT_COMMAND}" || exit
 
-	cleanup_project() {
-		echo "Exiting $PROJECT_NAME..."
-		eval "${PROJECT_EXIT_COMMAND}" 2> /dev/null
+	_cleanup_project() {
+		echo "Exiting $MERCATOR_PROJECT_NAME..."
+		eval "${MERCATOR_PROJECT_EXIT_COMMAND}" 2> /dev/null
 	}
 
 	exit_project() { exit; }
 
-	trap cleanup_project EXIT
+	trap _cleanup_project EXIT
 }
 
 exit_project() {
@@ -50,25 +85,25 @@ exit_project() {
 
 project_default_help() {
 	cat <<-HELP_TEXT
-		Project ${PROJECT_NAME}
+		Project ${MERCATOR_PROJECT_NAME}
 		This the default Mercator help message.
-		Define your own .help in ${PROJECT_INIT_COMMAND}
+		Define your own .help in ${MERCATOR_PROJECT_INIT_COMMAND}
 	HELP_TEXT
 }
 
-dump_no_project_help() {
+_dump_no_project_help() {
 	cat <<-HELP_TEXT
-		Looks like you tried to enter project "$PROJECT_NAME",
-		but there is no init command "$PROJECT_INIT_COMMAND".
+		Looks like you tried to enter project "$MERCATOR_PROJECT_NAME",
+		but there is no init command "$MERCATOR_PROJECT_INIT_COMMAND".
 		You need to define that in order to use Mercator.
 	HELP_TEXT
 }
 
-dump_world_map() {
+_dump_world_map() {
 	cat "$FUTILITY_PACKAGE_LIB/data-files/world_map.txt"
 }
 
-dump_logo() {
+_dump_logo() {
 	cat <<MERCATOR
 /=================\\
 	M E R C A T O R
@@ -164,3 +199,5 @@ init_project_temp() {
 
 	.help
 }
+
+register_project 'temp'
