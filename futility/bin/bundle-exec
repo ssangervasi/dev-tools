@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+source futility 
+bundle_lazy
+bundle exec $@

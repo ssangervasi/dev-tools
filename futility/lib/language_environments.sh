@@ -128,6 +128,8 @@ rvm() {
 #
 
 bundle_lazy() {
+  futility_log 'bundle_lazy'
+
   if [[ $(type -t bundle) != 'function' ]]; then
     return 0
   fi
@@ -145,6 +147,8 @@ bundle_lazy() {
 bundle() {
   bundle_lazy && bundle $@
 }
+
+futility_log "it's defined"
 
 ##
 # JS
