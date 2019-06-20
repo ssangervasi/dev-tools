@@ -42,6 +42,27 @@ def use_custom_prompt!
   ]
 end
 
+def use_dollar_for_shell_commands!
+  shell_command_const = :ShellCommand
+  shell_command_class = Pry::Command.const_get(shell_command_const)
+  if shell_command_class.nil?
+    warn("The #{shell_command_const.inspect} const is not defined.")
+    return
+  end
+
+  # The original pattern should be `/\.(.*)/` but just to make sure...
+  original_pattern, _ =  Pry.commands.find { |k, v| v == shell_command_class }
+  if original_pattern.nil?
+    warn("There was no pattern for shell command #{shell_command_class.inspect}")
+    return
+  end
+
+  Pry.commands.delete(original_pattern)
+
+  dollar_prefix_pattern = /\$(.*)/
+  Pry.commands[dollar_prefix_pattern] = shell_command_class
+end
+
 def try_to_use_awesome_print!
   begin
     require 'awesome_print'
@@ -54,5 +75,13 @@ def try_to_use_awesome_print!
   end
 end
 
-use_custom_prompt!
-# try_to_use_awesome_print!
+begin
+  use_custom_prompt!
+  use_dollar_for_shell_commands!
+  # try_to_use_awesome_print!
+rescue StandardError => e
+  warn(
+    "Problem with pryrc '#{__FILE__}':",
+    e.message
+  )
+end
