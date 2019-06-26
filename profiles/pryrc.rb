@@ -42,7 +42,7 @@ def use_custom_prompt!
   ]
 end
 
-def use_dollar_for_shell_commands!
+def use_dobule_dollar_for_shell_commands!
   shell_command_const = :ShellCommand
   shell_command_class = Pry::Command.const_get(shell_command_const)
   if shell_command_class.nil?
@@ -59,7 +59,7 @@ def use_dollar_for_shell_commands!
 
   Pry.commands.delete(original_pattern)
 
-  dollar_prefix_pattern = /\$(.*)/
+  dollar_prefix_pattern = /\$\$(.*)/
   Pry.commands[dollar_prefix_pattern] = shell_command_class
 end
 
@@ -77,7 +77,7 @@ end
 
 begin
   use_custom_prompt!
-  use_dollar_for_shell_commands!
+  use_dobule_dollar_for_shell_commands!
   # try_to_use_awesome_print!
 rescue StandardError => e
   warn(

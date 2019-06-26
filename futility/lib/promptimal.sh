@@ -3,7 +3,8 @@ prompt_swap() {
 	check_help $@ && prompt_swap_help && return 0
 	clear_prompt
 
-	case $1 in
+	local arg="${1:--s}"
+	case "$arg" in
 		-s|--simple)
 			_simple_prompt
 			;;
@@ -17,18 +18,19 @@ prompt_swap() {
 			mangle_prompt_command _dynamic_prompt
 			;;
 		*)
-			export PS1=$(default "$1" "$simple_prompt")
+			export PS1="$arg"
+		;;
 	esac
 }
 
 prompt_swap_help() {
-	cat <<HELP_TEXT
-Supported prompts:
-	-s, --simple
-	-i, --info
-	-t, --timer
-	-d, --dynamic
-HELP_TEXT
+	cat <<-HELP_TEXT
+		Supported prompts:
+			-s, --simple
+			-i, --info
+			-t, --timer
+			-d, --dynamic
+	HELP_TEXT
 }
 
 clear_prompt() {

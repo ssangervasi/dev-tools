@@ -71,18 +71,26 @@ respec() {
 
 _complete_spec_history() {
 	local current_word="${COMP_WORDS[$COMP_CWORD]}"
+	local history_array=($(spec_history 10 2>/dev/null))
+	local match_array=($(compgen -W "${history_array[*]}" "${current_word}"))
 
-	# Allows using file paths instead of history completion.
-	if [[ ${current_word} =~ ^(/|\./|~/) ]]; then
+	if (( ${#match_array[@]} > 0 )); then
+		COMPREPLY=(${match_array[@]})
+	else
 		COMPREPLY=(
 			$(compgen -o default "${current_word}")
 		)
-		return 0
 	fi
 
-	COMPREPLY=(
-		$(compgen -W "$(spec_history 10)" "${current_word}")
-	)
+	# FUTILITY_LOG_LEVEL='debug'
+	# futility_log "history_array"
+	# futility_log "${#history_array[@]} | ${history_array[@]}"
+	# futility_log "Match array"
+	# futility_log "${#match_array[@]} | ${match_array[@]}"
+	# futility_log "COMPREPLY"
+	# futility_log "${COMPREPLY[@]}"
+	# futility_log "current_word"
+	# futility_log "${current_word}"
 }
 
 complete -F _complete_spec_history spec

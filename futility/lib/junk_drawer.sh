@@ -68,3 +68,12 @@ json_extract_key() {
 	)
 	python -c "${py_script}" "${json}" "${key}"
 }
+
+pbpath() {
+	local target="${1:-.}"
+	local dir=$(dirname "${target}")
+	local base=$(basename "${target}")
+
+	local abs_dir=$(get_absolute_path "${dir}")
+	echo "${abs_dir}/${base}" | pbcopy
+}

@@ -23,8 +23,8 @@ _complete_enter_project() {
 	)
 }
 
-alias ep=enter_project
-complete -F _complete_enter_project enter_project ep
+alias '::'=enter_project
+complete -F _complete_enter_project enter_project '::'
 
 ##
 # Entering the shell
