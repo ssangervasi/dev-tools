@@ -17,7 +17,7 @@ def abbreviate(str, max_len: 40)
 
   midpoint = max_len.div 2
   prefix = str[0..midpoint]
-  suffix = str[midpoint..(str.length)]
+  suffix = str[(str.length - midpoint)..(str.length)]
   "#{prefix}...#{suffix}"
 end
 

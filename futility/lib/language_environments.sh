@@ -29,7 +29,12 @@ virtualenvwrapper_lazy() {
 }
 
 virtualenvwrapper() {
-  virtualenvwrapper_lazy && virtualenvwrapper $@
+  virtualenvwrapper_lazy && virtualenvwrapper "$@"
+}
+
+workon() {
+  unset workon
+  virtualenvwrapper_lazy && workon "$@"
 }
 
 #

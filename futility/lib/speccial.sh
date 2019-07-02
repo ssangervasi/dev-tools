@@ -71,8 +71,9 @@ respec() {
 
 _complete_spec_history() {
 	local current_word="${COMP_WORDS[$COMP_CWORD]}"
-	local history_array=($(spec_history 10 2>/dev/null))
-	local match_array=($(compgen -W "${history_array[*]}" "${current_word}"))
+	local match_array=($(spec_history 10 2>/dev/null | grep -E "${current_word}"))
+	# local history_array=($(spec_history 10 2>/dev/null))
+	# local match_array=($(compgen -W "${history_array[*]}" "${current_word}"))
 
 	if (( ${#match_array[@]} > 0 )); then
 		COMPREPLY=(${match_array[@]})

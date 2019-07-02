@@ -25,6 +25,9 @@
     interactive = auto
 
 [alias]
+    # Meta!
+    aliases = config --get-regexp alias
+
     a = add --all
     ass = add .
 
@@ -44,9 +47,9 @@
 
     root-dir=rev-parse --show-toplevel
     dic = diff --cached
-    junction = merge-base master
-    wat = !git diff --name-status $(git junction $1)
-    stat = !git diff --stat $(git junction)
+    junction = ! git merge-base ${1:-master} ${2:-head}
+    wat = !git diff --name-status $(git junction $@)
+    stat = !git diff --stat $(git junction $@)
 
     pf = push --force-with-lease
     hoist = push -u origin head

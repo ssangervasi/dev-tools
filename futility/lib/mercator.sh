@@ -6,7 +6,7 @@ register_project() {
 	local project_name="$1"
 	local init_command=$(_init_command_from_name "${project_name}")
 
-
+	alias ",${project_name}"="enter_project ${project_name}"
 	MERCATOR_PROJECTS+=("${project_name}")
 }
 
@@ -19,12 +19,12 @@ _complete_enter_project() {
 	# 	"${array[@]}" => "foo" "bar"
 	# 	"${array[*]}" => "foo bar"
 	COMPREPLY=(
-		$(compgen -W "${MERCATOR_PROJECTS[*]}" "${current_word}")
+		$(printf '%s\n' "${MERCATOR_PROJECTS[@]}" | grep -E "${current_word}")
 	)
 }
 
-alias '::'=enter_project
-complete -F _complete_enter_project enter_project '::'
+alias ',,'=enter_project
+complete -F _complete_enter_project enter_project ',,'
 
 ##
 # Entering the shell
