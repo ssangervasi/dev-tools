@@ -5,6 +5,7 @@
 # {{ date }}
 ##
 
+register_project '{{ name }}'
 .{{ name }}() { enter_project '{{ name }}'; }
 
 init_project_{{ name }}() {
@@ -25,5 +26,3 @@ init_project_{{ name }}() {
 
 	echo "Entered {{ name }}."
 }
-
-register_project '{{ name }}'

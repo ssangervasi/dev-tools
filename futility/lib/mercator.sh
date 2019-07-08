@@ -31,6 +31,12 @@ complete -F _complete_enter_project enter_project ',,'
 
 enter_project() {
 	local project_name="$1"
+	if [[ -n $MERCATOR_PROJECT_NAME ]]; then
+		echo_error "Cannot enter project: ${project_name}"
+		echo_error "Already in a project: $MERCATOR_PROJECT_NAME"
+		return $YA_DUN_GOOFED
+	fi
+
 	echo "Entering ${project_name}..."
 	# An interactive login shell...
 	# 	though, technically, it doesn' use the official '-l' argument to
