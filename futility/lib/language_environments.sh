@@ -1,8 +1,16 @@
 # Go
-export GOROOT="$DEV_HOME/go"
-add_to_path "/usr/local/go/bin" "/b/Go/bin"
+go() {
+  go_lazy && go "$@"
+}
 
-# Rust Cargo -- should be in bashrc.sh?
+go_lazy() {
+  unset go
+  add_to_path "/usr/local/go/bin" "/b/Go/bin"
+  # https://dave.cheney.net/2013/06/14/you-dont-need-to-set-goroot-really
+  # export GOROOT="$DEV_HOME/go"
+}
+
+# Rust Cargo
 add_to_path "$HOME/.cargo/bin"
 
 # Haskell Stack Binaries
@@ -42,7 +50,7 @@ workon() {
 #
 
 conda() {
-  conda_lazy && conda $@;
+  conda_lazy && conda "$@";
 }
 
 conda_lazy() {

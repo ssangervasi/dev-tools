@@ -61,19 +61,16 @@ add_to_path() {
 }
 
 get_absolute_path()  {
-	local relative_path absolute_path
-	relative_path="$1"
+	local relative_path="$1"
+	local absolute_path=$(
+		cd "${relative_path}" 2>/dev/null &&
+			echo "$PWD"
+	)
 
-	go_there() {
-		cd "$1" 2>>/dev/null && echo "$PWD"
-	}
-
-	absolute_path=$(go_there "${relative_path}")
-
-	if empty "$absolute_path"; then
+	if empty "${absolute_path}"; then
 		return $YA_DUN_GOOFED
 	fi
-	echo "$absolute_path"
+	echo "${absolute_path}"
 }
 
 current_dir_command() {
