@@ -1,0 +1,98 @@
+{
+  "title": "Disable Command+M minimize",
+  "rules": [
+    {
+      "description": "Disable Command+M minimize",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "m",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Disable Cmd+Ctrl+D dictionary",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Disable Cmd+H hide",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Make Terminal Ctrl+K soft-clear",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                  "^com\\.apple\\.Terminal$"
+              ]
+            }
+          ],
+          "to": [
+            { "key_code": "c" },
+            { "key_code": "l" },
+            { "key_code": "e" },
+            { "key_code": "a" },
+            { "key_code": "r" },
+            { "key_code": "return_or_enter" }
+          ]
+        }
+      ]
+    }
+  ]
+}

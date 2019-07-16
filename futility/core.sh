@@ -77,6 +77,13 @@ current_dir_command() {
   echo 'get_absolute_path $(dirname "$BASH_SOURCE")'
 }
 
+check_help_help() {
+	<<-HELP_TEXT
+		Returns success (0) if any argument matches '-h' or '--help'.
+		Returns failure (>0) otherwise.
+	HELP_TEXT
+}
+
 check_help() {
 	local args="$@"
 	local help_pattern='^(-h|--help)$'

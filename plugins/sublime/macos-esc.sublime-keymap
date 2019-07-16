@@ -122,4 +122,49 @@
 
 	// Quick reindent
 	{ "keys": ["ctrl+super+tab"], "command": "reindent" },
+
+	//
+	// Emmet
+	//
+	{
+	    "keys": [
+	        "shift+ctrl+e"
+	    ],
+	    "args": {
+	        "action": "evaluate_math_expression"
+	    },
+	    "command": "run_emmet_action",
+	    "context": [
+	        {
+	            "key": "emmet_action_enabled.evaluate_math_expression"
+	        }
+	    ]
+	},
+
+	//
+	// Side Bar Enhancements
+	// https://github.com/titoBouzout/SideBarEnhancements/blob/st3/Commands.sublime-commands
+	//
+	{
+		"keys": ["ctrl+super+c"],
+		"command": "side_bar_copy_path",
+		"context": [
+			{ "key": "setting.is_widget", "operator": "equal", "operand": false }
+		]
+	},
+	{
+		"keys": ["super+shift+c"],
+		"command": "side_bar_copy_path_relative_from_project"
+	},
+	//
+	// Side Bar un-enhanced
+	//
+	{
+		"keys": ["super+k", "b"],
+		"command": "reveal_in_side_bar"
+	},
+	{
+		"keys": ["super+k", "super+b"],
+		"command": "toggle_side_bar"
+	},
 ]

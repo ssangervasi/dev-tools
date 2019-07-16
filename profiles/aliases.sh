@@ -43,3 +43,7 @@ fi
 if (! which pip &> /dev/null); then
 	alias 'pip'='python -m pip'
 fi
+
+# Bat
+BAT_DEFAULT_OPTIONS='--paging always'
+alias 'bat'='bat ${BAT_DEFAULT_OPTIONS}'
