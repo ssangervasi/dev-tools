@@ -111,9 +111,9 @@ _dump_world_map() {
 
 _dump_logo() {
 	cat <<MERCATOR
-/=================\\
-	M E R C A T O R
-\\=================/
+ /=================\\
+|  M E R C A T O R  |
+ \\=================/
 MERCATOR
 }
 

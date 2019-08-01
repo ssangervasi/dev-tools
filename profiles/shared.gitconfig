@@ -59,8 +59,12 @@
     current = symbolic-ref --short HEAD
 
     new = checkout -b
-    finish = branch -d
-    murder = branch -D
+    # Delete a local branch of it's been merged.
+    finish = branch --delete
+    # Delete a local branch no matter what.
+    murder = branch --delete --force
+    # Delete a remote branch no matter what.
+    desecrate = branch --delete --remotes
 
 [fetch]
     prune = true
