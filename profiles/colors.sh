@@ -4,6 +4,10 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 export LS_COLORS=$LS_COLORS
 
 def_colors() {
+  if ! tput setaf &>/dev/null; then
+    return $YA_DUN_GOOFED
+  fi
+
   export COLOR_NO_COLOR=$(tput sgr0)
   export COLOR_NC="$COLOR_NO_COLOR"
 

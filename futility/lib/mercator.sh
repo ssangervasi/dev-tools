@@ -13,6 +13,8 @@ register_project() {
 # Bash completion based on registered names
 
 _complete_enter_project() {
+	_ensure_no_project || return $YA_DUN_GOOFED
+
 	local current_word="${COMP_WORDS[$COMP_CWORD]}"
 	# Note the difference between:
 	# 	array=(foo bar)
@@ -31,10 +33,13 @@ complete -F _complete_enter_project enter_project ',,'
 
 enter_project() {
 	local project_name="$1"
-	if [[ -n $MERCATOR_PROJECT_NAME ]]; then
-		echo_error "Cannot enter project: ${project_name}"
-		echo_error "Already in a project: $MERCATOR_PROJECT_NAME"
-		return $YA_DUN_GOOFED
+	local force_arg="$2"
+
+	# Ugly :(
+	if ! _ensure_no_project; then
+		if [[ ${force_arg} != '--force' ]]; then
+			return $YA_DUN_GOOFED
+		fi
 	fi
 
 	echo "Entering ${project_name}..."
@@ -45,6 +50,14 @@ enter_project() {
 			MERCATOR_PROJECT_INIT_COMMAND=$(_init_command_from_name "${project_name}") \
 			MERCATOR_PROJECT_EXIT_COMMAND=$(_exit_command_from_name "${project_name}") \
 			bash --init-file <(echo 'source $HOME/.bash_profile; _init_project') -i
+}
+
+_ensure_no_project() {
+	if [[ -n $MERCATOR_PROJECT_NAME ]]; then
+		echo_error "Already in a project: $MERCATOR_PROJECT_NAME"
+		return $YA_DUN_GOOFED
+	fi
+	return 0
 }
 
 _init_command_from_name() {
@@ -110,11 +123,11 @@ _dump_world_map() {
 }
 
 _dump_logo() {
-	cat <<MERCATOR
- /=================\\
-|  M E R C A T O R  |
- \\=================/
-MERCATOR
+	cat <<-MERCATOR
+		 /=================\\
+		|  M E R C A T O R  |
+		 \\=================/
+	MERCATOR
 }
 
 ##

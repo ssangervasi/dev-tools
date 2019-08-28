@@ -40,7 +40,10 @@
     hamster = checkout master
 
     l = log --oneline -n 10 --no-merges
-    la = log --pretty=format:'%h %an %ai  %N %D %s' -n 10 --no-merges
+    la = log \
+            -n 10 \
+            --no-merges \
+            --pretty=format:'%C(bold)%h%C(reset) %C(green)%an %C(dim)%ai%C(reset) [%C(magenta)%D%C(reset)] %s %N'
     lg = log --all --graph --abbrev-commit \
         --date=relative \
         --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'

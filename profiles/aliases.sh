@@ -28,22 +28,25 @@ alias bemigrate='bundle install && beer db:migrate && taste beer db:migrate'
 # Git
 alias gita="git a"
 alias gitb="git b"
+alias gitc="git c"
 alias gitl="git l"
 alias gits="git s"
 alias hamster='git hamster'
 alias new='git new'
 
-# Lock the screen (OSX only)
-MAC_OS_LOCK_SCREEN='/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession'
-if [[ -f $MAC_OS_LOCK_SCREEN ]]; then
-	alias 'afk'='"$MAC_OS_LOCK_SCREEN" -suspend'
+if [[ $(uname) == 'Darwin' ]]; then
+	# Lock the screen (OSX only)
+	MAC_OS_LOCK_SCREEN='/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession'
+	if [[ -f $MAC_OS_LOCK_SCREEN ]]; then
+		alias 'afk'="${MAC_OS_LOCK_SCREEN} -suspend"
+	fi
+
+	# Bat
+	BAT_DEFAULT_OPTIONS='--paging always'
+	alias 'bat'='bat ${BAT_DEFAULT_OPTIONS}'
 fi
 
 # Alias pip (Win only)
-if (! which pip &> /dev/null); then
-	alias 'pip'='python -m pip'
-fi
-
-# Bat
-BAT_DEFAULT_OPTIONS='--paging always'
-alias 'bat'='bat ${BAT_DEFAULT_OPTIONS}'
+# if (! which pip &> /dev/null); then
+# 	alias 'pip'='python -m pip'
+# fi
