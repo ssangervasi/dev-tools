@@ -1,3 +1,8 @@
+wat() {
+	local pager=$(which bat || which less)
+	echo "$@"
+	$@ --help | "${pager}"
+}
 
 # Strip underscores.Allows big numbers to be written '1_930_055'
 # Smiley eyes operator

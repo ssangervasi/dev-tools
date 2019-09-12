@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+directory() {
+	mkdir "$1"
+}
+dir() { directory "$@"; }
+
+directories() {
+	mkdir -p "$@"
+}
+dirs() { directories "$@"; }
+
+file() {
+	touch "$1"
+	"$EDITOR" "$1"
+}
+
+branch() {
+	git checkout -b "$1"
+}
+
+_help() {
+	cat <<-HELP_TEXT
+		new
+			directory <dir_name>
+			directories <dir_name>/<dir_name>
+			file <file_name>
+			branch <git_branch_name>
+	HELP_TEXT
+}
+
+"${@:-_help}"

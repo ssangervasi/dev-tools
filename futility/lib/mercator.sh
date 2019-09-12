@@ -42,7 +42,8 @@ enter_project() {
 		fi
 	fi
 
-	echo "Entering ${project_name}..."
+	_before_project_enter "${project_name}"
+
 	# An interactive login shell...
 	# 	though, technically, it doesn' use the official '-l' argument to
 	# 	make it a login shell because I'm mangling the init file.
@@ -50,6 +51,17 @@ enter_project() {
 			MERCATOR_PROJECT_INIT_COMMAND=$(_init_command_from_name "${project_name}") \
 			MERCATOR_PROJECT_EXIT_COMMAND=$(_exit_command_from_name "${project_name}") \
 			bash --init-file <(echo 'source $HOME/.bash_profile; _init_project') -i
+
+	_after_project_exit "${project_name}"
+}
+
+_before_project_enter() {
+	echo "Entering $1..."
+}
+
+_after_project_exit() {
+	echo "Exited project $1..."
+	term-theme DevBlack 2> /dev/null
 }
 
 _ensure_no_project() {

@@ -196,7 +196,7 @@ nvm_lazy() {
     echo_error "NVM decided to NeVerMind you. You should be Not Very Mad."
     return $YA_DUN_GOOFED
   fi
-  echo_info "Using nvm node: $(nvm current)"
   # Use the current dirs environment, if any.
   nvm use &> /dev/null
+  echo_info "Using nvm node: $(nvm current)"
 }

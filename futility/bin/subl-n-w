@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+##
+# This is basically an alias for 'subl -n -w' but having an actual executable
+# helps calls to $EDTIOR resolve correctly.
+##
+
+'/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl' -n -w "$@"

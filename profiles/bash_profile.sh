@@ -54,7 +54,7 @@ brew_bash_completion
 # Sublime "subl" CLI
 
 add_to_path "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
-export EDITOR='subl -n -w'
+export EDITOR='subl-n-w'
 alias 'sublime'='subl'
 
 # Chrome CLI
@@ -79,3 +79,4 @@ init_project_dev_tools() {
 }
 
 
+source /Users/ssangervasi/workspace/dev-tools/futility/bin/new.completions.sh

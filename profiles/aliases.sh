@@ -32,13 +32,13 @@ alias gitc="git c"
 alias gitl="git l"
 alias gits="git s"
 alias hamster='git hamster'
-alias new='git new'
 
 if [[ $(uname) == 'Darwin' ]]; then
 	# Lock the screen (OSX only)
 	MAC_OS_LOCK_SCREEN='/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession'
 	if [[ -f $MAC_OS_LOCK_SCREEN ]]; then
-		alias 'afk'="${MAC_OS_LOCK_SCREEN} -suspend"
+		alias 'afk'="'${MAC_OS_LOCK_SCREEN}' -suspend"
+		alias 'screensave'="'/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine'"
 	fi
 
 	# Bat

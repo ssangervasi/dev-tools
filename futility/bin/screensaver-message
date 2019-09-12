@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+source ~/workspace/dev-tools/futility/bin/futility
+
+defaults \
+	-currentHost write com.apple.screensaver moduleDict \
+	-dict \
+	path "/System/Library/Frameworks/ScreenSaver.framework/Resources/Computer Name.saver" \
+	moduleName "Computer Name" \
+	type 0
+
+defaults \
+	-currentHost write com.apple.screensaver.Basic \
+	MESSAGE "${1:-$(kanye)}"
+
+killall cfprefsd
