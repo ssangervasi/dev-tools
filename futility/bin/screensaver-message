@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-source ~/workspace/dev-tools/futility/bin/futility
+message="$@"
+[[ -z "${message}" ]] && exit 0
+
+source $(dirname $BASH_SOURCE)/futility
 
 defaults \
 	-currentHost write com.apple.screensaver moduleDict \
@@ -11,6 +14,6 @@ defaults \
 
 defaults \
 	-currentHost write com.apple.screensaver.Basic \
-	MESSAGE "${1:-$(kanye)}"
+	MESSAGE "${message}"
 
 killall cfprefsd

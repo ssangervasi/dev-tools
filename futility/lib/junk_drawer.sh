@@ -56,10 +56,6 @@ jcr() {
 	test $2 && java $2
 }
 
-kanye() {
-	json_extract_key "$(curl -s api.kanye.rest)" "quote"
-}
-
 json_extract_key() {
 	local json="$1"
 	local key="$2"

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Requires screensaver-message and json_extract_key
+source $(dirname $BASH_SOURCE)/futility
+
+quote() {
+	kq=$(json_extract_key "$(curl -s api.kanye.rest)" "quote" 2>/dev/null)
+	cat <<-QUOTE
+		'${kq}'
+			- Kanye
+	QUOTE
+}
+
+install_crontab() {
+	crontab <(echo "* * * * * $(which screensaver-message) \"\$($BASH_SOURCE)\"")
+}
+
+"${1:-quote}"
