@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+username=$(git config user.name)
+
+pretty_format=$(
+	cat <<-JSON | tr '\n' ' '
+		{
+			"heading": {
+				"hash":"%h",
+				"author": "%an",
+				"date": "%aI",
+				"ref": "%D",
+				"subject": "%s"
+			}
+		}
+	JSON
+)
+
+git log \
+	--author="${username}" \
+	--numstat \
+	--pretty="format:${pretty_format}" \
+	--no-merges \
+	"$@"

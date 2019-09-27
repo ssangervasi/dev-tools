@@ -66,8 +66,10 @@
     finish = branch --delete
     # Delete a local branch no matter what.
     murder = branch --delete --force
-    # Delete a remote branch no matter what.
-    desecrate = branch --delete --remotes
+    # Delete a remote branch on origin.
+    desecrate = ! git push origin ':'":$1"
+    # Delete a branch and its remote on origin.
+    annihilate = ! git desecrate "$1" && git murder "$1"
 
 [fetch]
     prune = true
