@@ -5,9 +5,10 @@ go() {
 
 go_lazy() {
   unset go
-  add_to_path "/usr/local/go/bin" "/b/Go/bin"
-  # https://dave.cheney.net/2013/06/14/you-dont-need-to-set-goroot-really
+  add_to_path "$DEV_HOME/go/bin"
+  export GOPATH="$DEV_HOME/go"
   # export GOROOT="$DEV_HOME/go"
+  # https://dave.cheney.net/2013/06/14/you-dont-need-to-set-goroot-really
 }
 
 # Rust Cargo
