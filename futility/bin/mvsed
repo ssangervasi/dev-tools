@@ -2,6 +2,8 @@
 
 source futility
 
+MVSED_DRY_RUN="${MVSED_DRY_RUN:-false}"
+
 _mvsed() {
 	check_help $@ && mvsed_help && exit 0
 
@@ -10,14 +12,22 @@ _mvsed() {
 	local sed_args="$@"
 	# echo local new_file_path="echo $file_path | sed $sed_args"
 	local new_file_path=$(echo "$file_path" | sed $sed_args)
+	
 	if [[ -e $new_file_path ]]; then
 		echo_error "Error: cannot move $file_path to $new_file_path -- path exists"
+		return $YA_DUN_GOOFED
 	elif [[ $(empty $new_file_path) ]]; then
 		echo_error "Error: cannot move $file_path -- new path is empty"
-	else
-			echo "$file_path => $new_file_path"
-			mv "$file_path" "$new_file_path"
+		return $YA_DUN_GOOFED
 	fi
+
+	echo_info "$file_path => $new_file_path"
+
+	if [[ "$MVSED_DRY_RUN" == 'true' ]]; then
+		return 0
+	fi
+
+	mv "$file_path" "$new_file_path"
 }
 
 
@@ -28,6 +38,8 @@ mvsed_help() {
 		-h, --help  : Print this help and exit.
 		<file_path> : The file path to move.
 		<sed_args>  : One or more arguments to pass to sed.
+
+		MVSED_DRY_RUN : Set to "true" to enable logging with out executing move. 
 	HELP_TEXT
 }
 

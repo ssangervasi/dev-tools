@@ -53,8 +53,8 @@ _dynamic_prompt() {
 	# Wow math comparisons are ugly.
 	if [[ $((${columns} >= ${min_info_width})) == 1 ]]; then
 		local max_basename_width=16
-		local pwd_basename=$(basename $PWD)
-		local basename=${pwd_basename}
+		local pwd_basename=$(basename "$PWD")
+		local abrv_basename="${pwd_basename}"
 		# String length calc is even uglier!
 		if [[ $((${#pwd_basename} > ${max_basename_width})) == 1 ]]; then
 			local head_width=8
@@ -62,9 +62,9 @@ _dynamic_prompt() {
 			local connector='…'
 			local basename_head=$(echo ${pwd_basename} | head -c ${head_width})
 			local basename_tail=$(echo ${pwd_basename} | tail -c ${tail_width})
-			basename="${basename_head}${connector}${basename_tail}"
+			abrv_basename="${basename_head}${connector}${basename_tail}"
 		fi
-		_info_prompt "${basename}"
+		_info_prompt "${abrv_basename}"
 	else
 		_simple_prompt
 	fi
