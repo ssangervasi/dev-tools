@@ -33,7 +33,7 @@ alias gitl="git l"
 alias gits="git s"
 alias hamster='git hamster'
 
-if [[ $(uname) == 'Darwin' ]]; then
+if [[ $(uname -s 2>/dev/null) == 'Darwin' ]]; then
 	# Lock the screen (OSX only)
 	MAC_OS_LOCK_SCREEN='/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession'
 	if [[ -f $MAC_OS_LOCK_SCREEN ]]; then

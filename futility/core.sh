@@ -159,28 +159,28 @@ source_if_exists() {
 }
 
 args_and_or_stdin() {
+	ARGS_AND_OR_STDIN_RESULT=()
 	local arg
-	local args=()
 	local use_stdin='no'
 	for arg in "$@"; do
 		if [[ ${arg} = '-' ]]; then
 			use_stdin='yes'
 		else
-			args+=("${arg}")
+			ARGS_AND_OR_STDIN_RESULT+=("${arg}")
 		fi
 	done
 
 	if [[ ${use_stdin} != 'yes' ]]; then
-		echo "${args[@]}"
+		echo "${ARGS_AND_OR_STDIN_RESULT[@]}"
 		return 0
 	fi
 
 	local arg_line
 	while read arg_line; do
-		args+=("${arg_line}")
+		ARGS_AND_OR_STDIN_RESULT+=("${arg_line}")
 	done
 
-	echo "${args[@]}"
+	echo "${ARGS_AND_OR_STDIN_RESULT[@]}"
 }
 
 args_and_or_stdin_help() {

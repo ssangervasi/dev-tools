@@ -1,5 +1,5 @@
 
-copy_associative_array() {
+aa_copy() {
 	local src_var_name="$1"
 	local dst_var_name="$2"
 	local key val
@@ -16,7 +16,7 @@ copy_associative_array() {
 	done
 }
 
-copy_associative_array_demo() {
+aa_copy_demo() {
 	declare -A my_contacts your_contacts our_contacts
 	my_contacts=(
 		["Jim"]='555-123-1234'
@@ -28,8 +28,8 @@ copy_associative_array_demo() {
 	)
 
 	our_contacts=()
-	copy_associative_array my_contacts our_contacts
-	copy_associative_array your_contacts our_contacts
+	aa_copy my_contacts our_contacts
+	aa_copy your_contacts our_contacts
 	cat <<-RESULT
 		my_contacts
 			${!my_contacts[@]}
