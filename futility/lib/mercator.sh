@@ -26,7 +26,7 @@ _complete_enter_project() {
 }
 
 alias ',,'=enter_project
-complete -F _complete_enter_project enter_project ',,'
+complete -o bashdefault -F _complete_enter_project enter_project ',,'
 
 ##
 # Entering the shell

@@ -48,4 +48,4 @@ _complete_git_cd() {
   )
 }
 
-complete -F _complete_git_cd git_cd cdg
+complete -o bashdefault -F _complete_git_cd git_cd cdg

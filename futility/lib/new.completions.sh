@@ -1,13 +1,4 @@
-_command_names() {
-	cat <<-COMMAND_NAMES
-		directory
-		dir
-		directories
-		dirs
-		file
-		branch
-	COMMAND_NAMES
-}
+complete -o bashdefault -F _complete_new new
 
 _complete_new() {
 	local current_word="${COMP_WORDS[$COMP_CWORD]}"
@@ -23,4 +14,13 @@ _complete_new() {
 	)
 }
 
-complete -F _complete_new new
+_command_names() {
+	cat <<-COMMAND_NAMES
+		directory
+		dir
+		directories
+		dirs
+		file
+		branch
+	COMMAND_NAMES
+}

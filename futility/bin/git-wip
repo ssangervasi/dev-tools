@@ -1,18 +1,40 @@
 #!/usr/bin/env bash
 
-# Pipes:
-# - List git branches in comit-date order, marking the current branch with "*"
-# - Exclude master and the currently checked out branch
-# - Pluck the top of the list
-wip_branch=$(
-  git branch --list --sort -committerdate --format '%(HEAD)%(refname)' |
-    grep -v master |
-    grep -v "*" |
-    sed s!refs/heads/!! |
-    head -n 1
-)
-if [[ $wip_branch =~ ^[[:space:]]*$ ]]; then
-  echo 'No work-in-progress branch'
-  exit 0
-fi
-git checkout $wip_branch
+switch() {
+	wip_branch=$(show)
+	git checkout "${wip_branch}"
+}
+
+
+show() {
+	wip_branch=$(list | head -n 1)
+	if [[ ${wip_branch} =~ ^[[:space:]]*$ ]]; then
+	  echo 'No work-in-progress branch'
+	  exit 1
+	fi
+	echo "${wip_branch}"
+}
+
+list() {
+	# Pipes:
+	# - List git branches in comit-date order, marking the current branch with "*"
+	# - Exclude master and the currently checked out branch
+	# - Remove leading whitespace
+	git branch --list --sort -committerdate --format '%(HEAD)%(refname)' |
+	  grep -v master |
+	  grep -v "*" |
+	  sed "s!refs/heads/!!" |
+	  sed "s!^[[:space:]]*!!"
+}
+
+case "$@" in
+	show)
+		show
+	;;
+	list)
+		list
+	;;
+	*)
+		switch "$@"
+	;;
+esac

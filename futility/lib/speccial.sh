@@ -94,7 +94,7 @@ _complete_spec_history() {
 	# futility_log "${current_word}"
 }
 
-complete -F _complete_spec_history spec
+complete -o bashdefault -F _complete_spec_history spec
 
 globspec() {
 	check_help $@ && globspec_help && return 0
