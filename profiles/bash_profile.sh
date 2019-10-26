@@ -84,7 +84,7 @@ os_mac() {
 	# Sublime "subl" CLI
 
 	add_to_path "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
-	export EDITOR='subl -n -w'
+	export EDITOR='subl-n-w'
 	alias 'sublime'='subl'
 
 	# Chrome CLI

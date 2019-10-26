@@ -233,6 +233,8 @@ load_ruby_speccial_plugin() {
 ##
 
 load_python_speccial_plugin() {
+	alias pe='pipenv'
+
 	run_spec_command() {
 		pipenv run pytest $@
 	}
