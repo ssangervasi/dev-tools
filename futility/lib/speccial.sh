@@ -198,23 +198,36 @@ load_ruby_speccial_plugin() {
 	# Tests with RSpec
 
 	SPEC_RSPEC_COMMAND='bundle exec rspec'
-	SPEC_RSPEC_DEFAULT_ARGS="--format documentation --fail-fast"
+	SPEC_RSPEC_DEFAULT_ARGS="--format documentation"
 
 	# I'm not a fan of the retry gem...
 	export RSPEC_RETRY_RETRY_COUNT=0
 
 	run_spec_command() {
-		$SPEC_RSPEC_COMMAND $SPEC_RSPEC_DEFAULT_ARGS $@
+		$SPEC_RSPEC_COMMAND \
+			$SPEC_RSPEC_DEFAULT_ARGS \
+			$SPEC_RSPEC_FAIL_FAST \
+			"$@"
 	}
 
 	print_spec_header() {
-		echo "Running: $SPEC_RSPEC_COMMAND"
-		echo "With args: $SPEC_RSPEC_DEFAULT_ARGS $@"
+		echo "Running: $SPEC_RSPEC_COMMAND $SPEC_RSPEC_DEFAULT_ARGS $SPEC_RSPEC_FAIL_FAST"
+		echo "With args: $@"
 	}
 
-	use_spring() {
+	spec_rspec_use_spring() {
 		SPEC_RSPEC_COMMAND='bundle exec spring rspec'
 	}
+
+	fail_fast() {
+		SPEC_RSPEC_FAIL_FAST='--fail-fast'
+	}
+
+	no_fail_fast() {
+		SPEC_RSPEC_FAIL_FAST='--no-fail-fast'
+	}
+
+	fail_fast
 
 	##
 	# Linting with RuboCop

@@ -6,7 +6,7 @@ source $(dirname $BASH_SOURCE)/futility
 quote() {
 	kq=$(json_extract_key "$(curl -s api.kanye.rest)" "quote" 2>/dev/null)
 	cat <<-QUOTE
-		'${kq}'
+		${kq}
 			- Kanye
 	QUOTE
 }
