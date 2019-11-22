@@ -34,12 +34,15 @@ complete -o bashdefault -F _complete_enter_project enter_project ',,'
 enter_project() {
 	local project_name="$1"
 	local force_arg="$2"
+	local project_args=("${@:2}")
 
 	# Ugly :(
 	if ! _ensure_no_project; then
 		if [[ ${force_arg} != '--force' ]]; then
 			return $YA_DUN_GOOFED
 		fi
+		# Pop off force arg
+		project_args=("${project_args[@]:2}")
 	fi
 
 	_before_project_enter "${project_name}"
@@ -50,7 +53,10 @@ enter_project() {
 	env MERCATOR_PROJECT_NAME="${project_name}" \
 			MERCATOR_PROJECT_INIT_COMMAND=$(_init_command_from_name "${project_name}") \
 			MERCATOR_PROJECT_EXIT_COMMAND=$(_exit_command_from_name "${project_name}") \
-			bash --init-file <(echo 'source $HOME/.bash_profile; _init_project') -i
+			MERCATOR_PROJECT_ARGS="${project_args[*]}" \
+			bash \
+				--init-file <(echo 'source $HOME/.bash_profile; _init_project')
+				-i
 
 	_after_project_exit "${project_name}"
 }

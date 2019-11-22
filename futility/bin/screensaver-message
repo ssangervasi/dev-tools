@@ -5,12 +5,26 @@ message="$@"
 
 source $(dirname $BASH_SOURCE)/futility
 
-defaults \
-	-currentHost write com.apple.screensaver moduleDict \
-	-dict \
-	path "/System/Library/Frameworks/ScreenSaver.framework/Resources/Computer Name.saver" \
-	moduleName "Computer Name" \
-	type 0
+before_catalina() {
+	defaults \
+		-currentHost write com.apple.screensaver moduleDict \
+		-dict \
+		path "/System/Library/Frameworks/ScreenSaver.framework/Resources/Computer Name.saver" \
+		moduleName "Computer Name" \
+		type 0
+}
+
+# This didn't work
+catalina() {
+	defaults \
+		-currentHost write com.apple.screensaver moduleDict \
+		-dict \
+		path "~/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/cn.saver" \
+		moduleName "Computer Name" \
+		type 0
+}
+
+catalina
 
 defaults \
 	-currentHost write com.apple.screensaver.Basic \
