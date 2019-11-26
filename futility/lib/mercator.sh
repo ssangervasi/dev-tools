@@ -55,7 +55,7 @@ enter_project() {
 			MERCATOR_PROJECT_EXIT_COMMAND=$(_exit_command_from_name "${project_name}") \
 			MERCATOR_PROJECT_ARGS="${project_args[*]}" \
 			bash \
-				--init-file <(echo 'source $HOME/.bash_profile; _init_project')
+				--init-file <(echo 'source $HOME/.bash_profile; _init_project') \
 				-i
 
 	_after_project_exit "${project_name}"
