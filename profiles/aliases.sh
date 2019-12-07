@@ -6,7 +6,7 @@
 alias resource='source $HOME/.bashrc $HOME/.bash_profile'
 alias '..'='cd ..'
 alias '...'='cd $DEV_HOME'
-alias ',,,'='cd $DEV_HOME'
+alias ',,,'='cd $WORKSPACE'
 TREE_DEFAULT_OPTIONS='--dirsfirst -C'
 alias tree='tree ${TREE_DEFAULT_OPTIONS}'
 alias binweb='./bin/web'
@@ -40,10 +40,6 @@ if [[ $(uname -s 2>/dev/null) == 'Darwin' ]]; then
 		alias 'afk'="'${MAC_OS_LOCK_SCREEN}' -suspend"
 		alias 'screensave'="'/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine'"
 	fi
-
-	# Bat
-	BAT_DEFAULT_OPTIONS='--paging always'
-	alias 'bat'='bat ${BAT_DEFAULT_OPTIONS}'
 fi
 
 # Alias pip (Win only)

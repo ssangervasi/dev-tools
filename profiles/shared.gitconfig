@@ -1,5 +1,6 @@
 [user]
     name = Sebastian Sangervasi
+    email = villain@harmless.dev
 
 [diff]
     renames = true
