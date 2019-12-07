@@ -162,7 +162,7 @@ generate_project() {
 	directory=$(default $(get_absolute_path "$1") "$PWD")
 
 	name=$(default "$2" $(basename ${directory}))
-	icon=$(default "$3" '🆕')
+	icon=$(default "$3" '🆕 ')
 
 	cat <(cat "$FUTILITY_PACKAGE_LIB/data-files/new_project.sh.template" |
 				sub_var 'name' "${name}" |
@@ -203,7 +203,7 @@ sub_var() {
 	IFS=''
 	while read -t 10 template; do
 		echo ${template} |
-			sed -E "s'{{[[:space:]]*(${var_name})[[:space:]]*}}'${var_content}'g"
+			sed -E "s'\{\{[[:space:]]*(${var_name})[[:space:]]*\}\}'${var_content}'g"
 	done
 	unset IFS
 }

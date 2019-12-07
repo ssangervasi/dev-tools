@@ -18,7 +18,7 @@ prompt_swap() {
 			mangle_prompt_command _dynamic_prompt
 			;;
 		*)
-			export PS1="$arg"
+			PS1="$arg"
 		;;
 	esac
 }
@@ -86,13 +86,13 @@ ${PROMPT_PREFIX}\
 ${basename}\
 \[${COLOR_NC}\]\
 \$ "
-	export PS1="${info_ps1}"
+	PS1="${info_ps1}"
 }
 
 prefix_prompt() {
 	unprefix_prompt
-	export PROMPT_PREFIX="$1"
-	export PS1="${PROMPT_PREFIX}${PS1}"
+	PROMPT_PREFIX="$1"
+	PS1="${PROMPT_PREFIX}${PS1}"
 }
 
 unprefix_prompt() {
@@ -100,23 +100,23 @@ unprefix_prompt() {
 		return 0
 	fi
 	local unprefixed=$(echo "$PS1" | sed "s/^${PROMPT_PREFIX}//")
-	export PS1="${unprefixed}"
+	PS1="${unprefixed}"
 }
 
 prompt_clock() {
-	export CHECK_SECONDS=$((SECONDS-CHECK_SECONDS))
-	export ELAPSED=$((CHECK_SECONDS/60)):$((CHECK_SECONDS%60))
-	export CHECK_SECONDS=$SECONDS
+	CHECK_SECONDS=$((SECONDS-CHECK_SECONDS))
+	ELAPSED=$((CHECK_SECONDS/60)):$((CHECK_SECONDS%60))
+	CHECK_SECONDS=$SECONDS
 }
 
 mangle_prompt_command() {
-	export PROMPT_COMMAND_CUSTOM="$1"
+	PROMPT_COMMAND_CUSTOM="$1"
 	local original=$(
 		echo "$PROMPT_COMMAND" |
 			sed s/[[:space:]]*prompt_command_function[[:space:]]*//
 	)
-	export PROMPT_COMMAND_ORIGINAL="${original}"
-	export PROMPT_COMMAND="prompt_command_function"
+	PROMPT_COMMAND_ORIGINAL="${original}"
+	PROMPT_COMMAND="prompt_command_function"
 }
 
 prompt_command_function() {
@@ -129,8 +129,8 @@ prompt_command_function() {
 }
 
 unmangle_prompt_command() {
-	export PROMPT_COMMAND="$PROMPT_COMMAND_ORIGINAL"
-	export PROMPT_COMMAND_CUSTOM=''
+	PROMPT_COMMAND="$PROMPT_COMMAND_ORIGINAL"
+	PROMPT_COMMAND_CUSTOM=''
 }
 
 prompt_command_help() {

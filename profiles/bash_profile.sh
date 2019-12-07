@@ -20,23 +20,8 @@ _init() {
 	local os_name=$(uname -o 2>/dev/null || uname -s 2>/dev/null)
 	if [[ ${os_name} =~ Msys ]]; then os_win;
 	elif [[ ${os_name} =~ Darwin ]]; then os_mac;
+	elif [[ ${os_name} =~ Linux ]]; then os_linux;
 	fi
-
-	# Project navigation
-
-	.dev_tools() { enter_project 'dev_tools'; }
-	alias '.dev'='.dev_tools'
-
-	register_project 'dev_tools'
-	init_project_dev_tools() {
-		prefix_prompt '🛠  '
-		term-theme DevPurple
-
-		cd "$DEV_TOOLS_ROOT"
-		add_to_path "$DEV_TOOLS_ROOT/futility/tests"
-
-		exit_project_dev_tools() { return; }
-	}
 
 	# bat
 	source "$DEV_TOOLS_ROOT/plugins/bat/bat_options.sh"
@@ -44,6 +29,15 @@ _init() {
 
 os_win() {
 	add_to_path "C:\Program Files\Sublime Text 3"
+}
+
+os_linux() {
+	register_project 'dev_tools'
+	init_project_dev_tools() {
+		prefix_prompt '[D]'
+
+		cd "$DEV_TOOLS_ROOT"
+	}
 }
 
 os_mac() {
@@ -93,6 +87,14 @@ os_mac() {
 
 	add_to_path '/Applications/Google Chrome.app/Contents/MacOS'
 	alias 'chrome'='Google\ Chrome'
+
+	register_project 'dev_tools'
+	init_project_dev_tools() {
+		prefix_prompt '🛠'
+		term-theme DevPurple
+
+		cd "$DEV_TOOLS_ROOT"
+	}
 }
 
 _init
