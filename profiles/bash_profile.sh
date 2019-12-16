@@ -18,20 +18,31 @@ _init() {
 	prompt_swap --dynamic
 
 	local os_name=$(uname -o 2>/dev/null || uname -s 2>/dev/null)
-	if [[ ${os_name} =~ Msys ]]; then os_win;
-	elif [[ ${os_name} =~ Darwin ]]; then os_mac;
-	elif [[ ${os_name} =~ Linux ]]; then os_linux;
+	if [[ ${os_name} =~ Msys ]]; then os_msys;
+	elif [[ ${os_name} =~ Darwin ]]; then os_darwin;
+	elif [[ ${os_name} =~ Linux ]]; then
+		if grep -q Microsoft /proc/version; then
+			os_wsl
+		else
+			os_linux
+		fi
 	fi
 
 	# bat
 	source "$DEV_TOOLS_ROOT/plugins/bat/bat_options.sh"
+
+	# Sublime "subl" CLI
+	export EDITOR='subl-n-w'
+	alias 'sublime'='subl'
 }
 
-os_win() {
-	add_to_path "C:\Program Files\Sublime Text 3"
-}
+os_msys() { :; }
 
-os_linux() {
+os_linux() { :; }
+
+os_wsl() {
+	source "$DEV_TOOLS_ROOT/plugins/sublime/wsl/plugin.sh"
+
 	register_project 'dev_tools'
 	init_project_dev_tools() {
 		prefix_prompt '[D]'
@@ -40,7 +51,7 @@ os_linux() {
 	}
 }
 
-os_mac() {
+os_darwin() {
 	##
 	# Homebrew bash completions
 
@@ -78,13 +89,9 @@ os_mac() {
 	##
 
 	# Sublime "subl" CLI
-
-	add_to_path "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
-	export EDITOR='subl-n-w'
-	alias 'sublime'='subl'
+	source "$DEV_TOOLS_ROOT/plugins/sublime/darwin/plugin.sh"
 
 	# Chrome CLI
-
 	add_to_path '/Applications/Google Chrome.app/Contents/MacOS'
 	alias 'chrome'='Google\ Chrome'
 

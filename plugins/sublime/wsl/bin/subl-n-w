@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+##
+# This is basically an alias for 'subl -n -w' but having an actual executable
+# helps calls to $EDTIOR resolve correctly.
+##
+
+win_paths=()
+for path in "$@"; do
+	win_paths+=($(wslpath -w "${path}" ))
+done
+subl.exe -n -w "${win_paths[@]}"

@@ -5,4 +5,4 @@
 # helps calls to $EDTIOR resolve correctly.
 ##
 
-'/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl' -n -w "$@"
+subl -n -w "$@"
