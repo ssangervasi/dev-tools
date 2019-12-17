@@ -42,6 +42,7 @@ os_linux() { :; }
 
 os_wsl() {
 	source "$DEV_TOOLS_ROOT/plugins/sublime/wsl/plugin.sh"
+	source "$DEV_TOOLS_ROOT/plugins/clipboard/wsl/plugin.sh"
 
 	register_project 'dev_tools'
 	init_project_dev_tools() {
