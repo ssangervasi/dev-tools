@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+source futility
+args_and_or_stdin "$@" |
+	pbcopy

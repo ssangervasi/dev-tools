@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-powershell.exe -Command "Set-Clipboard '$@'"
-
-# Could be cool to support stdin
-# if [[ $1 = '-' ]]; then
-
+source futility
+args_and_or_stdin "$@" |
+	powershell.exe -Command "Set-Clipboard -"

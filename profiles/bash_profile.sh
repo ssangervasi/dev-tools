@@ -86,8 +86,10 @@ os_darwin() {
 
 	brew_bash_completion
 
-	#
 	##
+	# Plugins
+
+	source "$DEV_TOOLS_ROOT/plugins/clipboard/darwin/plugin.sh"
 
 	# Sublime "subl" CLI
 	source "$DEV_TOOLS_ROOT/plugins/sublime/darwin/plugin.sh"
