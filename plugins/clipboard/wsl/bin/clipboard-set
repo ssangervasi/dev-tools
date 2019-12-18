@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 source futility
-args_and_or_stdin "$@" |
-	powershell.exe -Command "Set-Clipboard -"
+content=$(args_and_or_stdin "$@")
+echo "-----"
+echo "${content[@]}"
+echo "-----"
+powershell.exe -Command "echo ${content[@]} | Set-Clipboard -Value { \$_ }"
