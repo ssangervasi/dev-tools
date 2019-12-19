@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
 source futility
-content=$(read_to_stdout "$@" <&0)
-powershell.exe -Command "echo ${content[@]} | Set-Clipboard -Value { \$_ }"
+
+# The many calls to powershell.exe are slow, but every other version of
+# this runs into quoting issues or line squashing :( 
+powershell.exe -Command Set-Clipboard
+while read line; do
+	#[exe      ] [arg to exe] [command and its args ] [powershell-style here-string]
+	powershell.exe -Command Set-Clipboard -Append -Value @\"$'\n'"${line}"$'\n'\"@
+done < <(read_to_stdout "$@" <&0)
