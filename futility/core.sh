@@ -74,7 +74,7 @@ get_absolute_path()  {
 }
 
 current_dir_command() {
-  echo 'get_absolute_path $(dirname "$BASH_SOURCE")'
+	echo 'get_absolute_path $(dirname "$BASH_SOURCE")'
 }
 
 check_help_help() {
@@ -158,6 +158,7 @@ source_if_exists() {
 	return 0
 }
 
+# Pretty much deprecated for readers.sh read_to_arr() and read_to_stdout()
 args_and_or_stdin() {
 	ARGS_AND_OR_STDIN_RESULT=()
 	local arg

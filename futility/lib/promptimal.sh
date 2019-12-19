@@ -51,12 +51,12 @@ _dynamic_prompt() {
 	local min_info_width=70
 	local columns=$(default ${COLUMNS} ${min_info_width})
 	# Wow math comparisons are ugly.
-	if [[ $((${columns} >= ${min_info_width})) == 1 ]]; then
+	if (( "${min_info_width}" < "${columns}")); then
 		local max_basename_width=16
 		local pwd_basename=$(basename "$PWD")
 		local abrv_basename="${pwd_basename}"
 		# String length calc is even uglier!
-		if [[ $((${#pwd_basename} > ${max_basename_width})) == 1 ]]; then
+		if (( "${max_basename_width}" < "${#pwd_basename}" )); then
 			local head_width=8
 			local tail_width=7
 			local connector='…'

@@ -2,7 +2,7 @@
 
 source futility
 
-MVSED_DRY_RUN="${MVSED_DRY_RUN:-false}"
+MVSED_DRY_RUN="${MVSED_DRY_RUN:-1}"
 
 _mvsed() {
 	check_help $@ && mvsed_help && exit 0
@@ -23,7 +23,7 @@ _mvsed() {
 
 	echo_info "$file_path => $new_file_path"
 
-	if [[ "$MVSED_DRY_RUN" == 'true' ]]; then
+	if [[ "$MVSED_DRY_RUN" == 'true' ]] || (( 0 == "$MVSED_DRY_RUN" )); then
 		return 0
 	fi
 
@@ -39,7 +39,7 @@ mvsed_help() {
 		<file_path> : The file path to move.
 		<sed_args>  : One or more arguments to pass to sed.
 
-		MVSED_DRY_RUN : Set to "true" to enable logging with out executing move. 
+		MVSED_DRY_RUN : Set to "0" or "true" to enable logging with out executing move. 
 	HELP_TEXT
 }
 

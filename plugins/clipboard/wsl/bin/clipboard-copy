@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
 source futility
-content=$(args_and_or_stdin "$@")
-echo "-----"
-echo "${content[@]}"
-echo "-----"
+content=$(read_to_stdout "$@" <&0)
 powershell.exe -Command "echo ${content[@]} | Set-Clipboard -Value { \$_ }"
