@@ -45,6 +45,11 @@ enter_project() {
 		project_args=("${project_args[@]:2}")
 	fi
 
+	if empty "${project_name}"; then
+		enter_project_help
+		return 0
+	fi
+
 	_before_project_enter "${project_name}"
 
 	# An interactive login shell...
@@ -59,6 +64,13 @@ enter_project() {
 				-i
 
 	_after_project_exit "${project_name}"
+}
+
+enter_project_help() {
+	cat <<-HELP_TEXT
+		Enter a project that has been defined. Check out:
+		$ generate_project --help
+	HELP_TEXT
 }
 
 _before_project_enter() {
