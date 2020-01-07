@@ -31,17 +31,23 @@ write_spec_history() {
 }
 
 spec_history() {
-	local range_end="$1"
+	local range_expr="${1:-1}"
 
 	local out_path=$(mktemp)
 	trap "rm ${out_path}" RETURN
 
-	if [[ ${range_end} =~ [0-9]+ ]]; then
-		tail -n ${range_end} $SPEC_HISTORY_PATH > ${out_path}
-	elif [[ -z ${range_end} || ${range_end} =~ all ]]; then
+	if [[ ${range_expr} =~ ^[0-9]+$ ]]; then
+		tail -n ${range_expr} $SPEC_HISTORY_PATH > ${out_path}
+	elif [[ ${range_expr} =~ ^[0-9]+-[0-9]+$ ]]; then
+		local range_start=$(sed -E s/-[0-9]+$// <<< "${range_expr}")
+		local range_end=$(sed -E s/^[0-9]+-// <<< "${range_expr}")
+		(sed -n "${range_start},${range_end}p" < $SPEC_HISTORY_PATH) > ${out_path}
+	elif [[ ${range_expr} =~ .+,.+$ ]]; then
+		(sed -n "${range_expr}p" < $SPEC_HISTORY_PATH) > ${out_path}
+	elif [[ ${range_expr} =~ all ]]; then
 		cat $SPEC_HISTORY_PATH > ${out_path}
 	else
-		echo_error "Invalid history range: '${range_end}'"
+		echo_error "Invalid history range: '${range_expr}'"
 	fi
 
 	if [[ ! -s ${out_path} ]]; then
@@ -181,7 +187,7 @@ select_spec_paths() {
 }
 
 select_lint_paths() {
-	grep -E '^((Gemfile)|(.+[.])(hs|rb|py|js))$'
+	grep -E '^((Gemfile)|(.+[.])(hs|rb|py|js|ts))$'
 }
 
 run_lint_command() {
@@ -207,11 +213,12 @@ load_ruby_speccial_plugin() {
 		$SPEC_RSPEC_COMMAND \
 			$SPEC_RSPEC_DEFAULT_ARGS \
 			$SPEC_RSPEC_FAIL_FAST \
+			$SPEC_RSPEC_TAG_FOCUS \
 			"$@"
 	}
 
 	print_spec_header() {
-		echo "Running: $SPEC_RSPEC_COMMAND $SPEC_RSPEC_DEFAULT_ARGS $SPEC_RSPEC_FAIL_FAST"
+		echo "Running: $SPEC_RSPEC_COMMAND $SPEC_RSPEC_DEFAULT_ARGS $SPEC_RSPEC_FAIL_FAST $SPEC_RSPEC_TAG_FOCUS"
 		echo "With args: $@"
 	}
 
@@ -225,6 +232,14 @@ load_ruby_speccial_plugin() {
 
 	no_fail_fast() {
 		SPEC_RSPEC_FAIL_FAST='--no-fail-fast'
+	}
+
+	tag_focus() {
+		SPEC_RSPEC_TAG_FOCUS='--tag=focus'
+	}
+
+	no_tag_focus() {
+		SPEC_RSPEC_TAG_FOCUS=''
 	}
 
 	fail_fast
