@@ -11,8 +11,9 @@ register_project '{{ name }}'
 init_project_{{ name }}() {
 	prefix_prompt '{{ icon }} '
 
+	MERCATOR_PWD='{{ directory }}'
 	.cd() {
-		cd '{{ directory }}'
+		cd "$MERCATOR_PWD"
 	}
 	.cd
 

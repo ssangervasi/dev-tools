@@ -79,7 +79,7 @@ _before_project_enter() {
 
 _after_project_exit() {
 	echo "Exited project $1..."
-	term-theme DevBlack 2> /dev/null
+	# term-theme DevBlack 2> /dev/null
 }
 
 _ensure_no_project() {

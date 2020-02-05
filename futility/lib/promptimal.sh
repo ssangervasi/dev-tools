@@ -35,7 +35,7 @@ prompt_swap_help() {
 
 clear_prompt() {
 	unprefix_prompt
-	unmangle_prompt_command
+	unmangle_prompt_command _dynamic_prompt
 }
 
 _simple_prompt() {
@@ -110,27 +110,27 @@ prompt_clock() {
 }
 
 mangle_prompt_command() {
-	PROMPT_COMMAND_CUSTOM="$1"
-	local original=$(
-		echo "$PROMPT_COMMAND" |
-			sed s/[[:space:]]*prompt_command_function[[:space:]]*//
-	)
-	PROMPT_COMMAND_ORIGINAL="${original}"
-	PROMPT_COMMAND="prompt_command_function"
-}
-
-prompt_command_function() {
-	if [[ -n $(type $PROMPT_COMMAND_ORIGINAL) ]]; then
-		eval "$PROMPT_COMMAND_ORIGINAL"
+	local prompt_command_custom="$1"
+	if ! [[ "${PROMPT_COMMAND:-}" =~ ${prompt_command_custom} ]]; then
+		PROMPT_COMMAND="${prompt_command_custom};${PROMPT_COMMAND}"
 	fi
-	if [[ -n $(type $PROMPT_COMMAND_CUSTOM) ]]; then
-		eval "$PROMPT_COMMAND_CUSTOM"
-	fi
+	_cleanup_prompt_command
 }
 
 unmangle_prompt_command() {
-	PROMPT_COMMAND="$PROMPT_COMMAND_ORIGINAL"
-	PROMPT_COMMAND_CUSTOM=''
+	local prompt_command_custom="$1"
+	PROMPT_COMMAND="${PROMPT_COMMAND/${prompt_command_custom}/}"
+	_cleanup_prompt_command
+}
+
+_cleanup_prompt_command() {
+	PROMPT_COMMAND="${PROMPT_COMMAND/;;/;}"
+	PROMPT_COMMAND="${PROMPT_COMMAND#;}"
+	# PROMPT_COMMAND=$(
+	# 	echo "$PROMPT_COMMAND" |
+	# 	sed 's/^;//g' |
+	# 	sed -E 's/;+/;/g'
+	# )
 }
 
 prompt_command_help() {

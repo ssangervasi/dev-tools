@@ -28,12 +28,22 @@ _init() {
 		fi
 	fi
 
+	editor_plugin
+
 	# bat
 	source "$DEV_TOOLS_ROOT/plugins/bat/bat_options.sh"
+}
 
-	# Sublime "subl" CLI
-	export EDITOR='subl-n-w'
-	alias 'sublime'='subl'
+editor_plugin() {
+	if which -s subl; then
+		source "$DEV_TOOLS_SUBLIME_PLUGIN"
+		export EDITOR='subl-n-w'
+		alias 'sublime'='subl'
+	elif which -s code; then
+		export EDITOR='code'
+	else
+		export EDITOR='vim'
+	fi
 }
 
 os_msys() { :; }
@@ -41,7 +51,7 @@ os_msys() { :; }
 os_linux() { :; }
 
 os_wsl() {
-	source "$DEV_TOOLS_ROOT/plugins/sublime/wsl/plugin.sh"
+	DEV_TOOLS_SUBLIME_PLUGIN="$DEV_TOOLS_ROOT/plugins/sublime/wsl/plugin.sh"
 	source "$DEV_TOOLS_ROOT/plugins/clipboard/wsl/plugin.sh"
 
 	register_project 'dev_tools'
@@ -81,6 +91,8 @@ os_darwin() {
 			source "/usr/local/etc/profile.d/bash_completion.sh"
 		else
 			echo_error 'Homebrew bash completions do not exist!'
+			echo_error 'Homebrew suggests running: brew install bash-completion'
+			return $YA_DUN_GOOFED
 		fi
 	}
 
@@ -92,7 +104,7 @@ os_darwin() {
 	source "$DEV_TOOLS_ROOT/plugins/clipboard/darwin/plugin.sh"
 
 	# Sublime "subl" CLI
-	source "$DEV_TOOLS_ROOT/plugins/sublime/darwin/plugin.sh"
+	DEV_TOOLS_SUBLIME_PLUGIN="$DEV_TOOLS_ROOT/plugins/sublime/darwin/plugin.sh"
 
 	# Chrome CLI
 	add_to_path '/Applications/Google Chrome.app/Contents/MacOS'
