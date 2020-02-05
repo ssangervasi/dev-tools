@@ -75,7 +75,7 @@ _info_prompt() {
 	local info_ps1="\
 ${PROMPT_PREFIX}\
 \[${COLOR_CYAN}\]\
-\T\
+\t\
 \[${COLOR_NC}\]\
 |\
 \[${COLOR_BROWN}\]\
