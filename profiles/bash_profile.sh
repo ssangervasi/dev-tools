@@ -37,10 +37,8 @@ _init() {
 editor_plugin() {
 	if which -s subl; then
 		source "$DEV_TOOLS_SUBLIME_PLUGIN"
-		export EDITOR='subl-n-w'
-		alias 'sublime'='subl'
 	elif which -s code; then
-		export EDITOR='code'
+		source "$DEV_TOOLS_VSCODE_PLUGIN"
 	else
 		export EDITOR='vim'
 	fi
@@ -105,6 +103,7 @@ os_darwin() {
 
 	# Sublime "subl" CLI
 	DEV_TOOLS_SUBLIME_PLUGIN="$DEV_TOOLS_ROOT/plugins/sublime/darwin/plugin.sh"
+	DEV_TOOLS_VSCODE_PLUGIN="$DEV_TOOLS_ROOT/plugins/vs-code/darwin/plugin.sh"
 
 	# Chrome CLI
 	add_to_path '/Applications/Google Chrome.app/Contents/MacOS'

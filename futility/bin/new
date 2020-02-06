@@ -19,6 +19,21 @@ branch() {
 	git checkout -b "$1"
 }
 
+TICKETS_HOME="${TICKETS_HOME:-$HOME/tickets}"
+ticket() {
+	ticket_name="$1"
+
+	pushd "$TICKETS_HOME" || return
+	mkdir "${ticket_name}"
+	pushd ./"${ticket_name}" || return
+	TICKET_HOME="$PWD"
+
+	touch ./notes.md
+	mkdir screenshots
+
+	echo "$TICKET_HOME"
+}
+
 _help() {
 	cat <<-HELP_TEXT
 		new
@@ -26,6 +41,7 @@ _help() {
 			directories <dir_name>/<dir_name>
 			file <file_name>
 			branch <git_branch_name>
+			ticket <ticket_or_feature_name>
 	HELP_TEXT
 }
 
