@@ -1,7 +1,10 @@
+##
+# change dir, but weird
+##
 
 cls() {
 	clear
-	summary
+	summary "$@"
 }
 
 summary() {

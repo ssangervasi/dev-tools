@@ -7,9 +7,10 @@ alias resource='source $HOME/.bashrc $HOME/.bash_profile'
 alias '..'='cd ..'
 alias '...'='cd $DEV_HOME'
 alias ',,,'='cd $WORKSPACE'
-TREE_DEFAULT_OPTIONS='--dirsfirst -C'
+
+export TREE_DEFAULT_OPTIONS='--dirsfirst -C'
 alias tree='tree ${TREE_DEFAULT_OPTIONS}'
-alias binweb='./bin/web'
+
 alias tt='term-theme'
 alias 'pgrep'='pgrep -lfi'
 alias lsa='ls -A1lh'
@@ -33,6 +34,7 @@ alias gitl="git l"
 alias gits="git s"
 alias hamster='git hamster'
 
+# Screensaver
 if [[ $(uname -s 2>/dev/null) == 'Darwin' ]]; then
 	# Lock the screen (OSX only)
 	MAC_OS_LOCK_SCREEN='/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession'

@@ -72,6 +72,9 @@
     # Delete a branch and its remote on origin.
     annihilate = ! git desecrate "$1" && git murder "$1"
 
+    # GitHub `hub` command
+    cmp = !hub compare
+
 [fetch]
     prune = true
 
