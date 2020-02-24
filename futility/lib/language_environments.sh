@@ -97,6 +97,9 @@ conda_init() {
 
 rbenv_lazy() {
 	if ! which rbenv &>/dev/null; then
+		add_to_path ~/.rbenv/bin
+	fi
+	if ! which rbenv &>/dev/null; then
 		echo_error "You ain't got no rbenv"
 		return $YA_DUN_GOOFED
 	fi

@@ -76,7 +76,7 @@ pbpath() {
 	local base=$(basename "${target}")
 
 	local abs_dir=$(get_absolute_path "${dir}")
-	echo -n "${abs_dir}/${base}" | pbcopy
+	echo -n "${abs_dir}/${base}" | clipboard-copy -
 }
 
 dir_size() {

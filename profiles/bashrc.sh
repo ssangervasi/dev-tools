@@ -6,7 +6,7 @@ _init() {
 	if [[ -z $DEV_TOOLS_ROOT ]]; then
 		DEV_TOOLS_ROOT="$(dirname $BASH_SOURCE)/.."
 	fi
-	
+
 	##
 	# My tools
 	##

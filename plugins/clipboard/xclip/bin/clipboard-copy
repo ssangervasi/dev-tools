@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+source futility
+read_to_stdout "$@" <&0 | xclip -select clipboard
