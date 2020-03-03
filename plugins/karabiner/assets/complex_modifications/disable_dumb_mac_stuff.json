@@ -52,9 +52,25 @@
                 "command"
               ],
               "optional": [
-                "caps_lock"
+                "caps_lock",
+                "shift"
               ]
             }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Eject is Sys Pref",
+      "manipulators": [
+        {
+          "from": {
+            "key_code": "eject",
+            "modifiers": {}
+          },
+          "type": "basic",
+          "to": {
+            "shell_command": "open -a 'System Preferences'"
           }
         }
       ]
@@ -79,18 +95,66 @@
             {
               "type": "frontmost_application_if",
               "bundle_identifiers": [
-                  "^com\\.apple\\.Terminal$"
+                "^com\\.apple\\.Terminal$"
               ]
             }
           ],
           "to": [
-            { "key_code": "c" },
-            { "key_code": "l" },
-            { "key_code": "e" },
-            { "key_code": "a" },
-            { "key_code": "r" },
-            { "key_code": "return_or_enter" }
+            {
+              "key_code": "c"
+            },
+            {
+              "key_code": "l"
+            },
+            {
+              "key_code": "e"
+            },
+            {
+              "key_code": "a"
+            },
+            {
+              "key_code": "r"
+            },
+            {
+              "key_code": "return_or_enter"
+            }
           ]
+        }
+      ]
+    },
+    {
+      "description": "Log date",
+      "manipulators": [
+        {
+          "from": {
+            "key_code": "escape",
+            "modifiers": {
+              "mandatory": [
+                "left_command"
+              ]
+            }
+          },
+          "type": "basic",
+          "to": {
+            "shell_command": "date >> ~/Desktop/open_editor.txt"
+          }
+        }
+      ]
+    },
+    {
+      "description": "Open editor",
+      "manipulators": [
+        {
+          "from": {
+            "key_code": "f1",
+            "modifiers": {
+              "mandatory": []
+            }
+          },
+          "type": "basic",
+          "to": {
+            "shell_command": "bash -l edit"
+          }
         }
       ]
     }

@@ -1,3 +1,6 @@
+# [core]
+#     excludesFile = ./shared.gitignore
+
 [user]
     name = Sebastian Sangervasi
     email = villain@harmless.dev
@@ -31,11 +34,17 @@
 
     a = add --all
     ass = add .
+    ap = add --patch
 
     c = commit -m
     fix = commit --squash HEAD
     amen = commit --amend --no-edit
-    squash = rebase --interactive
+    
+    ri = rebase --interactive
+    rc = rebase --continue
+    ra = rebase --abort
+    # Rebase the "wat" stuff
+    rat = !git ri $(git junction $@)
 
     co = checkout
     hamster = checkout master
@@ -61,8 +70,10 @@
     b = branch -v
     s = status -sb
     current = symbolic-ref --short HEAD
+    gone = ! git branch --format='%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' | grep '.'
 
-    new = checkout -b
+    new = checkout -b 
+    borrow = ! git fetch origin "$1" && git checkout FETCH_HEAD -b 
     # Delete a local branch of it's been merged.
     finish = branch --delete
     # Delete a local branch no matter what.
@@ -80,4 +91,3 @@
 
 [pull]
     rebase = true
-

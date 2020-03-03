@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+HYPER_CONFIG_PATH=${HYPER_CONFIG_PATH:-~/.config/hyper}
+HYPER_RC_PATH=${HYPER_RC_PATH:-~/.hyper.js}
+
+main() {
+	THEME_NAME="$1"
+	
+	cd "${HYPER_CONFIG_PATH}" || exit_no_config
+	THEME_PATH="${PWD}/${THEME_NAME}".hyper.js
+	[[ -f "${THEME_PATH}" ]] || exit_no_theme
+	
+	if [[ -e "${HYPER_RC_PATH}" ]]; then
+		cp "${HYPER_RC_PATH}" ./backup.hyper.js || exit_could_not_backup
+	fi
+	
+	cp "${THEME_PATH}" "${HYPER_RC_PATH}"
+}
+
+exit_no_config() {
+	echo_error "Missing config path: ${HYPER_CONFIG_PATH}"
+	exit 1	
+}
+
+exit_no_theme() {
+	echo_error "Missing theme for '${THEME_NAME}'. Expected: ${THEME_PATH}"
+	exit 2
+}
+
+exit_could_not_backup() {
+	echo_error "Could not create backup file."
+	exit 3
+}
+
+echo_error() {
+	echo "$@" 1>&2
+}
+
+main "$@"

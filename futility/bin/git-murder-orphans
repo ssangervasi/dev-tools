@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Remove all "gone" branches
+git gone | while read br; do git murder "${br}"; done

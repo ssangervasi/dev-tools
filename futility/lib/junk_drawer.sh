@@ -82,3 +82,8 @@ pbpath() {
 dir_size() {
 	du -sh "$@"
 }
+
+mac_show_all_files() {
+	defaults write com.apple.finder AppleShowAllFiles true
+	killall Finder
+}

@@ -61,17 +61,30 @@ add_to_path() {
 }
 
 get_absolute_path()  {
-	local relative_path="$1"
-	local absolute_path=$(
-		cd "${relative_path}" 2>/dev/null &&
+	local relative_dir="$1"
+	local relative_basename=""
+	if [[ ! -d "${relative_dir}" ]]; then
+		relative_basename=$(basename "${relative_dir}")
+		relative_dir=$(dirname "${relative_dir}")
+	fi
+
+	local absolute_dir=$(
+		cd "${relative_dir}" 2>/dev/null &&
 			echo "$PWD"
 	)
 
-	if empty "${absolute_path}"; then
+	if empty "${absolute_dir}"; then
 		return $YA_DUN_GOOFED
 	fi
-	echo "${absolute_path}"
+
+	if empty "${relative_basename}"; then
+		echo "${absolute_dir}"
+		return
+	fi
+
+	echo "${absolute_dir}/${relative_basename}"
 }
+alias abs=get_absolute_path
 
 current_dir_command() {
 	echo 'get_absolute_path $(dirname "$BASH_SOURCE")'
