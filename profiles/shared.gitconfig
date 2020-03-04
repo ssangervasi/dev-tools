@@ -60,12 +60,12 @@
 
     root-dir=rev-parse --show-toplevel
     dic = diff --cached
-    junction = ! git merge-base ${1:-master} ${2:-head}
+    junction = ! git merge-base ${1:-master} ${2:-HEAD}
     wat = !git diff --name-status $(git junction $@)
     stat = !git diff --stat $(git junction $@)
 
     pf = push --force-with-lease
-    hoist = push -u origin head
+    hoist = push -u origin HEAD
 
     b = branch -v
     s = status -sb
