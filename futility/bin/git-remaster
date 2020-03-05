@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 
+source futility
+
 original_branch=$(git symbolic-ref --short HEAD)
 original_status=$(git status --porcelain)
 
 if [[ -n "${original_status}" ]]; then
-  echo 'Stashing dirty changes'
+  echo_info 'Stashing dirty changes'
   git stash push \
     -m "remaster on ${original_branch}" \
     --include-untracked \
     || exit 1
 fi
 
-echo 'Pulling master'
+echo_info 'Pulling master'
 git checkout master &&
-  git pull &&
-  echo "Rebasing ${original_branch} onto master" &&
+  git pull origin master &&
+  echo_info "Rebasing ${original_branch} onto master" &&
   git checkout "${original_branch}" &&
   git rebase master
 
@@ -24,6 +26,6 @@ if [[ $? != 0 ]]; then
 fi
 
 if [[ -n "${original_status}" ]]; then
-  echo "Restoring stash" &&
+  echo_info "Restoring stash" &&
   git stash pop
 fi
