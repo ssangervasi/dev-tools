@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+stash_ref=$(git stash list --grep 'Undo' --pretty='%gD' -1)
+if [[ -z "${stash_ref}" ]]; then
+	echo 'Nothing to redo!'
+	exit 1
+fi
+git stash pop "${stash_ref}"
