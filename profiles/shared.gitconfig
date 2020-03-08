@@ -36,7 +36,6 @@
     ass = add .
     ap = add --patch
 
-    c = commit -m
     fix = commit --squash HEAD
     amen = commit --amend --no-edit
     
@@ -60,8 +59,9 @@
 
     root-dir=rev-parse --show-toplevel
     dic = diff --cached
-    junction = ! git merge-base ${1:-master} ${2:-HEAD}
+    junction = !git merge-base ${1:-master} ${2:-HEAD}
     wat = !git diff --name-status $(git junction $@)
+    wut = !git diff ${1:-HEAD}
     stat = !git diff --stat $(git junction $@)
 
     pf = push --force-with-lease
@@ -70,18 +70,18 @@
     b = branch -v
     s = status -sb
     current = symbolic-ref --short HEAD
-    gone = ! git branch --format='%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' | grep '.'
+    gone = !git branch --format='%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' | grep '.'
 
     new = checkout -b 
-    borrow = ! git fetch origin "$1" && git checkout FETCH_HEAD -b 
+    borrow = !git fetch origin "$1" && git checkout FETCH_HEAD -b 
     # Delete a local branch of it's been merged.
     finish = branch --delete
     # Delete a local branch no matter what.
     murder = branch --delete --force
     # Delete a remote branch on origin.
-    desecrate = ! git push origin ':'":$1"
+    desecrate = !git push origin ':'":$1"
     # Delete a branch and its remote on origin.
-    annihilate = ! git desecrate "$1" && git murder "$1"
+    annihilate = !git desecrate "$1" && git murder "$1"
 
     # GitHub `hub` command
     cmp = !hub compare
