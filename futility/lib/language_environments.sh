@@ -151,7 +151,7 @@ bundle_lazy() {
 		return 0
 	fi
 	unset bundle
-	rvm_lazy || rbenv_lazy
+	rvm_lazy 2>/dev/null || rbenv_lazy 2>/dev/null
 	if [[ $? > 0 ]]; then
 		echo_error 'Could find ruby environment for bundler'
 		return $YA_DUN_GOOFED
