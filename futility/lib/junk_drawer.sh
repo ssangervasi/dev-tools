@@ -87,3 +87,8 @@ mac_show_all_files() {
 	defaults write com.apple.finder AppleShowAllFiles true
 	killall Finder
 }
+
+screen_pid_by_name() {
+    name="$1"
+    screen -ls | grep "${name}" | sed -E "s/[^0-9]*([0-9]+)\.${name}.*/\1/g"
+}
