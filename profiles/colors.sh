@@ -55,16 +55,27 @@ def_colors
 # mi = non-existent file pointed to by a symbolic link (visible when you type ls -l)
 # ex = file which is executable (ie. has 'x' set in permissions).
 # export LS_COLORS="fi=01;30:"
-export LS_COLORS="fi=00;00:di=02;013:ln=0;03:*.horse=02;31:"
-# export LS_COLORS="fi=00;13"
-# eval $(dircolors <(
-# 	cat <<-COLOR_DB
-# 		DIR 01;01
-# 		DIR 01;01
-# 	COLOR_DB
-# ))
-# export LS_COLORS=$(
-# 	cat <<-COLOR_DB | tr '\n' ':' | tr ' ' '='
-# 		DIR 01;01
-# 	COLOR_DB
-# )
+def_ls_colors() {
+	export LS_COLORS="fi=00;00:di=02;013:ln=0;03:*.horse=02;31:"
+}
+
+def_dircolors() {
+	eval "$(dircolors)"
+	# eval $(dircolors <(
+	# 	cat <<-COLOR_DB
+	# 		DIR 01;01
+	# 		DIR 01;01
+	# 	COLOR_DB
+	# ))
+	# export LS_COLORS=$(
+	# 	cat <<-COLOR_DB | tr '\n' ':' | tr ' ' '='
+	# 		DIR 01;01
+	# 	COLOR_DB
+	# )
+}
+
+if which dircolors &>/dev/null; then
+	def_dircolors
+else
+	def_ls_colors
+fi
