@@ -1,15 +1,8 @@
 # Go
-go() {
-	go_lazy && go "$@"
-}
-
-go_lazy() {
-	unset go
+if [[ -d "$DEV_HOME/go" ]]; then
 	add_to_path "$DEV_HOME/go/bin"
 	export GOPATH="$DEV_HOME/go"
-	# export GOROOT="$DEV_HOME/go"
-	# https://dave.cheney.net/2013/06/14/you-dont-need-to-set-goroot-really
-}
+fi
 
 # Rust Cargo
 add_to_path "$HOME/.cargo/bin"
