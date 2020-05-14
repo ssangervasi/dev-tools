@@ -40,6 +40,7 @@ _init() {
 	# General Use
 
 	add_to_path "$HOME/bin"
+	add_to_path "$HOME/.local/bin"
 }
 
 _init
