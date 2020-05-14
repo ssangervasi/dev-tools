@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+git checkout "$1" &&
+	git checkout -b "$2" &&
+	git branch --delete "$1"
