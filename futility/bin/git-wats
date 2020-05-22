@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ref_start="${1:-master}"
 ref_end="${2:-HEAD}"
-echo "File changes in "${ref_start}.."${ref_end})"
+echo "File changes in "${ref_start}.."${ref_end}"
 for ref in $(git log --pretty='format:%h' "${ref_start}..${ref_end}"); do
 	echo
 	git log --pretty=oneline -n1 "${ref}"
