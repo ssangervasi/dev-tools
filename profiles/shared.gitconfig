@@ -56,6 +56,7 @@
     lg = log --all --graph --abbrev-commit \
         --date=relative \
         --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
+    summarize = log --pretty='format:%B' --reverse
 
     root-dir=rev-parse --show-toplevel
     dic = diff --cached
