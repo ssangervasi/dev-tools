@@ -92,3 +92,16 @@
 
 [pull]
     rebase = true
+
+##
+# Performance
+[core]
+	preloadIndex = true
+	untrackedCache = true
+
+[fetch]
+	negotiationAlgorithm = skipping
+	writeCommitGraph = true
+    
+[index]
+	version = 4
