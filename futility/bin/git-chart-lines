@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+source futility
+
+main() {
+	FILE_PATH="$1"
+	START_DATE="$2"
+
+	if [[ -z "${FILE_PATH}" ]]; then
+		exit_error "Need a file path"
+	elif [[ -z "${START_DATE}" ]]; then
+		exit_error "Need a start date"
+	fi
+
+	chart_lines
+}
+
+chart_lines() {
+	log_commits | while read line; do
+		line_arr=($line)
+		h=${line_arr[0]}
+		d="${line_arr[1]} ${line_arr[2]}"
+
+		git checkout "${h}" -- "${FILE_PATH}" ||
+			exit_error "Unable to checkout"
+
+		wc_arr=($(wc -l "${FILE_PATH}"))
+		count=${wc_arr[0]}
+
+		echo "${d}	${h}	${count}"
+	done
+
+	git co HEAD -- "${FILE_PATH}"
+}
+
+log_commits() {	
+	git log \
+		--reverse \
+		--after "${START_DATE}" \
+		--pretty='format:%h %ci' \
+		-- "${FILE_PATH}"
+}
+
+exit_error() {
+	echo_error "$@"
+	exit 1
+}
+
+main "$@"

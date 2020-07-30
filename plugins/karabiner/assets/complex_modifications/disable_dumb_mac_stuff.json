@@ -41,6 +41,48 @@
       ]
     },
     {
+      "description": "Copy on print_screen",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "print_screen",
+            "modifiers": {
+              "mandatory": [],
+              "optional": []
+            },
+            "to": {
+              "key_code": "c",
+              "modifiers": [
+                "command"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Pasta on pause",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "pause",
+            "modifiers": {
+              "mandatory": [],
+              "optional": []
+            },
+            "to": {
+              "key_code": "v",
+              "modifiers": [
+                "command"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "description": "Disable Cmd+H hide",
       "manipulators": [
         {
