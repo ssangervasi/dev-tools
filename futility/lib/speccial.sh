@@ -10,7 +10,8 @@ SPEC_HISTORY_PATH=~/.spec_history
 SPEC_HISTORY_SIZE='100'
 
 spec() {
-	local args=$(args_and_or_stdin $@ <&0)
+	read_to_arr $@ <&0
+	local args="${READ_TO_ARR_RESULT[@]}"
 	print_spec_header ${args}
 	write_spec_history ${args}
 	run_spec_command ${args}
@@ -18,7 +19,7 @@ spec() {
 
 write_spec_history() {
 	local new_entry="$@"
-	local prev_entry=$(spec_history 1 2>/dev/null)
+	local prev_entry=$(tail -n 1 "$SPEC_HISTORY_PATH")
 	if [[ "${new_entry}" == "${prev_entry}" ]]; then
 		return 0
 	fi
@@ -31,47 +32,57 @@ write_spec_history() {
 }
 
 spec_history() {
-	local range_expr="${1:-1}"
+	local range_expr="${1:-all}"
 
+	local in_path=$(mktemp)
 	local out_path=$(mktemp)
-	trap "rm ${out_path}" RETURN
+	trap "rm ${out_path} ${in_path}" RETURN
+
+	grep -n . "${SPEC_HISTORY_PATH}" > "${in_path}"
 
 	if [[ ${range_expr} =~ ^[0-9]+$ ]]; then
-		tail -n ${range_expr} $SPEC_HISTORY_PATH > ${out_path}
-	elif [[ ${range_expr} =~ ^[0-9]+-[0-9]+$ ]]; then
+		range_expr="${range_expr}-${range_expr}"
+	fi
+
+	if [[ ${range_expr} =~ ^[0-9]+-[0-9]+$ ]]; then
 		local range_start=$(sed -E s/-[0-9]+$// <<< "${range_expr}")
 		local range_end=$(sed -E s/^[0-9]+-// <<< "${range_expr}")
-		(sed -n "${range_start},${range_end}p" < $SPEC_HISTORY_PATH) > ${out_path}
+		(sed -n "${range_start},${range_end}p" < "${in_path}") > "${out_path}"
 	elif [[ ${range_expr} =~ .+,.+$ ]]; then
-		(sed -n "${range_expr}p" < $SPEC_HISTORY_PATH) > ${out_path}
+		(sed -n "${range_expr}p" < "${in_path}") > "${out_path}"
 	elif [[ ${range_expr} =~ all ]]; then
-		cat $SPEC_HISTORY_PATH > ${out_path}
+		cat "${in_path}" > "${out_path}"
+	elif [[ ${range_expr} =~ last ]]; then
+		tail -n 1 "${in_path}" > "${out_path}"
 	else
 		echo_error "Invalid history range: '${range_expr}'"
 	fi
 
-	if [[ ! -s ${out_path} ]]; then
-		echo_error 'No spec history!'
-		echo_error "Expected it to be present in: '$SPEC_HISTORY_PATH'"
+	if [[ ! -s "${out_path}" ]]; then
+		echo_error 'No history in range.'
 		return $YA_DUN_GOOFED
 	fi
 
-	cat ${out_path}
+	cat "${out_path}"
 }
 
-echo_paths() {
-	echo 'Found these paths:'
-	ls -1 $@
+trim_line_num() {
+	read_to_stdout $@ <&0 | sed -E 's/^[0-9]+://'
 }
 
 respec() {
-	local last_spec=$(spec_history 1)
+	local range_expr="${1:-last}"
+	shift
+
+	local replay_line=$(spec_history "${range_expr}")
 	if [[ $? > 0 ]]; then
 		return $YA_DUN_GOOFED
 	fi
 
-	echo 'Replaying spec:' $last_spec $@
-	spec $last_spec $@
+	replay_line=$(trim_line_num - <<< "${replay_line}")
+
+	echo 'Replaying spec:' ${replay_line} $@
+	spec ${replay_line} $@
 }
 
 
@@ -101,6 +112,11 @@ _complete_spec_history() {
 }
 
 complete -o bashdefault -F _complete_spec_history spec
+
+echo_paths() {
+	echo 'Found these paths:'
+	ls -1 $@
+}
 
 globspec() {
 	check_help $@ && globspec_help && return 0
