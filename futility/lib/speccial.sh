@@ -38,7 +38,7 @@ spec_history() {
 	local out_path=$(mktemp)
 	trap "rm ${out_path} ${in_path}" RETURN
 
-	grep -n . "${SPEC_HISTORY_PATH}" > "${in_path}"
+	grep -n '.*' "${SPEC_HISTORY_PATH}" > "${in_path}"
 
 	if [[ ${range_expr} =~ ^[0-9]+$ ]]; then
 		range_expr="${range_expr}-${range_expr}"
