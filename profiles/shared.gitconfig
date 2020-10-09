@@ -32,22 +32,27 @@
     # Meta!
     aliases = config --get-regexp alias
 
+    # Adding
     a = add --all
     ass = add .
     ap = add --patch
 
+    # Committing
     fix = commit --squash HEAD
     amen = commit --amend --no-edit
     
+    # Rebasing
     ri = rebase --interactive
     rc = rebase --continue
     ra = rebase --abort
     # Rebase the "wat" stuff
     rat = !git ri $(git junction $@)
 
+    # Checkouts
     co = checkout
     hamster = checkout master
 
+    # Logging
     l = log --oneline -n 10 --no-merges
     la = log \
             -n 10 \
@@ -58,6 +63,12 @@
         --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
     summarize = log --pretty='format:%B' --reverse
 
+    # All... through the day...
+    i = config --get user.name
+    me = config --get user.email
+    mine = !git l --author=\"$(git i)\"
+
+    # Diffing
     root-dir=rev-parse --show-toplevel
     dic = diff --cached
     junction = !git merge-base ${1:-master} ${2:-HEAD}
@@ -65,14 +76,17 @@
     wut = !git diff ${1:-HEAD}
     stat = !git diff --stat $(git junction $@)
 
+    # Pushing
     pf = push --force-with-lease
     hoist = push -u origin HEAD
 
-    b = branch -v
+    # Status
     s = status -sb
+    b = branch -v
     current = symbolic-ref --short HEAD
     gone = !git branch --format='%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' | grep '.'
 
+    # Branching
     new = checkout -b 
     borrow = !git fetch origin "$1" && git checkout FETCH_HEAD -b 
     # Delete a local branch of it's been merged.
