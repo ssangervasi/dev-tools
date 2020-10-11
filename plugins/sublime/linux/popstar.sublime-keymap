@@ -4,4 +4,9 @@
 	{ "keys": ["ctrl+alt+d"], "command": "goto_definition" },
 	{ "keys": ["ctrl+shift+["], "command": "prev_view" },
 	{ "keys": ["ctrl+shift+]"], "command": "next_view" },
+
+	// I always want to place bookmarks
+	{ "keys": ["ctrl+r"], "command": "toggle_bookmark" },
+	{ "keys": ["ctrl+up"], "command": "prev_bookmark" },
+	{ "keys": ["ctrl+down"], "command": "next_bookmark" }
 ]
