@@ -203,7 +203,7 @@ select_spec_paths() {
 }
 
 select_lint_paths() {
-	grep -E '^((Gemfile)|(.+[.])(hs|rb|py|js|ts))$'
+	grep -E '^((Gemfile)|(.+[.])(hs|rb|py|js|ts|tsx|go))$'
 }
 
 run_lint_command() {
