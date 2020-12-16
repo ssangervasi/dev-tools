@@ -62,6 +62,7 @@
         --date=relative \
         --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
     summarize = log --pretty='format:%B' --reverse
+    lc = log -n1 --pretty=format:'%h'
 
     # All... through the day...
     i = config --get user.name

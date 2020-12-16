@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+petrify_branch() {
+	echo "petrify '$branch' '"$(git lc "$branch")"'"
+}
+
+for branch in "$@"; do
+	petrify_branch "$branch"
+done
