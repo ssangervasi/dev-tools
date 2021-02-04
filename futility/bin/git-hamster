@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+default_branch="master"
+if git hab "main"; then
+	default_branch="main"
+elif git hab "hamster"; then
+	git co "hamster"
+fi
+
+git co "${default_branch}"

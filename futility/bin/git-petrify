@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# I can't remember what I wanted to do with this...
 petrify_branch() {
 	echo "petrify '$branch' '"$(git lc "$branch")"'"
 }

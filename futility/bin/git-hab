@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# "Has branch?"
+git show-ref --verify --quiet refs/heads/"$1"

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# This script is similar to just running
+# 	git log --pretty=oneline *FILE_PATH*
+# The main difference is that files will be grouped under
+# their "wats" heading
+
+path_pattern="${1}"
+ref_start="${2}"
+ref_end="${3}"
+
+git wats "${ref_start}" "${ref_end}" |
+	while read line; do
+		if [[ "${line}" =~ ^[a-zA-Z0-9]{40} ]]; then
+			commit_line="${line}"
+		elif [[ "${line}" =~ "${path_pattern}" ]]; then
+			echo "${commit_line}"
+			echo "${line}"
+		fi
+	done

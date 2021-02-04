@@ -50,7 +50,6 @@
 
     # Checkouts
     co = checkout
-    hamster = checkout master
 
     # Logging
     l = log --oneline -n 10 --no-merges
@@ -67,7 +66,7 @@
     # All... through the day...
     i = config --get user.name
     me = config --get user.email
-    mine = !git l --author=\"$(git i)\"
+    mine = !git l --author=\"$(git i)\" $@
 
     # Diffing
     root-dir=rev-parse --show-toplevel
