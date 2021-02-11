@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+source futility
+
+main() {
+	read_to_arr "$@"
+	for entry in "${READ_TO_ARR_RESULT[@]}"; do
+		guess_path "$entry" || exit 1
+	done
+}
+
+guess_path() {
+	local maybe="$1"
+	local abs
+	
+	# If the path exists as-is, print its absolute form.
+	if [[ -e "$maybe" ]]; then
+		abs=$(get_absolute_path "$maybe")
+		echo "$abs"
+		return 0
+	fi 
+	
+	# Try finding the path relative the current git repo.
+	local git_root
+	git_root=$(git root-dir 2>/dev/null)
+
+	if [[ -n "$git_root" ]]; then
+		abs=$(get_absolute_path "${git_root}/${maybe}")
+		
+		if [[ -e "$abs" ]]; then
+			echo "$abs"
+			return 0
+		fi
+	fi
+	
+	return 1
+}
+
+main "$@"
