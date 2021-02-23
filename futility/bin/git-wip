@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+main() {
+	if [[ "$1" == "switch" ]]; then
+		switch "$2"
+	elif [[ "$1" == "list" ]]; then
+		list
+	elif [[ "$1" == "show" ]]; then
+		show "$2"
+	else
+		switch "$1"
+	fi
+}
+
 switch() {
 	wip_branch=$(show "$1")
 	git checkout "${wip_branch}"
@@ -27,4 +39,4 @@ list() {
 	  sed "s!^[[:space:]]*!!"
 }
 
-switch "$@"
+main "$@"
