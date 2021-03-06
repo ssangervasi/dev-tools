@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source futility
+# source futility
 
 main() {
 	FILE_PATH="$1"

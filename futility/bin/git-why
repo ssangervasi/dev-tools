@@ -5,16 +5,46 @@
 # The main difference is that files will be grouped under
 # their "wats" heading
 
-path_pattern="${1}"
+cd $(git root-dir)
+
+is_grep="false"
+if [[ "$1" == "-g" ]]; then
+	is_grep="true"
+	shift
+fi
+
+pattern="${1}"
 ref_start="${2}"
 ref_end="${3}"
+commit="${ref_start:-HEAD}"
 
 git wats "${ref_start}" "${ref_end}" |
 	while read line; do
-		if [[ "${line}" =~ ^[a-zA-Z0-9]{40} ]]; then
+		line_arr=(${line})
+		prefix="${line_arr[0]}"
+		path="${line_arr[1]}"
+
+		if [[ "${prefix}" =~ ^[a-zA-Z0-9]{40} ]]; then
+			commit="${prefix}"
 			commit_line="${line}"
-		elif [[ "${line}" =~ "${path_pattern}" ]]; then
-			echo "${commit_line}"
-			echo "${line}"
+		elif [[ -n "${commit}" && -n "${path}" ]]; then
+			match_line=""
+			if [[ "${is_grep}" == "true" ]]; then
+				diff=$(git diff -G "${pattern}" "${commit}^..${commit}" -- "${path}")
+				if [[ -n "${diff}" ]]; then
+					match_line="${line}"
+				fi
+			else
+				if [[ "${path}" =~ "${pattern}" ]]; then
+					match_line="${line}"
+				fi
+			fi
+
+			if [[ -n "${match_line}" ]]; then
+				if [[ -n "${commit_line}" ]]; then
+					echo "${commit_line}";
+				fi
+				echo "${match_line}"
+			fi
 		fi
 	done
