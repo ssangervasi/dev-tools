@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+temp_path=$(mktemp)
+last_prefix=$(
+	git log -n1 --pretty=format:'%s' |
+		sed 's/:.*//'
+)
+cat <<-MSG > "${temp_path}"
+	# <code area> <subarea>: summary line no longer than 69 chars or -> |
+	${last_prefix}: 
+	
+MSG
+
+git commit --template="${temp_path}"
