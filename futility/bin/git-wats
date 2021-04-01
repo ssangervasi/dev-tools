@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-ref_start="${1:-master}"
-ref_end="${2:-HEAD}"
+refs=($(git seq "$@"))
+ref_start="${refs[0]}"
+ref_end="${refs[1]}"
 echo "File changes in "${ref_start}.."${ref_end}"
 for ref in $(git log --pretty='format:%h' "${ref_start}..${ref_end}"); do
 	echo

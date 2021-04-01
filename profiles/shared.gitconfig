@@ -45,6 +45,7 @@
     ri = rebase --interactive
     rc = rebase --continue
     ra = rebase --abort
+    re = rebase --edit-todo
     # Rebase the "wat" stuff
     rat = !git ri $(git junction $@)
 
@@ -71,10 +72,10 @@
     # Diffing
     root-dir=rev-parse --show-toplevel
     dic = diff --cached
-    junction = !git merge-base ${1:-master} ${2:-HEAD}
-    wat = !git diff --name-status $(git junction $@)
+    junction = !"f() { git merge-base ${1:-master} ${2:-HEAD}; }; f"
+    wat = !"f() { git diff --name-status $(git seq $@); }; f"
     wut = !git diff ${1:-HEAD}
-    stat = !git diff --stat $(git junction $@)
+    stat = !!"f() { git diff --stat $(git junction $@) ${2:-HEAD}; }; f"
 
     # Pushing
     pf = push --force-with-lease

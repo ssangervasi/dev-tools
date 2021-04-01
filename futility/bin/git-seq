@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+ref_start=""
+ref_end=""
+
+if [[ -n "$1"  && -n "$2" ]]; then
+	ref_start="$1"
+	ref_end="$2"
+elif [[ -n "$1" ]]; then
+	ref_end="$1"
+else
+	ref_end="HEAD"
+fi
+
+if [[ -z "${ref_start}" ]]; then
+	ref_start=$(git merge-base master "${ref_end}")
+fi
+
+echo "${ref_start}" "${ref_end}"
