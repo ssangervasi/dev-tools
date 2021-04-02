@@ -165,6 +165,57 @@
       ]
     },
     {
+      "description": "Disable Terminal Cmd+Left window swap",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "left_arrow",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": []
+            }
+          },
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$"
+              ]
+            }
+          ],
+          "to": []
+        }
+      ]
+    },{
+      "description": "Disable Terminal Cmd+Right window swap",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "right_arrow",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": []
+            }
+          },
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$"
+              ]
+            }
+          ],
+          "to": []
+        }
+      ]
+    },
+    {
       "description": "Log date",
       "manipulators": [
         {
