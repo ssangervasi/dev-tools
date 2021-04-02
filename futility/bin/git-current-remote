@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+r_c=($(
+	git branch --format='%(if)%(upstream)%(then)%(upstream:nobracket) %(refname:short)%(end)' |
+	grep $(git current)
+))
+echo "${r_c[0]}"
