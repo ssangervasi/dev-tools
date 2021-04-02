@@ -61,7 +61,7 @@
     lg = log --all --graph --abbrev-commit \
         --date=relative \
         --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
-    summarize = log --pretty='format:%B' --reverse
+    summarize = !"f() { git log --pretty='format:%B' --reverse $(git seq $@); }; f"
     lc = log -n1 --pretty=format:'%h'
 
     # All... through the day...
@@ -75,7 +75,7 @@
     junction = !"f() { git merge-base ${1:-master} ${2:-HEAD}; }; f"
     wat = !"f() { git diff --name-status $(git seq $@); }; f"
     wut = !git diff ${1:-HEAD}
-    stat = !!"f() { git diff --stat $(git junction $@) ${2:-HEAD}; }; f"
+    stat = !!"f() { git diff --stat $(git seq $@); }; f"
 
     # Pushing
     pf = push --force-with-lease

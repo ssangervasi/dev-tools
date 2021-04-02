@@ -15,4 +15,4 @@ if [[ -z "${ref_start}" ]]; then
 	ref_start=$(git merge-base master "${ref_end}")
 fi
 
-echo "${ref_start}" "${ref_end}"
+echo "${ref_start}..${ref_end}"
