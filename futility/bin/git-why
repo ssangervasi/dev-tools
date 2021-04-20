@@ -8,14 +8,22 @@
 cd $(git root-dir)
 
 is_grep="false"
-if [[ "$1" == "-g" ]]; then
-	is_grep="true"
-	shift
-fi
+is_short="false"
 
-pattern="${1}"
-ref_start="${2}"
-ref_end="${3}"
+args=()
+for arg in "$@"; do
+	if [[ "${arg}" == "-g" ]]; then
+		is_grep="true"
+	elif [[ "${arg}" == "-s" ]]; then
+		is_short="true"
+	else
+		args+=("${arg}")
+	fi
+done
+
+pattern="${args[0]}"
+ref_start="${args[1]}"
+ref_end="${args[2]}"
 commit="${ref_start:-HEAD}"
 
 git wats "${ref_start}" "${ref_end}" |
@@ -35,16 +43,21 @@ git wats "${ref_start}" "${ref_end}" |
 					match_line="${line}"
 				fi
 			else
-				if [[ "${path}" =~ "${pattern}" ]]; then
+				if [[ "${path}" =~ ${pattern} ]]; then
 					match_line="${line}"
 				fi
 			fi
 
 			if [[ -n "${match_line}" ]]; then
-				if [[ -n "${commit_line}" ]]; then
-					echo "${commit_line}";
+				if [[ "${is_short}" == "true" ]]; then
+					echo "${commit}"
+					break
+				else
+					if [[ -n "${commit_line}" ]]; then
+						echo "${commit_line}";
+					fi
+					echo "${match_line}"
 				fi
-				echo "${match_line}"
 			fi
 		fi
 	done

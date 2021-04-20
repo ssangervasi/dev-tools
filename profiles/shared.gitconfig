@@ -38,8 +38,8 @@
     ap = add --patch
 
     # Committing
-    fix = commit --squash HEAD
     amen = commit --amend --no-edit
+    fix = !git commit --fixup
     
     # Rebasing
     ri = rebase --interactive

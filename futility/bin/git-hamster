@@ -7,4 +7,8 @@ elif git hab "hamster"; then
 	git co "hamster"
 fi
 
-git co "${default_branch}"
+if [[ "$1" == "show" ]]; then
+	echo "${default_branch}"
+else
+	git co "${default_branch}"
+fi
