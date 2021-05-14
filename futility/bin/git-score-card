@@ -1,24 +1,122 @@
 #!/usr/bin/env bash
 
-username=$(git config user.name)
+# username=$(git config user.name)
+username="sangervasi"
 
-pretty_format=$(
-	cat <<-JSON | tr '\n' ' '
-		{
-			"heading": {
-				"hash":"%h",
-				"author": "%an",
-				"date": "%aI",
-				"ref": "%D",
-				"subject": "%s"
+as_json() {
+	pretty_format=$(
+		cat <<-JSON | tr '\n' ' '
+			{
+				"heading": {
+					"hash":"%h",
+					"author": "%an",
+					"date": "%aI",
+					"ref": "%D",
+					"subject": "%s"
+				}
 			}
-		}
-	JSON
-)
+		JSON
+	)
 
-git log \
-	--author="${username}" \
-	--numstat \
-	--pretty="format:${pretty_format}" \
-	--no-merges \
-	"$@"
+	git log \
+		--author="${username}" \
+		--numstat \
+		--pretty="format:${pretty_format}" \
+		--no-merges \
+		"$@"
+}
+
+as_lines() {
+	pretty_format="commit %h %ae %ai"
+
+	git log \
+		--author="${username}" \
+		--shortstat \
+		--pretty="format:${pretty_format}" \
+		--no-merges \
+		"$@"
+}
+
+sum_lines() {
+	echo "insertions, deletions, date"
+
+	ref=""
+	date=""
+	insertions=0
+	deletions=0
+	while read line; do
+		if [[ "$line" =~ ^commit ]]; then
+			line_arr=($line)
+			ref="${line_arr[1]}"
+			date="${line_arr[3]}"
+		elif [[ -n $ref ]]; then
+			insertions=$(( ${insertions} + $(parse_insertions "${line}") ))
+			deletions=$(( ${deletions} + $(parse_deletions "${line}") ))
+
+
+			echo "${insertions}, ${deletions}, ${date}"
+			
+			ref=""
+		fi
+	done
+
+	echo "insertions: ${insertions}"
+	echo "deletions: ${deletions}"
+}
+
+parse_stat() {
+	line="$1"
+	changes=$(sed -E 's/.*([0-9]+) files? changed.*/\1/' <<< "${line}")
+	if [[ "${changes}" == "${line}" ]]; then
+		changes=0
+	fi
+
+	insertions=$(sed -E 's/.*([0-9]+) insertions?.*/\1/' <<< "${line}")
+	if [[ "${insertions}" == "${line}" ]]; then
+		insertions=0
+	fi
+
+	deletions=$(sed -E 's/.*([0-9]+) deletions?.*/\1/' <<< "${line}")
+	if [[ "${deletions}" == "${line}" ]]; then
+		deletions=0
+	fi
+
+	
+	echo "insertions ${insertions}"
+	echo "deletions ${deletions}"
+}
+
+parse_insertions() {
+	insertions=$(sed -E 's/.*[^0-9]([0-9]+) insertions?.*/\1/' <<< "$1")
+	if [[ "${insertions}" == "$1" ]]; then
+		insertions=0
+	fi
+	
+	echo "${insertions}"
+}
+
+parse_deletions() {
+	deletions=$(sed -E 's/.*[^0-9]([0-9]+) deletions?.*/\1/' <<< "$1")
+	if [[ "${deletions}" == "$1" ]]; then
+		deletions=0
+	fi
+
+	
+	echo "${deletions}"
+}
+
+test_parse_stat() {
+	for example in \
+		"gobbledy" \
+		"1 file changed, 53 insertions(+)" \
+		"3 files changed, 77 insertions(+), 56 deletions(-)" \
+	; do
+		echo "Example: ${example}"
+		parse_insertions "${example}"
+		parse_deletions "${example}"
+	done
+}
+
+# test_parse_stat
+
+as_lines "$@" | sum_lines
