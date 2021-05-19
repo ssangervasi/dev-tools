@@ -72,7 +72,7 @@
     # Diffing
     root-dir=rev-parse --show-toplevel
     dic = diff --cached
-    junction = !"f() { git merge-base ${1:-master} ${2:-HEAD}; }; f"
+    junction = !"f() { git merge-base ${1:-$(git hamster show)} ${2:-HEAD}; }; f"
     wat = !"f() { git diff --name-status $(git seq $@); }; f"
     wut = !git diff ${1:-HEAD}
     stat = !!"f() { git diff --stat $(git seq $@); }; f"
