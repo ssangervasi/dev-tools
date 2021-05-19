@@ -132,6 +132,19 @@ exit_project() {
 	echo_error 'Not in a project!'
 }
 
+.cd() {
+	dest="$1"
+	if [[ -n "${dest}" ]]; then
+		export MERCATOR_PWD="${dest}"
+	fi
+
+	cd "$MERCATOR_PWD" 
+}
+
+.help() {
+	project_default_help
+}
+
 project_default_help() {
 	cat <<-HELP_TEXT
 		Project ${MERCATOR_PROJECT_NAME}
