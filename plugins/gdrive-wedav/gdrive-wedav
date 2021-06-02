@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+source ~/.config/google/drive/credentials.sh
+# CLIENT_ID=""
+# CLIENT_SECRET=""
+
+sudo docker run -ti --rm \
+	-p 8765:8765 \
+	skippa/gdrive-webdav \
+	--client-id="$CLIENT_ID" \
+	--client-secret="$CLIENT_SECRET"

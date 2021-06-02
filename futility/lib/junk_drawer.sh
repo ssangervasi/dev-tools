@@ -11,6 +11,8 @@ n_n ()
 	args_and_or_stdin $@ | sed s/_//g
 }
 
+ts() { date +%s; }
+
 tree_find() {
 	local dir="$1"
 	local pattern="$2"
