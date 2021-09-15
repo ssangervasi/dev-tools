@@ -5,7 +5,7 @@
 cls() {
 	clear
 	summary "$@"
-	gits
+	git s
 }
 
 summary() {

@@ -6,24 +6,16 @@
 ##
 
 register_project '{{ name }}'
-.{{ name }}() { enter_project '{{ name }}'; }
-
 init_project_{{ name }}() {
 	prefix_prompt '{{ icon }} '
+	.cd '{{ directory }}'
 
-	MERCATOR_PWD='{{ directory }}'
-	.cd() {
-		cd "$MERCATOR_PWD"
-	}
-	.cd
+	# Additional init:
 
-	.help() {
-		project_default_help
-	}
 
+	# Cleanup:
 	exit_project_{{ name }} () {
 		echo "Exiting project {{ name }}..."
 	}
-
 	echo "Entered {{ name }}."
 }
