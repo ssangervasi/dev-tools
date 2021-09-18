@@ -172,6 +172,12 @@ nvm() {
 }
 
 nvm_lazy() {
+	if which nvm; then
+		unset nvm
+		echo_info "NVM is hashed: $(nvm version)"
+		return 0
+	fi
+
 	if [[ -n $NVM_DIR ]]; then
 		echo_info "Uh, $NVM_DIR is already set. I think we're done here."
 		stacktrace
