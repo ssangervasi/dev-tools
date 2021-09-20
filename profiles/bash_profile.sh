@@ -34,7 +34,9 @@ _init() {
 
 os_msys() { :; }
 
-os_linux() { :; }
+os_linux() { 
+	alias clear='clear -x'
+}
 
 os_wsl() {
 	DEV_TOOLS_SUBLIME_PLUGIN="$DEV_TOOLS_ROOT/plugins/sublime/wsl/plugin.sh"
