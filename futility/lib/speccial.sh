@@ -293,23 +293,28 @@ load_python_speccial_plugin() {
 	}
 }
 
-load_jest_speccial_plugin() {
+load_yarn_jest_speccial_plugin() {
 	run_spec_command() {
-		opts=()
-		patterns=()
-		for arg in "$@"; do
-			# Jest doesn't like having "--opts" passed after test paths,
-			# so sort them out.
-			if [[ "${arg}" =~ ^- ]]; then
-				opts+=("${arg}")
-			else
-				# Jest accepts regex, but it needs this to be fuzzier. Also, if
-				# none of that patterns match it runs the whole test suite which
-				# feels like some kind of sick joke.
-				patterns+=(".*${arg}.*")
-			fi
-		done
-
-		yarn run jest "${opts[@]}" "${patterns[@]}"
+		format_jest_args "$@"
+		yarn run jest "${JEST_ARGS[@]}"
 	}
+}
+
+format_jest_args() {
+	opts=()
+	patterns=()
+	for arg in "$@"; do
+		# Jest doesn't like having "--opts" passed after test paths,
+		# so sort them out.
+		if [[ "${arg}" =~ ^- ]]; then
+			opts+=("${arg}")
+		else
+			# Jest accepts regex, but it needs this to be fuzzier. Also, if
+			# none of that patterns match it runs the whole test suite which
+			# feels like some kind of sick joke.
+			patterns+=(".*${arg}.*")
+		fi
+	done
+
+	JEST_ARGS=(${opts[@]} ${patterns[@]})
 }

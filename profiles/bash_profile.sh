@@ -71,10 +71,10 @@ os_darwin() {
 	## For bash >= 4
 
 	brew_bash_completion() {
-		export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
-
 		if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
 			source "/usr/local/etc/profile.d/bash_completion.sh"
+		elif [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]]; then
+			source "/opt/homebrew/etc/profile.d/bash_completion.sh"
 		else
 			echo_error 'Homebrew bash completions do not exist!'
 			echo_error 'Homebrew suggests running: brew install bash-completion'

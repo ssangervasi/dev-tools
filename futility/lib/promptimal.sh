@@ -48,6 +48,8 @@ _timer_prompt() {
 }
 
 _dynamic_prompt() {
+	history -a
+	
 	local min_info_width=70
 	local columns=$(default ${COLUMNS} ${min_info_width})
 	# Wow math comparisons are ugly.

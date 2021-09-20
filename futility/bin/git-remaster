@@ -13,12 +13,14 @@ if [[ -n "${original_status}" ]]; then
     || exit 1
 fi
 
-echo_info 'Pulling master'
-git checkout master &&
-  git pull origin master &&
-  echo_info "Rebasing ${original_branch} onto master" &&
+master="$(git hamster show)"
+echo_info "Pulling hamster: ${master}"
+
+git checkout "${master}" &&
+  git pull origin "${master}" &&
+  echo_info "Rebasing ${original_branch} onto ${master}" &&
   git checkout "${original_branch}" &&
-  git rebase master
+  git rebase "${master}"
 
 if [[ $? != 0 ]]; then
   echo_error 'Remaster failed!'

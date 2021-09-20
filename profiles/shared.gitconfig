@@ -1,5 +1,10 @@
-# [core]
-#     excludesFile = ./shared.gitignore
+
+## Example:
+# [include]
+#     path = ~/dev_home/dev-tools/profiles/shared.gitconfig
+
+[core]
+    excludesFile = ~/dev_home/dev-tools/profiles/shared.gitignore
 
 [user]
     name = Sebastian Sangervasi
@@ -75,7 +80,7 @@
     junction = !"f() { git merge-base ${1:-$(git hamster show)} ${2:-HEAD}; }; f"
     wat = !"f() { git diff --name-status $(git seq $@); }; f"
     wut = !git diff ${1:-HEAD}
-    stat = !!"f() { git diff --stat $(git seq $@); }; f"
+    stat = !"f() { git diff --stat $(git seq $@); }; f"
 
     # Pushing
     pf = push --force-with-lease

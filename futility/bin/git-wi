@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+##
+# git-wats with the option to diff each file.
+##
+
+source futility
+
+cd $(git root-dir)
+
+args=()
+for arg in "$@"; do
+	if false; then
+		:
+	else
+		args+=("${arg}")
+	fi
+done
+
+ref_start="${args[1]}"
+ref_end="${args[2]}"
+commit="${ref_start:-HEAD}"
+
+# git wats "${ref_start}" "${ref_end}" >&3
+echo "horse" >&4
+
+while read -u 4 line; do
+	line_arr=(${line})
+	prefix="${line_arr[0]}"
+	path="${line_arr[1]}"
+
+	if [[ "${prefix}" =~ ^[a-zA-Z0-9]{40} ]]; then
+		commit="${prefix}"
+		commit_line="${line}"
+		echo commit
+	elif [[ -n "${commit}" && -n "${path}" ]]; then
+		echo "${line}"
+	fi
+done

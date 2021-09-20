@@ -14,14 +14,19 @@ _init() {
 	source "$DEV_TOOLS_ROOT/futility/package.sh"
 	source "$DEV_TOOLS_ROOT/profiles/aliases.sh"
 
+
 	if [[ -z $DEV_HOME ]]; then
-		echo_error 'Error: DEV_HOME is not set!'
-		return ${YA_DUN_GOOFED}
-	elif [[ ! -d $DEV_HOME ]]; then
-		echo_error 'Error: DEV_HOME does not exist!'
+		export DEV_HOME=~/dev_home
+	fi
+
+	if [[ ! -d $DEV_HOME ]]; then
+		echo_error 'Error: DEV_HOME does not exist! Expected: '"$DEV_HOME"
 		return ${YA_DUN_GOOFED}
 	fi
 
+	if [[ -z $WORKSPACE ]]; then
+		export WORKSPACE=~/workspace
+	fi
 
 
 	##

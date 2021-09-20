@@ -183,6 +183,7 @@ nvm_lazy() {
 		stacktrace
 		return 0
 	fi
+	# Don't use homebrew.
 	export NVM_DIR="$HOME/.nvm"
 	unset nvm
 

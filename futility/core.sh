@@ -21,7 +21,7 @@ echo_error() {
 
 echo_info() {
 	local echo_prefix=${ECHO_PREFIX:-'♾  '}
-	echo "${COLOR_YELLOW}${echo_prefix}$@${COLOR_NC}" #1>&2
+	echo "${COLOR_YELLOW}${echo_prefix}$@${COLOR_NC}" 1>&2
 	return 0
 }
 

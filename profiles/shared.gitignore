@@ -2,3 +2,8 @@
 .localized
 **/.localized
 **/.ssangervasi_tmp/**
+**/.sstmp/**
+*.horse
+**/DerivedData/**
+**/DerivedData
+**/e2e/output

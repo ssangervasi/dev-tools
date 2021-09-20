@@ -3,8 +3,10 @@
 default_branch="master"
 if git hab "main"; then
 	default_branch="main"
+elif git hab "staging"; then
+	default_branch="staging"
 elif git hab "hamster"; then
-	git co "hamster"
+	default_branch="main"
 fi
 
 if [[ "$1" == "show" ]]; then

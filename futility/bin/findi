@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+source futility
+
+main() {
+	do_find "$@" |
+		while read found; do
+			echo "Found: ${found}"
+			bat "${found}"
+		done
+}
+
+do_find() {
+	argcount="${#@}"
+	args=()
+	if [[ $argcount == 0 ]]; then
+		echo_error "Need args"
+		return $YA_DUN_GOOFED
+	elif [[ $argcount == 1 ]]; then
+		args=(. -name "*$1*")
+	elif [[ $argcount == 2 ]]; then
+		args=("$1" -name "*$2*")
+	else
+		args=("$@")
+	fi
+
+	echo_info find "${args[@]}"
+	echo_info find "${args[@]}"
+	find "${args[@]}"
+}
+
+main "$@"
