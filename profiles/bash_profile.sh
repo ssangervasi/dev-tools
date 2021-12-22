@@ -32,7 +32,9 @@ _init() {
 	source "$DEV_TOOLS_ROOT/plugins/bat/bat_options.sh"
 }
 
-os_msys() { :; }
+os_msys() { 
+	export TREE_DEFAULT_OPTIONS='--dirsfirst';
+}
 
 os_linux() { 
 	alias clear='clear -x'
