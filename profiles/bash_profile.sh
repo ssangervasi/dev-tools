@@ -75,7 +75,9 @@ os_darwin() {
 	## For bash >= 4
 
 	brew_bash_completion() {
-		if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+		if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+			source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+		elif [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
 			source "/usr/local/etc/profile.d/bash_completion.sh"
 		elif [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]]; then
 			source "/opt/homebrew/etc/profile.d/bash_completion.sh"
