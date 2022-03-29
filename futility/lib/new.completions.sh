@@ -2,15 +2,27 @@ complete -o bashdefault -F _complete_new new
 
 _complete_new() {
 	local current_word="${COMP_WORDS[$COMP_CWORD]}"
+	local previous_word="${COMP_WORDS[$COMP_CWORD - 1]}"
 
-	if (( "$COMP_CWORD" > 1 )); then
+	# echo_error "pw ${previous_word}"
+
+	if (( "$COMP_CWORD" <= 1 )); then
 		COMPREPLY=(
-			$(compgen -o default "${current_word}")
+			$(printf '%s\n' "$(_command_names)" | grep -E "${current_word}")
 		)
 		return
 	fi
+	
+	if [[ "${previous_word}" == "branch" ]]; then
+		COMPREPLY=(
+			ssangervasi/
+			ssangervasi/ticket/description
+		)
+		return
+	fi
+
 	COMPREPLY=(
-		$(printf '%s\n' "$(_command_names)" | grep -E "${current_word}")
+		$(compgen -o default "${current_word}")
 	)
 }
 

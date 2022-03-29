@@ -118,6 +118,7 @@
 [core]
 	preloadIndex = true
 	untrackedCache = true
+    autocrlf = true
 
 [fetch]
 	negotiationAlgorithm = skipping
