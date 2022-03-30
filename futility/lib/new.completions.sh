@@ -34,5 +34,6 @@ _command_names() {
 		dirs
 		file
 		branch
+		ticket
 	COMMAND_NAMES
 }

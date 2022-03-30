@@ -1,37 +1,26 @@
 #!/usr/bin/env bash
 
-directory() {
+_directory() {
 	mkdir "$1"
 }
-dir() { directory "$@"; }
+_dir() { directory "$@"; }
 
-directories() {
+_directories() {
 	mkdir -p "$@"
 }
-dirs() { directories "$@"; }
+_dirs() { directories "$@"; }
 
-file() {
+_file() {
 	touch "$1"
 	"$EDITOR" "$1"
 }
 
-branch() {
+_branch() {
 	git checkout -b "$1"
 }
 
-TICKETS_HOME="${TICKETS_HOME:-$HOME/tickets}"
-ticket() {
-	ticket_name="$1"
-
-	pushd "$TICKETS_HOME" || return
-	mkdir "${ticket_name}"
-	pushd ./"${ticket_name}" || return
-	TICKET_HOME="$PWD"
-
-	touch ./notes.md
-	mkdir screenshots
-
-	echo "$TICKET_HOME"
+_ticket() {
+	env ticket new "$1"
 }
 
 _help() {
@@ -45,4 +34,8 @@ _help() {
 	HELP_TEXT
 }
 
-"${@:-_help}"
+cmd="$1"
+shift
+
+"_${cmd:-help}" "$@"
+
