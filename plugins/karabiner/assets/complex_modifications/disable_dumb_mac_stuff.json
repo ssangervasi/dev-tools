@@ -1,6 +1,24 @@
 {
-  "title": "Disable Command+M minimize",
+  "title": "Disable Dumb Mac Stuff",
   "rules": [
+    {
+        "description": "Disable Command+Shift+I email",
+        "manipulators": [
+            {
+                "from": {
+                    "key_code": "i",
+                    "modifiers": {
+                        "mandatory": [
+                            "command",
+                            "shift"
+                        ],
+                        "optional": []
+                    }
+                },
+                "type": "basic"
+            }
+        ]
+    },
     {
       "description": "Disable Command+M minimize",
       "manipulators": [

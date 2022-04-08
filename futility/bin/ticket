@@ -27,6 +27,13 @@ _dir() {
 	echo "$TICKETS_HOME"/$(_latest)
 }
 
+_notes() {
+	cd $(_dir)
+	"$EDITOR" ./notes.md
+}
+
+
+
 _help() {
 	cat <<-HELP_TEXT
 		ticket

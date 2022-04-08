@@ -33,7 +33,7 @@ list() {
 	# - Exclude master and the currently checked out branch
 	# - Remove leading whitespace
 	git branch --list --sort -committerdate --format '%(HEAD)%(refname)' |
-	  grep -v master |
+	  grep -v $(git hamster show) |
 	  grep -v "*" |
 	  sed "s!refs/heads/!!" |
 	  sed "s!^[[:space:]]*!!"
