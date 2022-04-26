@@ -86,32 +86,58 @@ respec() {
 }
 
 
-_complete_spec_history() {
-	local current_word="${COMP_WORDS[$COMP_CWORD]}"
-	local match_array=($(spec_history 10 2>/dev/null | grep -E "${current_word}"))
-	# local history_array=($(spec_history 10 2>/dev/null))
-	# local match_array=($(compgen -W "${history_array[*]}" "${current_word}"))
+# _complete_spec_history() {
+# 	local full_line="${COMP_LINE/spec?/}"
+# 	local match_array=($(spec_history 10 2>/dev/null | grep -E "${full_line}"))
+	# --
+# 	local current_word="${COMP_WORDS[$COMP_CWORD]}"
+# 	local match_array=($(spec_history 10 2>/dev/null | grep -E "${current_word}"))
+# 	# local history_array=($(spec_history 10 2>/dev/null))
+# 	# local match_array=($(compgen -W "${history_array[*]}" "${current_word}"))
 
-	if (( ${#match_array[@]} > 0 )); then
-		COMPREPLY=(${match_array[@]})
-	else
-		COMPREPLY=(
-			$(compgen -o default "${current_word}")
-		)
-	fi
+# 	if (( ${#match_array[@]} > 0 )); then
+# 		COMPREPLY=(${match_array[@]})
+# 	else
+# 		COMPREPLY=(
+# 			$(compgen -o default "${current_word}")
+# 		)
+# 	fi
 
-	# FUTILITY_LOG_LEVEL='debug'
-	# futility_log "history_array"
-	# futility_log "${#history_array[@]} | ${history_array[@]}"
-	# futility_log "Match array"
-	# futility_log "${#match_array[@]} | ${match_array[@]}"
-	# futility_log "COMPREPLY"
-	# futility_log "${COMPREPLY[@]}"
-	# futility_log "current_word"
-	# futility_log "${current_word}"
-}
+# 	# FUTILITY_LOG_LEVEL='debug'
+# 	# futility_log "history_array"
+# 	# futility_log "${#history_array[@]} | ${history_array[@]}"
+# 	# futility_log "Match array"
+# 	# futility_log "${#match_array[@]} | ${match_array[@]}"
+# 	# futility_log "COMPREPLY"
+# 	# futility_log "${COMPREPLY[@]}"
+# 	# futility_log "current_word"
+# 	# futility_log "${current_word}"
+# }
+# complete -o bashdefault -F _complete_spec_history spec
 
-complete -o bashdefault -F _complete_spec_history spec
+# _complete_respec() {
+# 	local full_line="${COMP_LINE/respec?/}"
+# 	local digis=$(sed -E 's/^([0-9]+):.*|.*/\1/' <<< "${full_line}")
+# 	local argies=$(sed -E 's/^([0-9]+):(.*)|.*/\2/' <<< "${full_line}")
+ 
+#  	# echo_info "full_line: ${full_line}"
+#  	# echo_info "digis: ${digis}"
+#  	# echo_info "argies: ${argies}"
+# 	if [[ -n "${digis}" && -n "${argies}" ]]; then
+# 		# COMPREPLY=("${argies}")
+# 		return
+# 	fi
+
+# 	local matches=$(spec_history all 2>/dev/null | grep -E "${full_line}")
+# 	# COMPREPLY=(${match_array[@]})
+
+# 	IFS=$'\n'
+# 	for line in ${matches}; do
+# 		COMPREPLY+=("${line}")
+# 	done
+
+# }
+# complete -F _complete_respec respec
 
 echo_paths() {
 	echo 'Found these paths:'
