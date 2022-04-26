@@ -79,7 +79,7 @@
     dic = diff --cached
     junction = !"f() { git merge-base ${1:-$(git hamster show)} ${2:-HEAD}; }; f"
     wat = !"f() { git diff --name-status $(git seq $@); }; f"
-    wut = !git diff ${1:-HEAD}
+    wut = !"f() { git diff ${1:-HEAD}^..${1:-HEAD}; }; f"
     stat = !"f() { git diff --stat $(git seq $@); }; f"
 
     # Pushing
