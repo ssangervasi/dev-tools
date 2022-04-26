@@ -8,18 +8,38 @@
 cd $(git root-dir)
 
 is_grep="false"
-is_short="false"
+is_commit_only="false"
+is_help="false"
 
 args=()
 for arg in "$@"; do
 	if [[ "${arg}" == "-g" ]]; then
 		is_grep="true"
-	elif [[ "${arg}" == "-s" ]]; then
-		is_short="true"
+	elif [[ "${arg}" == "-c" ]]; then
+		is_commit_only="true"
+	elif [[ "${arg}" == "--help" || "${arg}" == "-h"  ]]; then
+		is_help="true"
 	else
 		args+=("${arg}")
 	fi
 done
+
+if [[ "${is_help}" == "true" ]]; then
+	cat <<HELP
+usage: git why [options] <pattern> [<ref_start>] [<ref_end>]
+where:
+	<pattern>	File path regex. Tested against modified files in range.
+	<ref_*>		Range of commits. Defaults based on git-seq.
+options:	
+	-g	Grep <pattern> against the diffs of modified files instead of file paths.
+	-c	Only print hashes of commits that matched.
+	-h	Print this help.
+
+HELP
+
+	exit
+fi
+
 
 pattern="${args[0]}"
 ref_start="${args[1]}"
@@ -49,7 +69,7 @@ git wats "${ref_start}" "${ref_end}" |
 			fi
 
 			if [[ -n "${match_line}" ]]; then
-				if [[ "${is_short}" == "true" ]]; then
+				if [[ "${is_commit_only}" == "true" ]]; then
 					echo "${commit}"
 					break
 				else
