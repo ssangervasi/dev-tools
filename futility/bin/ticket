@@ -1,26 +1,47 @@
 #!/usr/bin/env bash
 
 TICKETS_HOME="${TICKETS_HOME:-$HOME/tickets}"
+TICKETS_HIST="ticket.hist"
 
 _new() {
 	ticket_name="$1"
+	description="${@:2}"
 
-	pushd "$TICKETS_HOME" || return
-	echo "$ticket_name" > ticket.hist
+	if [[ -z "$ticket_name" ]]; then
+		__error "Need ticket name"
+	fi
 
-	mkdir "${ticket_name}"
-	pushd ./"${ticket_name}" || return
+	cd "$TICKETS_HOME" || __error "No dir $TICKETS_HOME"
+	echo "$ticket_name" >> "$TICKETS_HIST"
+
+	mkdir -p "${ticket_name}"
+	cd ./"${ticket_name}" || __error "No dir ${ticket_name}"
 	TICKET_HOME="$PWD"
 
-	touch ./notes.md
-	mkdir screenshots
+	cat <<-NOTES >> ./notes.md
+		# ${ticket_name}
+		${description}
+	NOTES
+	mkdir -p screenshots
 
 	echo "$TICKET_HOME"
 }
 
 _latest() {
-	cd "$TICKETS_HOME" || return
-	cat ./ticket.hist
+	cd "$TICKETS_HOME" || __error "No TICKETS_HOME"
+
+	ticket_name=$(_hist 1)
+	if [[ -z "$ticket_name" ]]; then
+		__error "No latest ticket"
+	fi
+
+	echo "$ticket_name"
+}
+
+_hist() {
+	cd "$TICKETS_HOME" || __error "No TICKETS_HOME"
+
+	tail -n "${1:-1}" "$TICKETS_HIST"
 }
 
 _dir() {
@@ -28,17 +49,39 @@ _dir() {
 }
 
 _notes() {
-	cd $(_dir)
-	"$EDITOR" ./notes.md
+	echo "$(_dir)/notes.md"
 }
 
+_desc() {
+	sed -n "2,2p" < "$(_notes)"
+}
 
+_branch() {
+	echo "ssangervasi/$(_latest)/$(
+		_desc |
+		sed -E 's/[^[:alpha:][:digit:]]+/-/g' |
+		tr '[:upper:]' '[:lower:]'
+	)"
+}
 
 _help() {
-	cat <<-HELP_TEXT
-		ticket
-			new <ticket_or_feature_name>
-	HELP_TEXT
+	cat <<HELP_TEXT
+ticket
+	new <ticket_or_feature_name> [...description]
+	branch
+HELP_TEXT
+}
+
+__error() {
+	echo "$@" >&2
+	exit 1
+}
+
+__commands() {
+	# sed -E -e 's/(a)/\1/' -e 't' -e 'd'
+	declare -F |
+		sed -E 's/declare -f _//' |
+		grep -v '^_'
 }
 
 cmd="$1"
