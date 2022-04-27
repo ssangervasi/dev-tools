@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+import re
+import typing as t
+import pprint
+from argparse import ArgumentParser
+from subprocess import check_output
+
+arg_parser = ArgumentParser()
+arg_parser.add_argument("ref_start", nargs="?", type=str, default="")
+arg_parser.add_argument("ref_end", nargs="?", type=str, default="")
+
+
+def main():
+    arg_parser.parse_args()
+    wats_output = check_output(["git", "wats"], encoding="utf-8")
+    blocks = split_blocks(wats_output)
+    print(f"Working on {len(blocks)} refs")
+    print("---")
+
+    groups = group(blocks)
+    pprint.pprint(groups._asdict(), indent=2, compact=False)
+
+
+BLANK_LINE_RE = re.compile(r"^$", flags=re.MULTILINE)
+
+
+def split_blocks(wats_output: str):
+    splitted = BLANK_LINE_RE.split(wats_output)
+    return [
+        block
+        for block in splitted
+        if len(block) and not block.startswith("File changes")
+    ]
+
+
+COMMIT_RE = re.compile(r"^(?P<ref>\w{8,40})\s+(?P<message>.+)$", flags=re.MULTILINE)
+EDIT_RE = re.compile(r"^(?P<status>\w{1,2})\s+(?P<path>.+)$", flags=re.MULTILINE)
+
+
+class Sqord(t.NamedTuple):
+    class Commit(t.NamedTuple):
+        ref: str
+        message: str
+
+    class Edit(t.NamedTuple):
+        path: str
+        status: str
+
+    @classmethod
+    def empty(cls):
+        return cls({}, {})
+
+    commit_to_edits: t.Dict[Commit, t.List[str]]
+    edit_to_commits: t.Dict[str, t.List[Commit]]
+
+
+def group(blocks):
+    sq = Sqord.empty()
+
+    for block in blocks:
+        c_match = COMMIT_RE.search(block)
+        if not c_match:
+            continue
+
+        ref = c_match.group("ref")
+        message = c_match.group("message")
+        com = Sqord.Commit(ref, message)
+        edits = []
+        sq.commit_to_edits[com] = edits
+
+        for e_match in EDIT_RE.finditer(block):
+            path = e_match.group("path")
+            status = e_match.group("status")
+            edit = Sqord.Edit(path, status)
+            edits.append(edit)
+
+    return sq
+
+
+if __name__ == "__main__":
+    main()
