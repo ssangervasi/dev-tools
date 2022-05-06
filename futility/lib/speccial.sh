@@ -42,6 +42,11 @@ spec_history() {
 
 	if [[ ${range_expr} =~ ^[0-9]+$ ]]; then
 		range_expr="${range_expr}-${range_expr}"
+	elif [[ ${range_expr} =~ ^-[0-9]+$ ]]; then
+		local delta="${range_expr:1}"
+		local last=$(spec_history last | sed -E 's/^([0-9]+):.*$/\1/')
+		local first=$((${last} - ${delta}))
+		range_expr="${first}-${last}"
 	fi
 
 	if [[ ${range_expr} =~ ^[0-9]+-[0-9]+$ ]]; then
@@ -56,6 +61,7 @@ spec_history() {
 		tail -n 1 "${in_path}" > "${out_path}"
 	else
 		echo_error "Invalid history range: '${range_expr}'"
+		return $YA_DUN_GOOFED
 	fi
 
 	if [[ ! -s "${out_path}" ]]; then
@@ -84,6 +90,25 @@ respec() {
 	echo 'Replaying spec:' ${replay_line} $@
 	spec ${replay_line} $@
 }
+
+_complete_spec() {
+	local current_word="${COMP_WORDS[$COMP_CWORD]}"
+	local hist_arr=($(
+		spec_history -10 2>/dev/null |
+			sed -E 's/^[0-9]+:(.*)$/\1/'
+	))
+	local git_arr=($(git diff --name-only))
+
+	COMPREPLY=()
+	for item in "${hist_arr[@]}" "${git_arr[@]}"; do
+		# echo "item [$item]"
+		if [[ "$item" =~ .*${current_word}.* ]]; then
+			COMPREPLY+=("$item")
+		fi
+	done
+}
+complete -o bashdefault -F _complete_spec spec
+
 
 
 # _complete_spec_history() {

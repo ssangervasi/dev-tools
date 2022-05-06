@@ -2,7 +2,6 @@
 
 import re
 import typing as t
-import pprint
 from argparse import ArgumentParser
 from subprocess import check_output
 
@@ -18,8 +17,12 @@ def main():
     print(f"Working on {len(blocks)} refs")
     print("---")
 
-    groups = group(blocks)
-    pprint.pprint(groups._asdict(), indent=2, compact=False)
+    sq = blocks_to_sqord(blocks)
+    for (path, commits) in sq.path_to_commits.items():
+        print(path)
+        for commit in commits:
+            edit = next(e for e in sq.commit_to_edits[commit] if e.path == path)
+            print(f"\t{commit.ref}\t{edit.status}")
 
 
 BLANK_LINE_RE = re.compile(r"^$", flags=re.MULTILINE)
@@ -51,11 +54,11 @@ class Sqord(t.NamedTuple):
     def empty(cls):
         return cls({}, {})
 
-    commit_to_edits: t.Dict[Commit, t.List[str]]
-    edit_to_commits: t.Dict[str, t.List[Commit]]
+    commit_to_edits: t.Dict[Commit, t.List[Edit]]
+    path_to_commits: t.Dict[str, t.List[Commit]]
 
 
-def group(blocks):
+def blocks_to_sqord(blocks):
     sq = Sqord.empty()
 
     for block in blocks:
@@ -66,7 +69,7 @@ def group(blocks):
         ref = c_match.group("ref")
         message = c_match.group("message")
         com = Sqord.Commit(ref, message)
-        edits = []
+        edits: t.List[Sqord.Edit] = []
         sq.commit_to_edits[com] = edits
 
         for e_match in EDIT_RE.finditer(block):
@@ -74,6 +77,10 @@ def group(blocks):
             status = e_match.group("status")
             edit = Sqord.Edit(path, status)
             edits.append(edit)
+
+            commits = sq.path_to_commits.get(path, [])
+            sq.path_to_commits[path] = commits
+            commits.append(com)
 
     return sq
 

@@ -11,6 +11,10 @@ _new() {
 		__error "Need ticket name"
 	fi
 
+	if [[ -z "$description" ]]; then
+		__error "Need description"
+	fi
+
 	cd "$TICKETS_HOME" || __error "No dir $TICKETS_HOME"
 	echo "$ticket_name" >> "$TICKETS_HIST"
 
@@ -62,6 +66,18 @@ _branch() {
 		sed -E 's/[^[:alpha:][:digit:]]+/-/g' |
 		tr '[:upper:]' '[:lower:]'
 	)"
+}
+
+_open() {
+	open $(_dir)
+}
+
+_edit() {
+	edit $(_dir)
+}
+
+_co() {
+	git checkout -b $(_branch)
 }
 
 _help() {
