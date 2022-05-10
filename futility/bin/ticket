@@ -32,8 +32,6 @@ _new() {
 }
 
 _latest() {
-	cd "$TICKETS_HOME" || __error "No TICKETS_HOME"
-
 	ticket_name=$(_hist 1)
 	if [[ -z "$ticket_name" ]]; then
 		__error "No latest ticket"
@@ -43,8 +41,6 @@ _latest() {
 }
 
 _hist() {
-	cd "$TICKETS_HOME" || __error "No TICKETS_HOME"
-
 	tail -n "${1:-1}" "$TICKETS_HIST"
 }
 
@@ -88,6 +84,10 @@ ticket
 HELP_TEXT
 }
 
+__home() {
+	cd "$TICKETS_HOME" || __error "No TICKETS_HOME"
+}
+
 __error() {
 	echo "$@" >&2
 	exit 1
@@ -99,6 +99,8 @@ __commands() {
 		sed -E 's/declare -f _//' |
 		grep -v '^_'
 }
+
+__home
 
 cmd="$1"
 shift

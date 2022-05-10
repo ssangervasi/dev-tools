@@ -99,15 +99,18 @@ _complete_spec() {
 	))
 	local git_arr=($(git diff --name-only))
 
+	# echo_info "current_word '$current_word'"
+
 	COMPREPLY=()
 	for item in "${hist_arr[@]}" "${git_arr[@]}"; do
-		# echo "item [$item]"
-		if [[ "$item" =~ .*${current_word}.* ]]; then
+		if [[ $item =~ .*"${current_word}".* ]]; then
+			# echo "item [$item]"
 			COMPREPLY+=("$item")
 		fi
 	done
 }
-complete -o bashdefault -F _complete_spec spec
+# complete -o bashdefault -F _complete_spec spec
+complete -o nospace -F _complete_spec spec
 
 
 
