@@ -7,8 +7,12 @@ TICKETS_HIST="ticket.hist"
 # Actions
 
 _new() {
-	ticket_name="${ARGS[1]}"
-	description="${ARGS:2}"
+	ticket_name="${ARGS[0]}"
+	description="${ARGS[@]:1}"
+
+	# echo "ticket_name '$ticket_name'"
+	# echo "description '$description'"
+	# __error
 
 	if [[ -z "$ticket_name" ]]; then
 		__error "Need ticket name"
