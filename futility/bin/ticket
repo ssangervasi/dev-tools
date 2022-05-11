@@ -3,9 +3,12 @@
 TICKETS_HOME="${TICKETS_HOME:-$HOME/tickets}"
 TICKETS_HIST="ticket.hist"
 
+##
+# Actions
+
 _new() {
-	ticket_name="$1"
-	description="${@:2}"
+	ticket_name="${ARGS[1]}"
+	description="${ARGS:2}"
 
 	if [[ -z "$ticket_name" ]]; then
 		__error "Need ticket name"
@@ -20,7 +23,7 @@ _new() {
 
 	mkdir -p "${ticket_name}"
 	cd ./"${ticket_name}" || __error "No dir ${ticket_name}"
-	TICKET_HOME="$PWD"
+	ticket_dir="$PWD"
 
 	cat <<-NOTES >> ./notes.md
 		# ${ticket_name}
@@ -28,40 +31,7 @@ _new() {
 	NOTES
 	mkdir -p screenshots
 
-	echo "$TICKET_HOME"
-}
-
-_latest() {
-	ticket_name=$(_hist 1)
-	if [[ -z "$ticket_name" ]]; then
-		__error "No latest ticket"
-	fi
-
-	echo "$ticket_name"
-}
-
-_hist() {
-	tail -n "${1:-1}" "$TICKETS_HIST"
-}
-
-_dir() {
-	echo "$TICKETS_HOME"/$(_latest)
-}
-
-_notes() {
-	echo "$(_dir)/notes.md"
-}
-
-_desc() {
-	sed -n "2,2p" < "$(_notes)"
-}
-
-_branch() {
-	echo "ssangervasi/$(_latest)/$(
-		_desc |
-		sed -E 's/[^[:alpha:][:digit:]]+/-/g' |
-		tr '[:upper:]' '[:lower:]'
-	)"
+	echo "$ticket_dir"
 }
 
 _open() {
@@ -76,6 +46,46 @@ _co() {
 	git checkout -b $(_branch)
 }
 
+_switch() {
+	echo "ARGS[0] '${ARGS[0]}'"
+}
+
+##
+# Info
+
+_latest() {
+	ticket_name=$(_hist 1)
+	if [[ -z "$ticket_name" ]]; then
+		__error "No latest ticket"
+	fi
+
+	echo "$ticket_name"
+}
+
+_hist() {
+	tail -n "${1:-1}" "$TICKETS_HOME"/"$TICKETS_HIST"
+}
+
+_dir() {
+	echo "$TICKETS_HOME"/"${OPTS[ticket]}"
+}
+
+_notes() {
+	echo "$(_dir)/notes.md"
+}
+
+_desc() {
+	sed -n "2,2p" < "$(_notes)"
+}
+
+_branch() {
+	echo "ssangervasi/${OPTS[ticket]}/$(
+		_desc |
+		sed -E 's/[^[:alpha:][:digit:]]+/-/g' |
+		tr '[:upper:]' '[:lower:]'
+	)"
+}
+
 _help() {
 	cat <<HELP_TEXT
 ticket
@@ -84,8 +94,44 @@ ticket
 HELP_TEXT
 }
 
-__home() {
-	cd "$TICKETS_HOME" || __error "No TICKETS_HOME"
+##
+# Internal
+
+__ensure_home() {
+	[[ -d  "$TICKETS_HOME" ]] || __error "No TICKETS_HOME"
+}
+
+__opts() {
+	declare -g -a ARGS
+	declare -g -A OPTS
+
+	OPTS[ticket]=$(_latest)
+
+	local opt=""
+	local arg
+
+	for arg in "$@"; do
+		if [[ -z "${opt}" ]]; then
+			if [[ "${arg}" =~ -t|--ticket ]]; then
+				opt="ticket"
+			fi
+
+			if [[ -z "${opt}" ]]; then
+				ARGS+=("${arg}")
+			fi
+		else
+			if [[ "${opt}" == ticket ]]; then
+				OPTS[ticket]="${arg}"
+			fi
+			opt=""
+		fi
+	done
+
+	# echo "ARGS ${ARGS[@]}"
+	# echo "     ${!ARGS[@]}"
+	# echo "OPTS ${OPTS[@]}"
+	# echo "     ${!OPTS[@]}"
+	# echo "----	"
 }
 
 __error() {
@@ -100,9 +146,12 @@ __commands() {
 		grep -v '^_'
 }
 
-__home
+##
 
 cmd="$1"
 shift
+
+__ensure_home
+__opts "$@"
 
 "_${cmd:-help}" "$@"
