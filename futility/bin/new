@@ -20,7 +20,7 @@ _branch() {
 }
 
 _ticket() {
-	env ticket new "$1"
+	env ticket new "$@"
 }
 
 _help() {

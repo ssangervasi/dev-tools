@@ -22,12 +22,13 @@ _new() {
 		__error "Need description"
 	fi
 
-	cd "$TICKETS_HOME" || __error "No dir $TICKETS_HOME"
-	echo "$ticket_name" >> "$TICKETS_HIST"
+	mkdir "$TICKETS_HOME"/"${ticket_name}" ||
+		__error "Ticket dir already exists. Try switching to it instead."
 
-	mkdir -p "${ticket_name}"
-	cd ./"${ticket_name}" || __error "No dir ${ticket_name}"
+	cd "$TICKETS_HOME"/"${ticket_name}" || __error "Could not make dir ${ticket_name}"
 	ticket_dir="$PWD"
+
+	echo "$ticket_name" >> "$TICKETS_HOME"/"$TICKETS_HIST"
 
 	cat <<-NOTES >> ./notes.md
 		# ${ticket_name}
@@ -51,7 +52,22 @@ _co() {
 }
 
 _switch() {
-	echo "ARGS[0] '${ARGS[0]}'"
+	local new_entry="${ARGS[0]}"
+	if [[ -z "${new_entry}" ]]; then
+		__error 'Switch to an existing ticket'
+	fi
+
+	local prev_entry=$(_hist 1)
+	if [[ "${new_entry}" == "${prev_entry}" ]]; then
+		__error "Already on ${prev_entry}"
+	fi
+
+	if ! grep -q "^${new_entry}$" "$TICKETS_HOME"/"$TICKETS_HIST"; then
+		__error "${new_entry} not in history"
+	fi
+
+	echo "${new_entry}" >> "$TICKETS_HOME"/"$TICKETS_HIST"
+	_latest
 }
 
 ##
@@ -93,8 +109,10 @@ _branch() {
 _help() {
 	cat <<HELP_TEXT
 ticket
-	new <ticket_or_feature_name> [...description]
+	new <ticket_name> [...description]
 	branch
+	co
+	switch <ticket_name>
 HELP_TEXT
 }
 
@@ -116,7 +134,7 @@ __opts() {
 
 	for arg in "$@"; do
 		if [[ -z "${opt}" ]]; then
-			if [[ "${arg}" =~ -t|--ticket ]]; then
+			if [[ "${arg}" =~ ^(-t|--ticket)$ ]]; then
 				opt="ticket"
 			fi
 
