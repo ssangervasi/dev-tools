@@ -30,6 +30,7 @@ _init() {
 
 	# bat
 	source "$DEV_TOOLS_ROOT/plugins/bat/bat_options.sh"
+	source "$DEV_TOOLS_ROOT/plugins/docker/plugin.sh"
 }
 
 os_msys() { 
