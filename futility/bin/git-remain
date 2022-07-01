@@ -8,22 +8,22 @@ original_status=$(git status --porcelain)
 if [[ -n "${original_status}" ]]; then
   echo_info 'Stashing dirty changes'
   git stash push \
-    -m "remaster on ${original_branch}" \
+    -m "remain on ${original_branch}" \
     --include-untracked \
     || exit 1
 fi
 
-master="$(git hamster show)"
-echo_info "Pulling hamster: ${master}"
+main="$(git hamster show)"
+echo_info "Pulling hamster: ${main}"
 
-git checkout "${master}" &&
-  git pull origin "${master}" &&
-  echo_info "Rebasing ${original_branch} onto ${master}" &&
+git checkout "${main}" &&
+  git pull origin "${main}" &&
+  echo_info "Rebasing ${original_branch} onto ${main}" &&
   git checkout "${original_branch}" &&
-  git rebase "${master}"
+  git rebase "${main}"
 
 if [[ $? != 0 ]]; then
-  echo_error 'Remaster failed!'
+  echo_error 'Remain failed!'
   exit 1
 fi
 

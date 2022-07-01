@@ -53,6 +53,7 @@
     re = rebase --edit-todo
     # Rebase the "wat" stuff
     rat = !git ri $(git junction $@)
+    remaster = remain
 
     # Checkouts
     co = checkout

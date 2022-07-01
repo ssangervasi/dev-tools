@@ -106,6 +106,17 @@ _branch() {
 	)"
 }
 
+_summarize() {
+	cd "$(git root-dir)"
+	if [[ -f '.github/pull_request_template.md' ]]; then
+		echo "## PR Template" >> "$(_notes)"
+		cat '.github/pull_request_template.md' >> "$(_notes)"
+	fi
+
+	echo "## Commit Summary" >> "$(_notes)"
+	git summarize >> "$(_notes)"
+}
+
 _help() {
 	cat <<HELP_TEXT
 ticket
