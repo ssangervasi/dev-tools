@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Remove all "gone" branches
+git stip --pretty=format:"%gD" |
+	cat - <(echo) | tail -r | # Reverse lines with padded newline
+	while read ref; do
+		git stash drop $ref;
+	done

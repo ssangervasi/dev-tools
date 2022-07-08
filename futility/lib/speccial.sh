@@ -253,7 +253,7 @@ run_spec_command() {
 }
 
 select_spec_paths() {
-	grep -E "(^(Test|Spec)|.+(_spec|_test)[.].+)"
+	grep -E "(^(Test|Spec)|.+(_spec|_test)[.].+|.+\.(test|cy)\..+)"
 }
 
 select_lint_paths() {

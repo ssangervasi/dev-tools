@@ -105,6 +105,10 @@
     # Delete a branch and its remote on origin.
     annihilate = !git desecrate "$1" && git murder "$1"
 
+    # Stashes with custom/default messages
+    stem=stash list --grep='WIP on' --invert-grep
+    stip=stash list --grep='WIP on' 
+
     # GitHub `hub` command
     cmp = !hub compare
 

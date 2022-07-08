@@ -135,7 +135,8 @@ exit_project() {
 .cd() {
 	dest="$1"
 	if [[ -n "${dest}" ]]; then
-		export MERCATOR_PWD="${dest}"
+		cd "${dest}" || return 1
+		export MERCATOR_PWD="$PWD"
 	fi
 
 	cd "$MERCATOR_PWD" 
