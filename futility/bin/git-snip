@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+
+snip() {
+	path="$1"
+	if [[ ! -f "${path}" ]]; then
+		exit_error "First argument must be a file path"
+	fi
+
+	git log -n1 --pretty='format:%h' "${path}"
+}
+
+exit_error() {
+	echo "$@" 1>&2
+	exit 1
+}
+
+
+snip "$@"

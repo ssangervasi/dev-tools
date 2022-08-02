@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
-git commit -F - <<<"$@"
+extra_args=()
+if [[ "$1" == 'n' || "$1" == '-n' ]]; then
+	echo "no-verify"
+	shift
+	extra_args+=('-n')
+fi
+
+git commit ${extra_args[@]} -F - <<<"$@"

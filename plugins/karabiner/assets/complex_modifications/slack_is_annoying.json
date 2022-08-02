@@ -1,0 +1,32 @@
+{
+  "title": "Slack is dumb",
+  "rules": [
+    {
+      "description": "Create link with Cmd+Shift+K (not U)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "mandatory": ["command", "shift"],
+              "optional": []
+            }
+          },
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": ["^com.tinyspeck.slackmacgap$"]
+            }
+          ],
+          "to": [
+            {
+              "key_code": "u",
+              "modifiers": ["command", "shift"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

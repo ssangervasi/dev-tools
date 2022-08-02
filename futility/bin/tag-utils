@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+refetch_tags() {
+	git tag -l | xargs git tag -d && git fetch -t
+}
+
+on_npm() {
+	npm dist-tag ls "$1"
+}
+
+check_tags() {
+	declare -A packages
+	for tag in $(git tag -l); do
+		# echo "tag [$tag]"
+		# @fidesui/components@0.0.2
+		package=$(echo "$tag" | sed -E 's!@fidesui/(.+)@.+!\1!')
+		# echo "package [$package]"
+
+		if [[ -z "${packages[$package]}" ]]; then
+			r=$(on_npm "$package")
+			packages[$package]="$r"
+			echo "$package $r"
+		fi
+	done
+}

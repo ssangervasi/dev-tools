@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# "Stash with message"
+git stash push -m "$*"

@@ -52,6 +52,7 @@ _dynamic_prompt() {
 	
 	local min_info_width=70
 	local columns=$(default ${COLUMNS} ${min_info_width})
+	local connector='…'
 	# Wow math comparisons are ugly.
 	if (( "${min_info_width}" < "${columns}")); then
 		local max_basename_width=16
@@ -61,12 +62,15 @@ _dynamic_prompt() {
 		if (( "${max_basename_width}" < "${#pwd_basename}" )); then
 			local head_width=8
 			local tail_width=7
-			local connector='…'
 			local basename_head=$(echo ${pwd_basename} | head -c ${head_width})
 			local basename_tail=$(echo ${pwd_basename} | tail -c ${tail_width})
 			abrv_basename="${basename_head}${connector}${basename_tail}"
 		fi
-		_info_prompt "${abrv_basename}"
+
+		local abrv_username="$(whoami)"
+		abrv_username="${abrv_username:0:4}"
+
+		_info_prompt "${abrv_basename}" "${abrv_username}"
 	else
 		_simple_prompt
 	fi
@@ -74,6 +78,7 @@ _dynamic_prompt() {
 
 _info_prompt() {
 	local basename=$(default "$1" "\W")
+	local username=$(default "$2" "\u")
 	local info_ps1="\
 ${PROMPT_PREFIX}\
 \[${COLOR_CYAN}\]\
@@ -81,7 +86,7 @@ ${PROMPT_PREFIX}\
 \[${COLOR_NC}\]\
 |\
 \[${COLOR_BROWN}\]\
-\u\
+${username}\
 \[${COLOR_NC}\]\
 |\
 \[${COLOR_GREY}\]\

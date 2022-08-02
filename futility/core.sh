@@ -210,3 +210,23 @@ args_and_or_stdin_help() {
 			# > is<space>a<space>horse<space>of<space>course<space>a<space>horse<space>is<space>a<space>horse
 	HELP_TEXT
 }
+
+shellfile() {
+	local path_var="$1"
+	shift
+
+	if [[ -z "${path_var}" ]]; then
+		echo_error 'Must specify a variable to store the path of the temp file'
+		return $YA_DUN_GOOFED
+	fi
+
+	local tmp_path=$(mktemp $@)
+	if [[ -z "${path_var}" ]]; then
+		echo_error 'Failed to create temp file'
+		return $YA_DUN_GOOFED
+	fi
+
+	trap "rm '${tmp_path}'" EXIT
+
+	eval "${path_var}=${tmp_path}"
+}

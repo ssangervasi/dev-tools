@@ -62,11 +62,13 @@
     l = log --oneline -n 10 --no-merges
     la = log \
             -n 10 \
-            --no-merges \
             --pretty=format:'%C(bold)%h%C(reset) %C(green)%an %C(dim)%ai%C(reset) [%C(magenta)%D%C(reset)] %s %N'
-    lg = log --all --graph --abbrev-commit \
+    lg = log \
+        --graph \
+        --abbrev-commit \
         --date=relative \
-        --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
+        --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d' \
+        --branches
     summarize = !"f() { git log --pretty='format:%B' --reverse $(git seq $@); }; f"
     lc = log -n1 --pretty=format:'%h'
 
@@ -95,7 +97,8 @@
 
     # Branching
     new = checkout -b 
-    borrow = !git fetch origin "$1" && git checkout FETCH_HEAD -b 
+    # Checkout a remote branch even if it's filtered and don't track it
+    borrow = !git fetch origin "$1" && git checkout FETCH_HEAD -b
     # Delete a local branch of it's been merged.
     finish = branch --delete
     # Delete a local branch no matter what.

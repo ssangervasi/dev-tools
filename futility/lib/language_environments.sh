@@ -168,26 +168,31 @@ futility_log "it's defined"
 #
 
 nvm() {
-	nvm_lazy && nvm $@
+	nvm_lazy
+	nvm $@
 }
 
 nvm_lazy() {
-	if which nvm; then
+	if (type nvm | grep nvm_lazy &>/dev/null); then
 		unset nvm
+	fi
+
+	if which nvm; then
 		echo_info "NVM is hashed: $(nvm version)"
 		return 0
 	fi
+
 
 	if [[ -n $NVM_DIR ]]; then
 		echo_info "Uh, $NVM_DIR is already set. I think we're done here."
 		stacktrace
 		return 0
 	fi
-	# Don't use homebrew.
-	export NVM_DIR="$HOME/.nvm"
-	unset nvm
 
-	export NPM_CONFIG_PREFIX=''
+	# Don't use homebrew.
+	NVM_DIR="$HOME/.nvm"
+	NPM_CONFIG_PREFIX=''
+
 	# This loads nvm
 	if [[ -s "$NVM_DIR/nvm.sh" ]]; then
 		source "$NVM_DIR/nvm.sh" 2>/dev/null
