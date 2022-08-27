@@ -83,7 +83,7 @@ _latest() {
 }
 
 _hist() {
-	tail -n "${1:-1}" "$TICKETS_HOME"/"$TICKETS_HIST"
+	tail -n "${ARGS[0]:-1}" "$TICKETS_HOME"/"$TICKETS_HIST"
 }
 
 _dir() {
@@ -96,6 +96,13 @@ _notes() {
 
 _desc() {
 	sed -n "2,2p" < "$(_notes)"
+}
+
+_hist-desc() {
+	for entry in $(_hist); do
+		OPTS[ticket]="${entry}"
+		echo "${entry}  # $(_desc)"
+	done
 }
 
 _branch() {
@@ -187,4 +194,4 @@ shift
 __ensure_home
 __opts "$@"
 
-"_${cmd:-help}" "$@"
+"_${cmd:-help}"
