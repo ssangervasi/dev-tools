@@ -62,7 +62,7 @@
     l = log --oneline -n 10 --no-merges
     la = log \
             -n 10 \
-            --pretty=format:'%C(bold)%h%C(reset) %C(green)%an %C(dim)%ai%C(reset) [%C(magenta)%D%C(reset)] %s %N'
+            --pretty=format:'%C(bold)%h%C(reset) %C(dim)%ai%C(reset) %C(green)%<(15,trunc)%an%C(reset) %<(30,trunc)%s %N [%C(magenta)%D%C(reset)]'
     lg = log \
         --graph \
         --abbrev-commit \
