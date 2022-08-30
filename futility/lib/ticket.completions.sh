@@ -9,6 +9,9 @@ _complete_ticket() {
 	elif (( $COMP_CWORD >= 2 )); then
 		if [[ "${COMP_WORDS[1]}" == switch ]]; then
 			_complete_ticket_switch
+		elif [[ "${COMP_WORDS[1]}" == new ]]; then
+			return
+			# _complete_ticket_new
 		fi
 	fi
 	# COMPREPLY+=("COMP_TYPE '$COMP_TYPE'")
@@ -41,4 +44,27 @@ __complete__strip_comments() {
 		v="${COMPREPLY[$i]}"
 		COMPREPLY[$i]="${v/' #'*/}"
 	done
+}
+
+
+_complete_ticket_new() {
+	if (( $COMP_CWORD >= 3 )); then
+		return
+	fi
+
+	local current_word="${COMP_WORDS[$COMP_CWORD]}"
+
+	local gh_issues=($(
+		gh issue list --assignee "@me" --json title,number --jq '.[] | [.title, .number]'
+	))
+	for entry in "${gh_issues[@]}"; do
+		local n=$(sed -E 's/,?.?"([0-9]+).+/\1/' <<<$entry)
+		COMPREPLY+=("$n")
+		# if [[ "$n" =~ .*"$current_word".* ]]; then
+		# fi
+	done
+
+	if (( ${#COMPREPLY[@]} == 1 )); then
+		__complete__strip_comments
+	fi
 }

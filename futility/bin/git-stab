@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# "Stash a branch"
+
+GIT_STAB_PREFIX="tmp"
+BRANCH="$GIT_STAB_PREFIX/$(git current)"
+
+git branch "$BRANCH" && echo "Stashed branch $BRANCH"

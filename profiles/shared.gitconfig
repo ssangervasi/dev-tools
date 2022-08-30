@@ -110,10 +110,10 @@
 
     # Stashes with custom/default messages
     stem=stash list --grep='WIP on' --invert-grep
-    stip=stash list --grep='WIP on' 
+    stip=stash list --grep='WIP on'
 
     # GitHub `hub` command
-    cmp = !hub compare
+    cmp = !git hoist && hub compare
 
 [fetch]
     prune = true

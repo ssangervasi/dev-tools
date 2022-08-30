@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+gh_issues_json=$(
+	gh issue list --assignee "@me" --json title,number --jq '.[] | [.title, .number]'
+)
+
+echo gh_issues_json
+echo "$gh_issues_json"
+
+jq -r '.[0]' <<<"$gh_issues_json" |
+	while read entry; do
+		# n=$(sed -E 's/,?.?"([0-9]+).+/\1/' <<<$entry)
+		echo "entry: $entry"
+	done
