@@ -210,6 +210,7 @@ nvm_lazy() {
 	echo_info "Using NVM v$(nvm --version): $NVM_DIR/nvm.sh"
 
 	# added for npm-completion https://github.com/Jephuff/npm-bash-completion
-	PATH_TO_NPM_COMPLETION="/home/sebastian/.nvm/versions/node/v12.13.0/lib/node_modules/npm-completion"
-	source $PATH_TO_NPM_COMPLETION/npm-completion.sh
+	# PATH_TO_NPM_COMPLETION="/home/sebastian/.nvm/versions/node/v12.13.0/lib/node_modules/npm-completion"
+	PATH_TO_NPM_COMPLETION="$(dirname $(nvm which current))/../lib/node_modules/npm-completion/npm-completion.sh"
+	source_if_exists "$PATH_TO_NPM_COMPLETION"
 }
