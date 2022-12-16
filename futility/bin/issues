@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+source futility
+
+# https://github.com/rethab/gh-project/blob/main/gh-project
+# TEMPLATE='{{tablerow "ID" "Name" "URL"}}{{range .}}{{tablerow .id .name .html_url}}{{end}}'
+# gh api --preview inertia "/users/ssangervasi/projects" --template="$TEMPLATE"
+
+gh status
 
 gh_issues_json=$(
 	gh issue list --assignee "@me" --json title,number --jq '.[] | [.title, .number]'

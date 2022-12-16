@@ -7,18 +7,18 @@ _complete_ticket() {
 		  $(compgen -W "$(ticket _commands)" "${current_word}")
 		)
 	elif (( $COMP_CWORD >= 2 )); then
-		if [[ "${COMP_WORDS[1]}" == switch ]]; then
-			_complete_ticket_switch
-		elif [[ "${COMP_WORDS[1]}" == new ]]; then
+		if [[ "${COMP_WORDS[1]}" == new ]]; then
 			return
 			# _complete_ticket_new
+		else
+			_complete_ticket_name
 		fi
 	fi
 	# COMPREPLY+=("COMP_TYPE '$COMP_TYPE'")
 }
 complete -o bashdefault -F _complete_ticket ticket
 
-_complete_ticket_switch() {
+_complete_ticket_name() {
 	if (( $COMP_CWORD >= 3 )); then
 		return
 	fi

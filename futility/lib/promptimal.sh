@@ -51,7 +51,7 @@ _dynamic_prompt() {
 	history -a
 	
 	local min_info_width=70
-	local columns=$(default ${COLUMNS} ${min_info_width})
+	local columns="${COLUMNS-:${min_info_width}}"
 	local connector='…'
 	# Wow math comparisons are ugly.
 	if (( "${min_info_width}" < "${columns}")); then

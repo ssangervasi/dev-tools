@@ -83,7 +83,7 @@ _latest() {
 }
 
 _hist() {
-	tail -n "${ARGS[0]:-1}" "$TICKETS_HOME"/"$TICKETS_HIST"
+	tail -n "${1:-${ARGS[0]:-1}}" "$TICKETS_HOME"/"$TICKETS_HIST"
 }
 
 _dir() {

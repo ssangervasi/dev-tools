@@ -55,6 +55,11 @@
     rat = !git ri $(git junction $@)
     remaster = remain
 
+    # Reset last commit
+    split = reset --soft HEAD~
+    # Commit with original message when done splitting
+    join = commit -C ORIG_HEAD
+
     # Checkouts
     co = checkout
 
@@ -62,7 +67,7 @@
     l = log --oneline -n 10 --no-merges
     la = log \
             -n 10 \
-            --pretty=format:'%C(bold)%h%C(reset) %C(dim)%ai%C(reset) %C(green)%<(15,trunc)%an%C(reset) %<(30,trunc)%s %N [%C(magenta)%D%C(reset)]'
+            --pretty=format:'%C(bold)%h%C(reset) %C(dim)%ai%C(reset) %C(green)%<(15,trunc)%an%C(reset) %<(40,trunc)%s %N [%C(magenta)%D%C(reset)]'
     lg = log \
         --graph \
         --abbrev-commit \
@@ -98,7 +103,7 @@
     # Branching
     new = checkout -b 
     # Checkout a remote branch even if it's filtered and don't track it
-    borrow = !git fetch origin "$1" && git checkout FETCH_HEAD -b
+    borrow = !git fetch origin "$1" && git checkout FETCH_HEAD -B
     # Delete a local branch of it's been merged.
     finish = branch --delete
     # Delete a local branch no matter what.
