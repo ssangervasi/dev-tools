@@ -57,7 +57,7 @@ _switch() {
 		__error 'Switch to an existing ticket'
 	fi
 
-	local prev_entry=$(_hist 1)
+	local prev_entry=$(_hist-names 1)
 	if [[ "${new_entry}" == "${prev_entry}" ]]; then
 		__error "Already on ${prev_entry}"
 	fi
@@ -74,7 +74,7 @@ _switch() {
 # Info
 
 _latest() {
-	ticket_name=$(_hist 1)
+	ticket_name=$(_hist-names 1)
 	if [[ -z "$ticket_name" ]]; then
 		__error "No latest ticket"
 	fi
@@ -82,7 +82,7 @@ _latest() {
 	echo "$ticket_name"
 }
 
-_hist() {
+_hist-names() {
 	tail -n "${1:-${ARGS[0]:-1}}" "$TICKETS_HOME"/"$TICKETS_HIST"
 }
 
@@ -99,10 +99,14 @@ _desc() {
 }
 
 _hist-desc() {
-	for entry in $(_hist); do
+	for entry in $(_hist-names "${1:-${ARGS[0]:-10}}"); do
 		OPTS[ticket]="${entry}"
 		echo "${entry}  # $(_desc)"
 	done
+}
+
+_hist() {
+	_hist-desc "$@"
 }
 
 _branch() {

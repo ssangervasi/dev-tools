@@ -5,17 +5,19 @@ source futility
 # TEMPLATE='{{tablerow "ID" "Name" "URL"}}{{range .}}{{tablerow .id .name .html_url}}{{end}}'
 # gh api --preview inertia "/users/ssangervasi/projects" --template="$TEMPLATE"
 
-gh status
+# gh status
 
-gh_issues_json=$(
-	gh issue list --assignee "@me" --json title,number --jq '.[] | [.title, .number]'
-)
+# gh_issues_json=$(
+# 	gh issue list --assignee "@me" --json title,number --jq '.[] | [.title, .number]'
+# )
 
-echo gh_issues_json
-echo "$gh_issues_json"
+# echo gh_issues_json
+# echo "$gh_issues_json"
 
-jq -r '.[0]' <<<"$gh_issues_json" |
-	while read entry; do
-		# n=$(sed -E 's/,?.?"([0-9]+).+/\1/' <<<$entry)
-		echo "entry: $entry"
-	done
+# jq -r '.[0]' <<<"$gh_issues_json" |
+# 	while read entry; do
+# 		# n=$(sed -E 's/,?.?"([0-9]+).+/\1/' <<<$entry)
+# 		echo "entry: $entry"
+# 	done
+
+gh search issues --assignee="@me" --sort="updated" --limit=10 "$@"
