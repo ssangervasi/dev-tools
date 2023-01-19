@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+MOD_PATTERN="$1"
+
+main() {
+	echo MOD_PATTERN "$MOD_PATTERN"
+	walk_packages |
+		while read package; do
+			if [[ "$package" =~ $MOD_PATTERN ]]; then
+				echo "Match: $package"
+				check_dups "$package"
+			fi
+		done
+}
+
+walk_packages() {
+	ls -1 node_modules |
+		while read namespace; do
+			if [[ "$namespace" =~ ^@ ]]; then
+				ls -1 node_modules/"$namespace"| while read package; do
+					echo "$namespace/$package"
+				done
+			else
+				echo "$namespace"
+			fi
+		done
+}
+
+# npm ls output example: 
+# admin-ui@ fides/clients/admin-ui
+# └─┬ @fidesui/react@0.0.20
+#   ├── @chakra-ui/provider@1.7.9
+#   ├─┬ @fidesui/react-provider@0.0.18
+#   │ └── @chakra-ui/provider@1.7.14
+#   └─┬ @fidesui/react-theme@0.0.7
+#     └─┬ @chakra-ui/react@1.8.9
+#       └── @chakra-ui/provider@1.7.14 deduped
+check_dups() {
+	package="$1"
+	nls=$(npm ls "$package")
+	version_lines=$(echo "$nls" | grep -E "${package}\b" | grep -v deduped)
+	# version_lines=$(sed -E "s|^.*(${package}@[0-9.]+)?.*$|\1|g" <<<"$nls")
+	# echo version_lines "$version_lines"
+	cleaned=$(echo "$version_lines" | sed -E "s|^.*(${package}@[0-9.]+).*$|\1|" | sort | uniq)
+	# echo cleaned "$cleaned"
+	count=$(echo "$cleaned" | grep -c .)
+	# echo $count
+	if (( $count == 1 )); then
+		echo "Unique"
+	else
+		echo "$count versions:"
+		for v in $cleaned; do 
+			echo $v; 
+		done
+	fi
+}
+
+main

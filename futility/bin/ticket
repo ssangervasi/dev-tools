@@ -73,13 +73,26 @@ _switch() {
 ##
 # Info
 
-_latest() {
+_latest-name() {
 	ticket_name=$(_hist-names 1)
 	if [[ -z "$ticket_name" ]]; then
 		__error "No latest ticket"
 	fi
 
 	echo "$ticket_name"
+}
+
+_latest-desc() {
+	ticket_name=$(_hist-desc 1)
+	if [[ -z "$ticket_name" ]]; then
+		__error "No latest ticket"
+	fi
+
+	echo "$ticket_name"
+}
+
+_latest() {
+	_latest-desc "$@"
 }
 
 _hist-names() {
@@ -149,7 +162,7 @@ __opts() {
 	declare -g -a ARGS
 	declare -g -A OPTS
 
-	OPTS[ticket]=$(_latest)
+	OPTS[ticket]=$(_latest-name)
 
 	local opt=""
 	local arg
