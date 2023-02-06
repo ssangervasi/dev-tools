@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+source futility
+
+gh search prs --author="@me" --sort="updated" --limit=10 "$@"
