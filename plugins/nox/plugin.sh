@@ -1,5 +1,26 @@
 nos() {
-	nox -s "$1${2:+(${2})}" "${@:3}"
+	session="$1"
+	param="$2"
+	args="${@:3}"
+
+	resolved_param=""
+	if [[ "$param" == '--' ]]; then
+		resolved_param=""
+	elif [[ "$param" == '' ]]; then
+		resolved_param=""
+	else
+		resolved_param="(${param})"
+	fi
+
+	resolved_args=()
+	for arg in "${args[@]}"; do
+		if [[ "$arg" == '--' ]]; then
+			continue
+		fi
+		resolved_args+=("$arg")
+	done
+
+	nox -s "${session}${resolved_param}" -- "${resolved_args[@]}"
 }
 
 nol() {

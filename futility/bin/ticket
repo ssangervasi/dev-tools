@@ -22,7 +22,7 @@ _new() {
 		__error "Need description"
 	fi
 
-	mkdir "$TICKETS_HOME"/"${ticket_name}" ||
+	mkdir -p "$TICKETS_HOME"/"${ticket_name}" ||
 		__error "Ticket dir already exists. Try switching to it instead."
 
 	cd "$TICKETS_HOME"/"${ticket_name}" || __error "Could not make dir ${ticket_name}"
