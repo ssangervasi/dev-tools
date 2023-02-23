@@ -20,4 +20,43 @@ source futility
 # 		echo "entry: $entry"
 # 	done
 
-gh search issues --assignee="@me" --sort="updated" --limit=10 "$@"
+_summary() {
+	gh search issues \
+		--assignee='@me' --state=open --sort="updated" --limit=20 \
+		\ "$@"
+}
+
+
+_branches() {
+	gh_issues_json=$(
+		gh search issues \
+			--assignee='@me' --state=open --sort="updated" --limit=20 \
+			--json='repository,title,number'
+	)
+
+	jq -cr '.[]' <<<"$gh_issues_json" |
+		while read -r entry; do
+			# {
+			#   "number": 115,
+			#   "repository": {
+			#     "name": "fidesplus",
+			#     "nameWithOwner": "ethyca/fidesplus"
+			#   },
+			#   "title": "Add \"Approve dataset classification\" button"
+			# }
+			# echo "entry: $entry"
+
+			repo=$(jq -r '.repository.name' <<<"$entry")
+			number=$(jq -r '.number' <<<"$entry")
+			title=$(jq -r '.title' <<<"$entry" | escape-branch)
+
+			branch="ssangervasi/${repo}/${number}/${title}"
+
+			echo "$branch"
+		done
+}
+
+cmd="$1"
+shift
+
+"_${cmd:-summary}"

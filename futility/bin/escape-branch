@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cat | 
+	sed -E 's/[^[:alpha:][:digit:]]+/-/g' |
+	tr '[:upper:]' '[:lower:]'
