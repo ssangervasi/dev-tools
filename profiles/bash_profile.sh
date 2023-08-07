@@ -86,7 +86,7 @@ os_darwin() {
 			source "/usr/local/etc/profile.d/bash_completion.sh"
 		else
 			echo_error 'Homebrew bash completions do not exist!'
-			echo_error 'Homebrew suggests running: brew install bash-completion'
+			echo_error 'Homebrew suggests running: brew install bash-completion@2'
 			return $YA_DUN_GOOFED
 		fi
 	}
