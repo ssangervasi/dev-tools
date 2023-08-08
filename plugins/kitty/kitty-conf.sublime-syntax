@@ -1,0 +1,12 @@
+%YAML 1.2
+---
+name: Kitty Terminal Config 
+file_extensions: [.conf]
+scope: source.conf
+
+contexts:
+  main:
+    - match: ^\#.+
+      scope: comment.line
+    - match: ^\w+\b
+      scope: keyword
