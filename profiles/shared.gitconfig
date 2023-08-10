@@ -118,7 +118,8 @@
     stip=stash list --grep='WIP on'
 
     # GitHub `hub` command
-    cmp = !git hoist && hub compare
+    # cmp = !git hoist && hub compare
+    cmp = !git hoist && gh pr create --web
 
 [fetch]
     prune = true
@@ -139,3 +140,6 @@
     
 [index]
 	version = 4
+
+[sequence]
+    editor = interactive-rebase-tool
