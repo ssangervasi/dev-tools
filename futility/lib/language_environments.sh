@@ -101,12 +101,12 @@ rbenv_lazy() {
 	fi
 	unset rbenv
 	eval "$(rbenv init -)"
-	echo_info "Using rbenv:" $(which rbenv)
+	echo "Using rbenv:" $(which rbenv)
 	return 0
 }
 
 rbenv() {
-	rbenv_lazy && rbenv
+	rbenv_lazy && rbenv "$@"
 }
 
 #

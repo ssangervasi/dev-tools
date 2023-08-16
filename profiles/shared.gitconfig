@@ -45,6 +45,7 @@
     # Committing
     amen = commit --amend --no-edit
     fix = !git commit --fixup
+    cn = c -n
     
     # Rebasing
     ri = rebase --interactive
