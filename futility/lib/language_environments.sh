@@ -214,3 +214,13 @@ nvm_lazy() {
 	PATH_TO_NPM_COMPLETION="$(dirname $(nvm which current))/../lib/node_modules/npm-completion/npm-completion.sh"
 	source_if_exists "$PATH_TO_NPM_COMPLETION"
 }
+
+
+##
+# Java
+if [[ -z "$JAVA_HOME" ]]; then
+	export JAVA_HOME="/usr/lib/jvm/jdk-17-oracle-x64"
+fi
+if [[ -d "$JAVA_HOME" ]]; then
+	add_to_path "$JAVA_HOME/bin"
+fi
