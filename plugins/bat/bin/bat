@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# Bat
+# which_bat() {
+# 	BAT_BIN=$(which bat)
+# 	if [[ -z "${BAT_BIN}" ]]; then
+# 		BAT_BIN=$(which batcat)
+# 	fi
+# 	if [[ -z "${BAT_BIN}" ]]; then
+# 		echo_error "No bat installed"
+# 		return
+# 	fi
+
+# 	BAT_DEFAULT_OPTIONS=(--paging always)
+# 	alias 'bat'="${BAT_BIN} ${BAT_DEFAULT_OPTIONS[*]}"
+
+# 	batwitch() {
+# 		"${BAT_BIN}" ${BAT_DEFAULT_OPTIONS[*]} "$(which $1)"
+# 	}
+# 	alias whichat=batwitch	
+# }
+
+BAT_DEFAULT_OPTIONS=(--paging always)
+
+which_bat() {
+	BAT_BIN=$(/usr/bin/env -i which bat)
+	if [[ -z "${BAT_BIN}" ]]; then
+		BAT_BIN=$(/usr/bin/env -i which batcat)
+	fi
+	if [[ -z "${BAT_BIN}" ]]; then
+		echo_error "No bat installed"
+		exit $YA_DUN_GOOFED
+	fi
+	# echo "BAT_BIN $BAT_BIN"
+}
+
+
+which_bat
+
+"${BAT_BIN}" ${BAT_DEFAULT_OPTIONS[*]} "$@" <&0

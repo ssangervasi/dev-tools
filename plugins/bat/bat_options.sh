@@ -1,21 +1,23 @@
-# Bat
-def_bat() {
-	BAT_BIN=$(which bat)
-	if [[ -z "${BAT_BIN}" ]]; then
-		BAT_BIN=$(which batcat)
-	fi
-	if [[ -z "${BAT_BIN}" ]]; then
-		echo_error "No bat installed"
-		return
-	fi
+add_to_path $(dirname "$BASH_SOURCE")/bin
 
-	BAT_DEFAULT_OPTIONS=(--paging always)
-	alias 'bat'="${BAT_BIN} ${BAT_DEFAULT_OPTIONS[*]}"
+# # Bat
+# def_bat() {
+# 	BAT_BIN=$(which bat)
+# 	if [[ -z "${BAT_BIN}" ]]; then
+# 		BAT_BIN=$(which batcat)
+# 	fi
+# 	if [[ -z "${BAT_BIN}" ]]; then
+# 		echo_error "No bat installed"
+# 		return
+# 	fi
 
-	batwitch() {
-		"${BAT_BIN}" ${BAT_DEFAULT_OPTIONS[*]} "$(which $1)"
-	}
-	alias whichat=batwitch	
-}
+# 	BAT_DEFAULT_OPTIONS=(--paging always)
+# 	alias 'bat'="${BAT_BIN} ${BAT_DEFAULT_OPTIONS[*]}"
 
-def_bat
+# 	batwitch() {
+# 		"${BAT_BIN}" ${BAT_DEFAULT_OPTIONS[*]} "$(which $1)"
+# 	}
+# 	alias whichat=batwitch	
+# }
+
+# def_bat
