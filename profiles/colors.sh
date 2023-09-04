@@ -79,3 +79,19 @@ if which dircolors &>/dev/null; then
 else
 	def_ls_colors
 fi
+
+
+FUTILITY_THEME_PURPLE="#320830"
+FUTILITY_THEME_BLUE="#101035"
+
+futility_theme() {
+	FUTILITY_THEME_NAME="$1"
+	if [[ "$FUTILITY_THEME_NAME" == 'purple' ]]; then
+		FUTILITY_THEME_BG="$FUTILITY_THEME_PURPLE"
+	elif [[ "$FUTILITY_THEME_NAME" == 'blue' ]]; then
+		FUTILITY_THEME_BG="$FUTILITY_THEME_BLUE"
+	fi
+
+	echo printf '\x1b]11;'"$FUTILITY_THEME_BG"'\x1b\\'
+	printf '\x1b]11;'"$FUTILITY_THEME_BG"'\x1b\\'
+}
