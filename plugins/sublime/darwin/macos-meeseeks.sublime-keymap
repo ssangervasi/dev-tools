@@ -308,6 +308,10 @@
 		"command": "toggle_side_bar"
 	},
 
+	{ "keys": ["super+k", "super+z"], "command": "zoom_pane", "args": {"fraction": 0.9} },
+	{ "keys": ["super+k", "super+shift+z"], "command": "unzoom_pane", "args": {} },
+
+
 	// Keep as last thing.
 	{}
 ]

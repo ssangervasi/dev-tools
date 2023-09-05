@@ -25,6 +25,10 @@ tabname() {
 	echo -ne "\033]0;$*\007"
 }
 
+count() {
+	grep '.' --count
+}
+
 count_files() {
 	local what where
 	what=${1:-.}

@@ -1,4 +1,3 @@
-
 ##
 # Generic framework for specification testing and linting.
 ##
@@ -88,7 +87,7 @@ respec() {
 	replay_line=$(trim_line_num - <<< "${replay_line}")
 
 	echo 'Replaying spec:' ${replay_line} $@
-	spec ${replay_line} $@
+	spec "${replay_line}" $@
 }
 
 _complete_spec() {
@@ -143,29 +142,29 @@ complete -o nospace -F _complete_spec spec
 # }
 # complete -o bashdefault -F _complete_spec_history spec
 
-# _complete_respec() {
-# 	local full_line="${COMP_LINE/respec?/}"
-# 	local digis=$(sed -E 's/^([0-9]+):.*|.*/\1/' <<< "${full_line}")
-# 	local argies=$(sed -E 's/^([0-9]+):(.*)|.*/\2/' <<< "${full_line}")
+_complete_respec() {
+	local full_line="${COMP_LINE/respec?/}"
+	local digis=$(sed -E 's/^([0-9]+):.*|.*/\1/' <<< "${full_line}")
+	local argies=$(sed -E 's/^([0-9]+):(.*)|.*/\2/' <<< "${full_line}")
  
-#  	# echo_info "full_line: ${full_line}"
-#  	# echo_info "digis: ${digis}"
-#  	# echo_info "argies: ${argies}"
-# 	if [[ -n "${digis}" && -n "${argies}" ]]; then
-# 		# COMPREPLY=("${argies}")
-# 		return
-# 	fi
+ 	# echo_info "full_line: ${full_line}"
+ 	# echo_info "digis: ${digis}"
+ 	# echo_info "argies: ${argies}"
+	if [[ -n "${digis}" && -n "${argies}" ]]; then
+		COMPREPLY=("${argies}")
+		return
+	fi
 
-# 	local matches=$(spec_history all 2>/dev/null | grep -E "${full_line}")
-# 	# COMPREPLY=(${match_array[@]})
+	local matches=$(spec_history all 2>/dev/null | grep -E "${full_line}")
+	# COMPREPLY=(${match_array[@]})
 
-# 	IFS=$'\n'
-# 	for line in ${matches}; do
-# 		COMPREPLY+=("${line}")
-# 	done
+	IFS=$'\n'
+	for line in ${matches}; do
+		COMPREPLY+=("${line}")
+	done
 
-# }
-# complete -F _complete_respec respec
+}
+complete -F _complete_respec respec
 
 echo_paths() {
 	echo 'Found these paths:'
@@ -347,28 +346,46 @@ load_python_speccial_plugin() {
 	}
 }
 
-load_yarn_jest_speccial_plugin() {
+load_jest_speccial_plugin() {
 	run_spec_command() {
 		format_jest_args "$@"
-		yarn run jest "${JEST_ARGS[@]}"
+		# echo npx jest "${JEST_ARGS[@]}"
+		# printf "argy %q \n" "$@"
+		# printf "atty %q \n" "${JEST_ARGS[@]}"
+		# printf "stary %q \n" "${JEST_ARGS[*]}"
+		npx jest "${JEST_ARGS[@]}"
 	}
-}
 
-format_jest_args() {
-	opts=()
-	patterns=()
-	for arg in "$@"; do
-		# Jest doesn't like having "--opts" passed after test paths,
-		# so sort them out.
-		if [[ "${arg}" =~ ^- ]]; then
-			opts+=("${arg}")
-		else
-			# Jest accepts regex, but it needs this to be fuzzier. Also, if
-			# none of that patterns match it runs the whole test suite which
-			# feels like some kind of sick joke.
-			patterns+=(".*${arg}.*")
-		fi
-	done
+	use_debugger() {
+		run_spec_command() {
+			format_jest_args "$@"
+			npx --node-options='--inspect-brkcom' jest --runInBand "${JEST_ARGS[@]}"
+		}
+	}
 
-	JEST_ARGS=(${opts[@]} ${patterns[@]})
+	use_no_debugger() {
+		run_spec_command() {
+			format_jest_args "$@"
+			npx jest "${JEST_ARGS[@]}"
+		}
+	}
+
+	format_jest_args() {
+		opts=()
+		patterns=()
+		for arg in "$@"; do
+			# Jest doesn't like having "--opts" passed after test paths,
+			# so sort them out.
+			if [[ "${arg}" =~ ^- ]]; then
+				opts+=("${arg}")
+			else
+				# Jest accepts regex, but it needs this to be fuzzier. Also, if
+				# none of that patterns match it runs the whole test suite which
+				# feels like some kind of sick joke.
+				patterns+=(".*${arg}.*")
+			fi
+		done
+
+		JEST_ARGS=(${opts[@]} ${patterns[@]})
+	}
 }

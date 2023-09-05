@@ -54,7 +54,13 @@
     re = rebase --edit-todo
     # Rebase the "wat" stuff
     rat = !git ri $(git junction $@)
+    # Rebase junction of remote
+    rar = !git ri $(git junction FETCH_HEAD HEAD)
     remaster = remain
+
+    # Merge :/
+    mc = merge --continue
+    ma = merge --abort
 
     # Reset last commit
     split = reset --soft HEAD~
@@ -94,6 +100,7 @@
     # Pushing
     pf = push --force-with-lease
     hoist = push -u origin HEAD
+    yank = pull --set-upstream origin HEAD
 
     # Status
     s = status -sb
@@ -131,16 +138,16 @@
 ##
 # Performance
 [core]
-	preloadIndex = true
-	untrackedCache = true
+    preloadIndex = true
+    untrackedCache = true
     autocrlf = input
 
 [fetch]
-	negotiationAlgorithm = skipping
-	writeCommitGraph = true
+    negotiationAlgorithm = skipping
+    writeCommitGraph = true
     
 [index]
-	version = 4
+    version = 4
 
 [sequence]
     editor = interactive-rebase-tool
