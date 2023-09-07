@@ -87,7 +87,7 @@ respec() {
 	replay_line=$(trim_line_num - <<< "${replay_line}")
 
 	echo 'Replaying spec:' ${replay_line} $@
-	spec "${replay_line}" $@
+	spec ${replay_line} "$@"
 }
 
 _complete_spec() {
@@ -155,7 +155,7 @@ _complete_respec() {
 		return
 	fi
 
-	local matches=$(spec_history all 2>/dev/null | grep -E "${full_line}")
+	local matches=$(spec_history all 2>/dev/null | grep -E "${full_line}" | tail -n 10)
 	# COMPREPLY=(${match_array[@]})
 
 	IFS=$'\n'
@@ -164,7 +164,7 @@ _complete_respec() {
 	done
 
 }
-complete -F _complete_respec respec
+complete -o nosort -F _complete_respec respec
 
 echo_paths() {
 	echo 'Found these paths:'
@@ -351,7 +351,7 @@ load_jest_speccial_plugin() {
 		format_jest_args "$@"
 		# echo npx jest "${JEST_ARGS[@]}"
 		# printf "argy %q \n" "$@"
-		# printf "atty %q \n" "${JEST_ARGS[@]}"
+		# printf "arry %q \n" "${JEST_ARGS[@]}"
 		# printf "stary %q \n" "${JEST_ARGS[*]}"
 		npx jest "${JEST_ARGS[@]}"
 	}
@@ -359,7 +359,7 @@ load_jest_speccial_plugin() {
 	use_debugger() {
 		run_spec_command() {
 			format_jest_args "$@"
-			npx --node-options='--inspect-brkcom' jest --runInBand "${JEST_ARGS[@]}"
+			npx --node-options='--inspect-brk' jest --runInBand "${JEST_ARGS[@]}"
 		}
 	}
 
@@ -379,6 +379,7 @@ load_jest_speccial_plugin() {
 			if [[ "${arg}" =~ ^- ]]; then
 				opts+=("${arg}")
 			else
+				echo "format_jest_args '${arg}'"
 				# Jest accepts regex, but it needs this to be fuzzier. Also, if
 				# none of that patterns match it runs the whole test suite which
 				# feels like some kind of sick joke.
