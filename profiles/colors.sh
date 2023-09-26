@@ -92,6 +92,6 @@ futility_theme() {
 		FUTILITY_THEME_BG="$FUTILITY_THEME_BLUE"
 	fi
 
-	echo printf '\x1b]11;'"$FUTILITY_THEME_BG"'\x1b\\'
+	# echo printf '\x1b]11;'"$FUTILITY_THEME_BG"'\x1b\\'
 	printf '\x1b]11;'"$FUTILITY_THEME_BG"'\x1b\\'
 }
