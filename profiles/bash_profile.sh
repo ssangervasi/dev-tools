@@ -109,7 +109,8 @@ os_darwin() {
 	register_project 'dev_tools'
 	init_project_dev_tools() {
 		prefix_prompt '🛠'
-		term-theme DevPurple
+		# term-theme DevPurple
+		futility_theme purple
 
 		cd "$DEV_TOOLS_ROOT"
 	}

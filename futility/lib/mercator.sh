@@ -241,7 +241,7 @@ sub_var() {
 
 init_project_temp() {
 	prefix_prompt '⏳ '
-	term-theme DevOrange
+	futility_theme orange
 
 	temp_location=$(mktemp -d)
 	cd "${temp_location}"
