@@ -72,7 +72,7 @@ spec_history() {
 }
 
 trim_line_num() {
-	read_to_stdout $@ <&0 | sed -E 's/^[0-9]+://'
+	read_to_stdout "$@" <&0 | sed -E 's/^[0-9]+://'
 }
 
 respec() {
@@ -86,8 +86,8 @@ respec() {
 
 	replay_line=$(trim_line_num - <<< "${replay_line}")
 
-	echo 'Replaying spec:' ${replay_line} $@
-	spec ${replay_line} "$@"
+	echo 'Replaying spec:' "${replay_line}" "$@"
+	spec "${replay_line}" "$@"
 }
 
 _complete_spec() {
@@ -101,10 +101,11 @@ _complete_spec() {
 	# echo_info "current_word '$current_word'"
 
 	COMPREPLY=()
+	local item
 	for item in "${hist_arr[@]}" "${git_arr[@]}"; do
-		if [[ $item =~ .*"${current_word}".* ]]; then
+		if [[ "${item}" =~ .*"${current_word}".* ]]; then
 			# echo "item [$item]"
-			COMPREPLY+=("$item")
+			COMPREPLY+=("${item}")
 		fi
 	done
 }
@@ -162,7 +163,8 @@ _complete_respec() {
 	for line in ${matches}; do
 		COMPREPLY+=("${line}")
 	done
-
+	# There's gotta be a better way of doing this than IFS hacks
+	unset IFS
 }
 complete -o nosort -F _complete_respec respec
 
@@ -371,8 +373,9 @@ load_jest_speccial_plugin() {
 	}
 
 	format_jest_args() {
-		opts=()
-		patterns=()
+		local opts=()
+		local patterns=()
+		local arg
 		for arg in "$@"; do
 			# Jest doesn't like having "--opts" passed after test paths,
 			# so sort them out.
