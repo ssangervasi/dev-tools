@@ -79,8 +79,21 @@
         --graph \
         --abbrev-commit \
         --date=relative \
+        --cherry \
         --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d' \
         --branches
+    lb = !"f() { \
+        git log \
+            --graph \
+            --first-parent \
+            --cherry \
+            --abbrev-commit \
+            --date=relative \
+            --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d' \
+            $(git upstream) \
+            $(git current) \
+            ; \
+        }; f"
     summarize = !"f() { git log --pretty='format:%B' --reverse $(git seq $@); }; f"
     lc = log -n1 --pretty=format:'%h'
 
@@ -106,6 +119,7 @@
     s = status -sb
     b = branch -v
     current = symbolic-ref --short HEAD
+    upstream = rev-parse --abbrev-ref HEAD@{upstream}
     gone = !git branch --format='%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' | grep '.'
 
     # Branching

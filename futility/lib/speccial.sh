@@ -281,6 +281,7 @@ load_ruby_speccial_plugin() {
 	export RSPEC_RETRY_RETRY_COUNT=0
 
 	run_spec_command() {
+		export RAILS_ENV=test
 		$SPEC_RSPEC_COMMAND \
 			$SPEC_RSPEC_DEFAULT_ARGS \
 			$SPEC_RSPEC_FAIL_FAST \

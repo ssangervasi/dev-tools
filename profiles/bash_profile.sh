@@ -14,7 +14,6 @@ _init() {
 	fi
 
 	# Custom terminal
-	source "$DEV_TOOLS_ROOT/profiles/colors.sh"
 	prompt_swap --dynamic
 
 	local os_name=$(uname -o 2>/dev/null || uname -s 2>/dev/null)
