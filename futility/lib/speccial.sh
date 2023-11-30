@@ -9,15 +9,16 @@ SPEC_HISTORY_PATH=~/.spec_history
 SPEC_HISTORY_SIZE='100'
 
 spec() {
-	read_to_arr $@ <&0
-	local args="${READ_TO_ARR_RESULT[@]}"
-	print_spec_header ${args}
-	write_spec_history ${args}
-	run_spec_command ${args}
+	read_to_arr "$@" <&0
+	local args=("${READ_TO_ARR_RESULT[@]}")
+	print_spec_header "${args[@]}"
+	write_spec_history "${args[@]}"
+	run_spec_command "${args[@]}"
 }
 
 write_spec_history() {
-	local new_entry="$@"
+	# Parameter substition of function args, quoted.
+	local new_entry="${@@Q}"
 	local prev_entry=$(tail -n 1 "$SPEC_HISTORY_PATH")
 	if [[ "${new_entry}" == "${prev_entry}" ]]; then
 		return 0
@@ -29,6 +30,8 @@ write_spec_history() {
 	tail -n "$SPEC_HISTORY_SIZE" "$SPEC_HISTORY_PATH" > "${temp_path}"
 	mv "${temp_path}" "$SPEC_HISTORY_PATH"
 }
+
+# clean_spec_history() {}
 
 spec_history() {
 	local range_expr="${1:-all}"
@@ -87,7 +90,11 @@ respec() {
 	replay_line=$(trim_line_num - <<< "${replay_line}")
 
 	echo 'Replaying spec:' "${replay_line}" "$@"
-	spec "${replay_line}" "$@"
+	# Resplit quoted line into arg array
+	local replay_args
+	IFS=$'\n' replay_args=( $(xargs -n1 <<<"$replay_line") )
+	unset IFS
+	spec "${replay_args[@]}" "$@"
 }
 
 _complete_spec() {
@@ -324,7 +331,7 @@ load_ruby_speccial_plugin() {
 	alias modcop="modlint"
 
 	run_lint_command() {
-		$SPEC_RUBOCOP_COMMAND $@
+		$SPEC_RUBOCOP_COMMAND "$@"
 	}
 }
 
