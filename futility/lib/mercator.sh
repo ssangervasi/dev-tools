@@ -21,7 +21,7 @@ _complete_enter_project() {
 	# 	"${array[@]}" => "foo" "bar"
 	# 	"${array[*]}" => "foo bar"
 	COMPREPLY=(
-		$(printf '%s\n' "${MERCATOR_PROJECTS[@]}" | grep -iE "${current_word}")
+		$(printf '%s\n' "${MERCATOR_PROJECTS[@]}" | grep -iE "^${current_word}")
 	)
 }
 

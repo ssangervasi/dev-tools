@@ -19,7 +19,7 @@ _new() {
 	fi
 
 	if [[ -z "$description" ]]; then
-		__error "Need description"
+		description="$ticket_name"
 	fi
 
 	mkdir -p "$TICKETS_HOME"/"${ticket_name}" ||
