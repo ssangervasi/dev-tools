@@ -213,10 +213,15 @@ ls_modified() {
 	git diff $ref --name-only --diff-filter=d
 }
 
+ls_modified_specs() {
+	local ref=$1
+	ls_modified ${ref} | select_spec_paths
+}
+
 modspec() {
 	local ref=$1
 	shift
-	local modified_specs=$(ls_modified ${ref} | select_spec_paths)
+	local modified_specs=$(ls_modified_specs ${ref})
 	if empty $modified_specs; then
 		echo_error 'No modified spec files.'
 		return 0
