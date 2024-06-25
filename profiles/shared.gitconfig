@@ -58,6 +58,10 @@
     rar = !git ri $(git junction FETCH_HEAD HEAD)
     remaster = remain
 
+    # Cherry-pick
+    chc = cherry-pick --continue
+    cha = cherry-pick --abort
+
     # Merge :/
     mc = merge --continue
     ma = merge --abort
@@ -72,9 +76,11 @@
 
     # Logging
     l = log --oneline -n 20 --no-merges
+    # Format:
+    # hash datetime Auth.. description..  [HEAD -> branch]
     la = log \
             -n 20 \
-            --pretty=format:'%C(bold)%h%C(reset) %C(dim)%ai%C(reset) %C(green)%<(15,trunc)%an%C(reset) %<(40,trunc)%s %N [%C(magenta)%D%C(reset)]'
+            --pretty=format:'%C(bold)%h%C(reset) %C(dim)%ai%C(reset) %C(green)%<(15,trunc)%an%C(reset) %<(50,mtrunc)%s %N [%C(magenta)%D%C(reset)]'
     lg = log \
         --graph \
         --abbrev-commit \

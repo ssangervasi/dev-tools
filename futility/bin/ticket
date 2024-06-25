@@ -200,7 +200,8 @@ __commands() {
 	# sed -E -e 's/(a)/\1/' -e 't' -e 'd'
 	declare -F |
 		sed -E 's/declare -f _//' |
-		grep -v '^_'
+		grep -v '^_' | 
+		tr '\n' ' '
 }
 
 ##

@@ -31,7 +31,12 @@ write_spec_history() {
 	mv "${temp_path}" "$SPEC_HISTORY_PATH"
 }
 
-# clean_spec_history() {}
+clean_spec_history() {
+	# Hacky file rotation
+	local temp_path="${SPEC_HISTORY_PATH}.tmp"
+	tail -n 10 "$SPEC_HISTORY_PATH" | sort | uniq > "${temp_path}"
+	mv "${temp_path}" "$SPEC_HISTORY_PATH"
+}
 
 spec_history() {
 	local range_expr="${1:-all}"

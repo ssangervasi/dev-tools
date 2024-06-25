@@ -6,7 +6,7 @@ _complete_git-wip() {
 	local current_word="${COMP_WORDS[$COMP_CWORD]}"
 	local list=$(git wip list | grep "${current_word}")
 	COMPREPLY=(
-		$(printf '%s\n' "${list}")
+		$(printf '%s ' "${list}")
 	)
 }
 complete -o bashdefault -F _complete_git-wip git-wip

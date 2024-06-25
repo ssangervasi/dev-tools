@@ -11,6 +11,9 @@ arg_parser.add_argument("ref_end", nargs="?", type=str, default="")
 
 
 def main():
+    """
+    For each file changed since master, show the commits where it was changed.
+    """
     arg_parser.parse_args()
     wats_output = check_output(["git", "wats"], encoding="utf-8")
     blocks = split_blocks(wats_output)
@@ -18,7 +21,7 @@ def main():
     print("---")
 
     sq = blocks_to_sqord(blocks)
-    for (path, commits) in sq.path_to_commits.items():
+    for path, commits in sq.path_to_commits.items():
         print(path)
         for commit in commits:
             edit = next(e for e in sq.commit_to_edits[commit] if e.path == path)
