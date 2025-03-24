@@ -3,11 +3,40 @@
 # Mostly handy for tab completion.
 
 git_cd() {
-  local repo_root="$(git root-dir)"
+  REPO_ROOT="$(git root-dir)"
   # First arg can be used a ref for completion, but is optional.
   # Use second arg, first arg, or repo root.
-  local destination="${2:-${1:-${repo_root}}}"
-  cd "${destination}"
+  DEST="${2:-${1:-${REPO_ROOT}}}"
+
+  find_dest
+  if [[ $? > 0 ]]; then
+    return $YA_DUN_GOOFED
+  fi
+
+  cd "${FOUND_DEST}"
+}
+
+find_dest() {
+  if [[ -d "${DEST}" ]]; then
+    FOUND_DEST="${DEST}"
+    return
+  elif [[ -d "${REPO_ROOT}/${DEST}" ]]; then
+    FOUND_DEST="${REPO_ROOT}/${DEST}"    
+    return
+  fi
+
+  DEST_DIR=$(dirname "${DEST}")
+
+  if [[ -d "${DEST_DIR}" ]]; then
+    FOUND_DEST="${DEST_DIR}"
+    return
+  elif [[ -d "${REPO_ROOT}/${DEST_DIR}" ]]; then
+    FOUND_DEST="${REPO_ROOT}/${DEST_DIR}"    
+    return
+  fi
+
+  echo_error "Can't find "${DEST}""
+  return $YA_DUN_GOOFED
 }
 
 alias cdg=git_cd

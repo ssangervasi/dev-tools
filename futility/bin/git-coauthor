@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+temp_path=$(mktemp)
+last_body=$(git log -n1 --pretty=format:'%B')
+author_credit="$(git config --get user.name) <$(git config --get user.email)>"
+cat <<-MSG > "${temp_path}"
+	${last_body}: 
+	
+	Co-authored-by: ${author_credit}
+MSG
+
+git commit --amend --template="${temp_path}"

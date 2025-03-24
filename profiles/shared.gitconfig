@@ -52,6 +52,7 @@
     rc = rebase --continue
     ra = rebase --abort
     re = rebase --edit-todo
+    rs = rebase --skip
     # Rebase the "wat" stuff
     rat = !git ri $(git junction $@)
     # Rebase junction of remote
@@ -61,6 +62,7 @@
     # Cherry-pick
     chc = cherry-pick --continue
     cha = cherry-pick --abort
+    chs = cherry-pick --skip
 
     # Merge :/
     mc = merge --continue
@@ -73,6 +75,8 @@
 
     # Checkouts
     co = checkout
+    cours = checkout --ours
+    cothi = checkout --theirs
 
     # Logging
     l = log --oneline -n 20 --no-merges
@@ -114,6 +118,8 @@
     junction = !"f() { git merge-base ${1:-$(git hamster show)} ${2:-HEAD}; }; f"
     wat = !"f() { git diff --name-status $(git seq $@); }; f"
     wut = !"f() { git diff ${1:-HEAD}^..${1:-HEAD}; }; f"
+    # grep the wat seq
+    wag = !"f() { git diff -G \"$1\" $(git seq); }; f"
     stat = !"f() { git diff --stat $(git seq $@); }; f"
 
     # Pushing
@@ -144,10 +150,15 @@
     # Stashes with custom/default messages
     stem=stash list --grep='WIP on' --invert-grep
     stip=stash list --grep='WIP on'
+    # Sometimes you don't want a stash
+    rehard=reset --hard
+
 
     # GitHub `hub` command
     # cmp = !git hoist && hub compare
     cmp = !git hoist && gh pr create --web
+
+    wi = wip
 
 [fetch]
     prune = true

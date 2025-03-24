@@ -87,8 +87,8 @@ respec() {
 	local range_expr="${1:-last}"
 	shift
 
-	local replay_line=$(spec_history "${range_expr}")
-	if [[ $? > 0 ]]; then
+	local replay_line
+	if ! replay_line=$(spec_history "${range_expr}"); then
 		return $YA_DUN_GOOFED
 	fi
 
