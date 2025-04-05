@@ -1,7 +1,7 @@
 
 # Because I always forget:
-# The file `.bash_profile` is used loaded for interactive shells.
-# So stuff that is only useful at the prompt should go here.
+# .bash_profile -> loaded for login shell 
+# .bashrc -> loaded for interactive shells 
 
 _init() {
 	if [[ -z $DEV_TOOLS_ROOT ]]; then
