@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+FPY="$(dirname $BASH_SOURCE)/../futility-py"
+source "$FPY/.venv/bin/activate"
+python "$FPY/sqord.py" "$@"

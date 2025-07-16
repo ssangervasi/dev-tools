@@ -150,15 +150,17 @@
     # Stashes with custom/default messages
     stem=stash list --grep='WIP on' --invert-grep
     stip=stash list --grep='WIP on'
+    wi = wip
+
     # Sometimes you don't want a stash
     rehard=reset --hard
-
 
     # GitHub `hub` command
     # cmp = !git hoist && hub compare
     cmp = !git hoist && gh pr create --web
 
-    wi = wip
+    # lazygit
+    z = !lazygit
 
 [fetch]
     prune = true

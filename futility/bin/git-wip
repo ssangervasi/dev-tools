@@ -8,12 +8,21 @@ main() {
 	elif [[ "$1" == "show" ]]; then
 		show "$2"
 	else
-		switch "$1"
+		fuzzy "$1"
 	fi
 }
 
 switch() {
 	wip_branch=$(show "$1")
+	git checkout "${wip_branch}"
+}
+
+fuzzy() {
+	wip_branch=$(list | fzf)
+	if [[ -z "$wip_branch" ]]; then
+		return
+	fi
+	# echo wip_branch $wip_branch
 	git checkout "${wip_branch}"
 }
 
@@ -32,11 +41,13 @@ list() {
 	# - List git branches in comit-date order, marking the current branch with "*"
 	# - Exclude master and the currently checked out branch
 	# - Remove leading whitespace
+	# - Only first 10
 	git branch --list --sort -committerdate --format '%(HEAD)%(refname)' |
 	  grep -v $(git hamster show) |
 	  grep -v "*" |
 	  sed "s!refs/heads/!!" |
-	  sed "s!^[[:space:]]*!!"
+	  sed "s!^[[:space:]]*!!" |
+	  head -n 10
 }
 
 main "$@"
