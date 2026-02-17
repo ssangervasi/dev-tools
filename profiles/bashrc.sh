@@ -1,5 +1,5 @@
 
-# The file `.bashrc` is used loaded for non-interactive shells.
+# The file `.bashrc` is used loaded for non-login shells.
 # So anything I might call from a subshell should go here.
 
 _init() {
