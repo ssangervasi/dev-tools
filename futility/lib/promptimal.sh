@@ -118,21 +118,49 @@ prompt_clock() {
 
 mangle_prompt_command() {
 	local prompt_command_custom="$1"
-	if ! [[ "${PROMPT_COMMAND:-}" =~ ${prompt_command_custom} ]]; then
-		PROMPT_COMMAND="${prompt_command_custom};${PROMPT_COMMAND}"
-	fi
-	_cleanup_prompt_command
+
+	local prompt_command_len="${#PROMPT_COMMAND[@]}"
+	local com_entry
+	local i=0
+	for com_entry in "${PROMPT_COMMAND[@]}"; do
+		if [[ "$com_entry" = "$prompt_command_custom" ]]; then
+			break
+		elif [[ "$com_entry" = ":" ]]; then
+			break
+		fi
+
+		i=$(( $i + 1 ))
+	done
+
+	PROMPT_COMMAND[$i]="$prompt_command_custom"	
+
+	# if ! [[ "${PROMPT_COMMAND:-}" =~ ${prompt_command_custom} ]]; then
+	# 	PROMPT_COMMAND="${prompt_command_custom};${PROMPT_COMMAND}"
+	# fi
+	# _cleanup_prompt_command
 }
 
 unmangle_prompt_command() {
 	local prompt_command_custom="$1"
-	PROMPT_COMMAND="${PROMPT_COMMAND/${prompt_command_custom}/}"
-	_cleanup_prompt_command
+	local com_entry
+	local i=0
+	for com_entry in "${PROMPT_COMMAND[@]}"; do
+		if [[ "$com_entry" = "$prompt_command_custom" ]]; then
+			PROMPT_COMMAND[$i]=":"
+		fi
+
+		i=$(( $i + 1 ))
+	done
+
+	# local prompt_command_custom="$1"
+	# PROMPT_COMMAND="${PROMPT_COMMAND/${prompt_command_custom}/}"
+	# _cleanup_prompt_command
 }
 
 _cleanup_prompt_command() {
-	PROMPT_COMMAND="${PROMPT_COMMAND/;;/;}"
-	PROMPT_COMMAND="${PROMPT_COMMAND#;}"
+	:
+	# PROMPT_COMMAND="${PROMPT_COMMAND/;;/;}"
+	# PROMPT_COMMAND="${PROMPT_COMMAND#;}"
 	# PROMPT_COMMAND=$(
 	# 	echo "$PROMPT_COMMAND" |
 	# 	sed 's/^;//g' |
